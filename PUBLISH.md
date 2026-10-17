@@ -105,6 +105,20 @@ node -e "import('dsh-agent-prompts').then(m=>console.log(Object.keys(m), m.name,
 
 - [x] 插件代码、四个技能、README、LICENSE 就绪
 - [x] 已在本机 desktop profile 安装并验证（四个技能已出现在技能目录）
-- [ ] npm 发布（需 `npm adduser`）
-- [ ] GitHub 仓库 + `dsh-plugin` topic
-- [ ] 市场收录
+- [x] GitHub 仓库已创建：https://github.com/lw24-1936/dsh-agent-prompts
+- [x] topics 已设置：`dsh-plugin`、`deepseek-harness`、`cordis-plugin`、`skill`、`prompt`、`fullstack`、`spring-boot`、`spring-cloud`、`vue3`
+- [ ] npm 发布（**唯一剩余步骤**，需 `npm adduser`）
+- [ ] 市场收录（npm 包上线后由采集器自动抓取）
+
+### 为什么还差 npm 这一步
+
+市场的安装命令形如 `dsh plugin --profile web add <npm 包名>`，指向的是 **npm 包**，不是 GitHub 仓库。
+所以仓库上线只解决了"能被采集到"，还解决不了"用户装得动"。
+
+发布后确认：
+
+```powershell
+npm view dsh-agent-prompts version
+```
+
+能输出 `0.1.0` 即成功；此后市场采集器拉到条目时，安装命令才会真正可用。
