@@ -1,0 +1,5 @@
+# dsh-agent-prompts 的 profile 补丁：插入一条插件行。
+# Host-only 插件，没有 client 半，因此不需要 dsh.client 字段。
+- insert:
+    - id: dsh-agent-prompts
+      name: 'dsh-agent-prompts'

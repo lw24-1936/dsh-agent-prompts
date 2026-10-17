@@ -1,0 +1,42 @@
+{
+  "name": "dsh-agent-prompts",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "DeepSeek Harness 插件：把全栈开发与问题排查提示词做成四个按场景自动加载的技能（单体/微服务 × 开发/排查），含 Vue3+TS+Spring Boot 与 Spring Cloud Alibaba 的硬约束、四套环境、RBAC、双文档同步要求。",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "skills",
+    "reference",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "cordis-plugin",
+    "skill",
+    "prompt",
+    "fullstack",
+    "spring-boot",
+    "spring-cloud",
+    "vue3",
+    "code-review"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  }
+}
