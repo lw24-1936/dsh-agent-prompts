@@ -10,7 +10,7 @@
 | DSH Market 收录 | ✅ 已收录 | 条目 `lw24-1936/dsh-agent-prompts`，类型 `cordis-plugin` |
 | 市场安装命令 | ⚠️ 待刷新 | 旧条目指向 npm 包 `dsh-agent-prompts`，但 npm 尚未发布 |
 | npm 发布 | ❌ 未完成 | 本机未登录 npm（`npm whoami` → `ENEEDAUTH`），需要账号交互 |
-| 市场数据修正 | ⏳ 处理中 | 已提交 `[数据修正]` issue，把安装命令改为 GitHub 地址（见下） |
+| 市场数据修正 | ✅ 已提交 | issue [#313](https://github.com/2BingLing/dsh-market/issues/313)，把安装命令改为 GitHub 地址；次日 06:00 管道应用 |
 
 **结论**：在当前没有 npm 账号登录的情况下，GitHub 安装是可用路径；市场条目已存在，数据修正后安装命令会指向 GitHub。
 
@@ -55,7 +55,7 @@ $plugins.plugins | Where-Object id -eq "lw24-1936/dsh-agent-prompts" | ConvertTo
 - 修正内容：安装命令改为 `dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.git`
 - 简介同步为 0.2.0 的「6 技能 + 阿里 Java/前端规约」表述
 
-提交记录：见本仓库 GitHub Issues / 市场 issue（提交后在此补链接）。
+提交记录：[#313](https://github.com/2BingLing/dsh-market/issues/313)（`[数据修正] lw24-1936/dsh-agent-prompts`，open）。该仓库的采集器按 issue 标题前缀 `[数据修正]` 识别，不依赖 label；每日 06:00 自动应用。
 
 ## 四、npm 发布（需要账号）
 

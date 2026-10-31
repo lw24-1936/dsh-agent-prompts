@@ -82,7 +82,7 @@ dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 dsh plugin --profile web add dsh-agent-prompts
 ```
 
-> 仓库已提交 DSH Market（条目 `lw24-1936/dsh-agent-prompts`）。市场里的 npm 安装命令要等 0.2.0 发布到 npm 后才可用；在那之前请用方式一。已向市场提交数据修正，把安装命令更新为 GitHub 地址。
+> 仓库已提交 DSH Market（条目 `lw24-1936/dsh-agent-prompts`）。市场里的 npm 安装命令要等 0.2.0 发布到 npm 后才可用；在那之前请用方式一。已提交数据修正 [#313](https://github.com/2BingLing/dsh-market/issues/313)，把安装命令更新为 GitHub 地址。
 
 装完重启 Harness（桌面版刷新页面）后，技能会出现在技能目录。
 
