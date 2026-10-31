@@ -2,6 +2,8 @@
 
 > 与单体版同一纪律：**先复现，再定位；先证据，后结论**。
 > 本文件只补微服务特有的排查路径与故障模式；通用纪律见 `fullstack-monolith-debug`。
+>
+> **修复代码时同样受规约约束**：Java 遵循 `alibaba-java-standards`，前端遵循 `f2e-spec`；降级/熔断代码里尤其不能吞异常、不能用「返回 null」掩盖下游失败。
 
 ## 一、开工前置
 
@@ -80,6 +82,8 @@ Redis 连通 → MQ 是否堆积/死信 → Seata 事务状态 → ES 查询。
 2. 改动最小；需要改公共模块（`common` / `api`）时，说明影响范围与回归清单。
 3. 改配置类修复必须给出：改哪个 dataId、哪个 namespace、是否需要重启、灰度方式。
 4. 修完给出：根因 / 改动 / 验证 / 副作用 / 需要回归的服务列表。
+5. **修复不得新增 P0 反例**；改完跑 `node "<资源目录>/scan-redlines.mjs" --profile java --root .`，退出码必须为 0。
+6. **fallback 不得吞异常**：必须记录原始异常与 traceId；不能用返回 null / 空对象掩盖故障（集合用空集合并记录日志）。
 
 ## 七、排查记录格式（写入 `docs/DEV.md`）
 
@@ -124,3 +128,9 @@ Redis 连通 → MQ 是否堆积/死信 → Seata 事务状态 → ES 查询。
 - 清空 MQ 队列、删日志、清缓存来"消除现象"
 - 在 fallback 里吞掉异常还不打日志
 - 把「不报错了」当作根因已解决
+
+## 十一、资源
+
+- 原始文档：`reference/fullstack-microservice.original.md`（资源基准目录下）。
+- 红线扫描：`node <资源目录>/scan-redlines.mjs --profile java --root .`。
+

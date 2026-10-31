@@ -1,6 +1,8 @@
 # 全栈开发规范（微服务版）
 
 > 加载本规范后，它就是本项目的硬约束。前端部分与单体版一致，本文件只强调**差异点**与微服务硬绑定。
+>
+> **配套标准**：Java 写法遵循 `alibaba-java-standards`，前端写法遵循 `f2e-spec`。本文件管版本、拆分、模块、网关、事务与门禁。
 
 ## 一、开工前置（四件缺一不可）
 
@@ -144,7 +146,7 @@ public interface UserFeignClient {
 
 **启动顺序必须写清**：Nacos → 各业务服务 → 网关 → 前端。
 
-## 十四、提交前门禁（十条）
+## 十四、提交前门禁（十二条）
 
 1. 父 POM 能 `mvn clean package` 全部模块通过。
 2. 四套 profile 齐全，打包后 `spring.profiles.active` 已替换。
@@ -156,8 +158,17 @@ public interface UserFeignClient {
 8. 所有接口有鉴权注解；无权限返回 403。
 9. `/actuator/health` 全服务 UP；接口文档网关可聚合访问，pre/pro 关闭。
 10. `DEV.md` / `DESIGN.md` 已同步，`DESIGN.md` 含拆分清单与端口表。
+11. **Java P0 扫描**：`node "<资源目录>/scan-redlines.mjs" --profile java --root .` 退出码 0；重点复核线程池、日期时间、SQL 拼接、无 where 的 update·delete、空 catch、集合 return null、ThreadLocal。
+12. **前端质量门禁**：`eslint` + `vue-tsc --noEmit` 通过；F2E P0 扫描退出码 0，或逐条说明豁免理由。
 
-## 十五、必须停下来提问
+## 十五、编码规约（与标准技能联动）
+
+- **Java**：加载 `alibaba-java-standards`。Feign / 网关 / 事务代码同样受 P0 红线约束；Seata、Sentinel 的设计条文按需读 `alibaba-java/07-design-standards.md`。
+- **前端**：加载 `f2e-spec`，与单体版相同。
+- **冲突裁决**：版本三元组、服务拆分、模块依赖、网关规则、事务模式以本文件为准；编码写法按标准技能。冲突时先问用户。
+- **原始文档**：`reference/fullstack-microservice.original.md`（完整保留，供对照）。
+
+## 十六、必须停下来提问
 
 - 服务拆分粒度未确认
 - 事务模式（Seata AT/TCC/SAGA）未确认

@@ -1,124 +1,130 @@
-# 发布到 DSH 插件市场
+# 发布与市场提交记录
 
-本目录已可发布，只差两件需要你账号的事：**npm 登录** 与 **GitHub 仓库**。
+## 当前状态（2026-10-31）
 
-## 为什么市场需要这两样
+| 项 | 状态 | 说明 |
+|---|---|---|
+| 插件代码 / 文档 | ✅ 0.2.0 | 6 技能、资源目录、扫描器、测试 |
+| GitHub 仓库 | ✅ 已上线 | https://github.com/lw24-1936/dsh-agent-prompts |
+| GitHub topics | ✅ 已设置 | `dsh-plugin`、`deepseek-harness`、`cordis-plugin`、`skill`、`prompt`、`fullstack`、`spring-boot`、`spring-cloud`、`vue3` |
+| DSH Market 收录 | ✅ 已收录 | 条目 `lw24-1936/dsh-agent-prompts`，类型 `cordis-plugin` |
+| 市场安装命令 | ⚠️ 待刷新 | 旧条目指向 npm 包 `dsh-agent-prompts`，但 npm 尚未发布 |
+| npm 发布 | ❌ 未完成 | 本机未登录 npm（`npm whoami` → `ENEEDAUTH`），需要账号交互 |
+| 市场数据修正 | ⏳ 处理中 | 已提交 `[数据修正]` issue，把安装命令改为 GitHub 地址（见下） |
 
-市场索引（`2bingling.github.io/dsh-market`）收录的每条都是：
+**结论**：在当前没有 npm 账号登录的情况下，GitHub 安装是可用路径；市场条目已存在，数据修正后安装命令会指向 GitHub。
 
-```json
-{
-  "id": "owner/repo",
-  "type": "cordis-plugin",
-  "install": {
-    "method": "pnpm-profile",
-    "commands": ["dsh plugin --profile web add <npm 包名>"]
-  },
-  "sources": ["topic"]
-}
+## 一、安装方式（与 README 一致）
+
+```bash
+# GitHub（当前推荐）
+dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.git
+
+# 本地开发
+dsh plugin --profile web add file:/path/to/dsh-agent-prompts
+
+# npm（发布后）
+dsh plugin --profile web add dsh-agent-prompts
 ```
 
-也就是说：**它按 GitHub topic 抓仓库，安装命令指向 npm 包名**。所以两者缺一不可：
+桌面版通过「插件设置 → 安装」填 GitHub 地址或本地目录。
 
-- 没有 npm 包 → 用户装了会解析失败
-- 没有 GitHub 仓库 → 采集器抓不到你
+## 二、市场收录机制
 
-## 一、发布 npm 包
+DSH Market（[dsh.market](https://dsh.market/)）的收录规则：
+
+1. 仓库打 `dsh-plugin` topic → 每日 06:00 自动扫描；
+2. 或提交 [`[提交插件]` issue](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)；
+3. 收录条件：非 fork / 非归档 / 非官方本体，且有 `cordis.patch.yml`、`dsh.profile` 等 cordis 标记（本插件满足）。
+
+已用市场索引确认条目存在：
 
 ```powershell
-cd E:\projectWorkspace\ai-work\deepseek-harness\deepseekwork02\dsh-agent-prompts
+$plugins = Invoke-RestMethod "https://2bingling.github.io/dsh-market/plugins.json"
+$plugins.plugins | Where-Object id -eq "lw24-1936/dsh-agent-prompts" | ConvertTo-Json -Depth 5
+```
+
+> 索引约 47 MB，首次拉取较慢；上面的 PowerShell 片段会完整解析，按需使用。
+
+## 三、刷新市场安装命令（数据修正）
+
+市场条目的 `install.commands` 由 README 安装段解析得到。0.2.0 的 README 已把 GitHub 命令放在最前，下一次采集会更新；为立即生效，另提交数据修正 issue：
+
+- issue 模板：`[数据修正] 插件全名`
+- 仓库地址：`https://github.com/lw24-1936/dsh-agent-prompts`
+- 修正内容：安装命令改为 `dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.git`
+- 简介同步为 0.2.0 的「6 技能 + 阿里 Java/前端规约」表述
+
+提交记录：见本仓库 GitHub Issues / 市场 issue（提交后在此补链接）。
+
+## 四、npm 发布（需要账号）
+
+本机全局 registry 是 npmmirror（只读镜像），项目级 `.npmrc` 已覆盖为官方源；但 `npm whoami` 返回 `ENEEDAUTH`，需要先登录。
+
+```powershell
+cd E:\projectWorkspace\ai-work\deepseek-harness\skill-work\dsh-agent-prompts
 npm adduser          # 或 npm login，按提示在浏览器/邮箱完成
-npm whoami           # 必须输出你的用户名，否则下一步必失败
+npm whoami           # 必须输出用户名
+npm pack --dry-run   # 确认 lib/ skills/ resources/（含 resources/reference/）等文件齐全
 npm publish --access public
 ```
 
-发布前建议先干跑一遍，确认打进去的文件齐全：
-
-```powershell
-npm pack --dry-run
-```
-
-必须包含：`lib/`、`skills/`（4 个 .md）、`cordis.patch.yml`、`README.md`、`LICENSE`。
-不包含 `reference/` 也不影响运行（已在 `files` 里，会一起发布，用于对照原文）。
-
-验证发布结果：
+发布后验证：
 
 ```powershell
 npm view dsh-agent-prompts version
 npm view dsh-agent-prompts dist.tarball
 ```
 
-## 二、建 GitHub 仓库并打 topic
+预期版本 `0.2.0`。发布成功后，市场条目里的 npm 安装命令即可用；README 也可把 npm 方式放回首位。
+
+## 五、发布后自检
+
+### 1. 本地包导入
 
 ```powershell
-cd E:\projectWorkspace\ai-work\deepseek-harness\deepseekwork02\dsh-agent-prompts
-git init
-git add .
-git commit -m "feat: dsh-agent-prompts 0.1.0"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/dsh-agent-prompts.git
-git push -u origin main
-```
-
-推完后在仓库页面上加 topic（Settings 上方 About 右侧齿轮 → Topics）：
-
-```
-dsh-plugin
-```
-
-> 采集器按 topic 抓取，**没有这个 topic 就不会被收录**。
-
-## 三、等采集或主动提交
-
-- 采集器会定期跑，抓 topic 为 `dsh-plugin` 的仓库；
-- 想快一点，去市场仓库提 issue / PR 提交条目（`sources` 里出现 `awesome-0xsline` 说明还有人工收录渠道）。
-
-收录后市场里会出现：
-
-```
-id:      <owner>/dsh-agent-prompts
-install: dsh plugin --profile web add dsh-agent-prompts
-```
-
-## 四、发布后自检
-
-```powershell
-# 全新目录里装一遍，确认不是只在本机能用
 cd $env:TEMP
+Remove-Item -Recurse -Force verify-agent-prompts -ErrorAction SilentlyContinue
 mkdir verify-agent-prompts; cd verify-agent-prompts
 npm init -y | Out-Null
-npm i dsh-agent-prompts
-node -e "import('dsh-agent-prompts').then(m=>console.log(Object.keys(m), m.name, m.inject))"
+npm i "E:\projectWorkspace\ai-work\deepseek-harness\skill-work\dsh-agent-prompts"
+node -e "import('dsh-agent-prompts').then(m=>console.log(Object.keys(m), m.name, m.inject, m.SKILLS.length))"
 ```
 
-期望输出：`[ 'apply', 'inject', 'name' ] dsh-agent-prompts [ 'skills' ]`
+期望：`[ 'SKILLS', 'apply', 'inject', 'name' ] dsh-agent-prompts [ 'skills' ] 6`。
 
-## 五、版本升级清单
-
-改完技能文案要升版本，否则 npm 拒收，市场也不会更新：
-
-1. `package.json` 的 `version` +1（语义化：改文案 patch，加技能 minor，改结构 major）
-2. `README.md` 里的技能表同步
-3. `npm publish`，然后 `git tag v<version> && git push --tags`
-
-## 当前状态
-
-- [x] 插件代码、四个技能、README、LICENSE 就绪
-- [x] 已在本机 desktop profile 安装并验证（四个技能已出现在技能目录）
-- [x] GitHub 仓库已创建：https://github.com/lw24-1936/dsh-agent-prompts
-- [x] topics 已设置：`dsh-plugin`、`deepseek-harness`、`cordis-plugin`、`skill`、`prompt`、`fullstack`、`spring-boot`、`spring-cloud`、`vue3`
-- [ ] npm 发布（**唯一剩余步骤**，需 `npm adduser`）
-- [ ] 市场收录（npm 包上线后由采集器自动抓取）
-
-### 为什么还差 npm 这一步
-
-市场的安装命令形如 `dsh plugin --profile web add <npm 包名>`，指向的是 **npm 包**，不是 GitHub 仓库。
-所以仓库上线只解决了"能被采集到"，还解决不了"用户装得动"。
-
-发布后确认：
+### 2. GitHub 安装
 
 ```powershell
-npm view dsh-agent-prompts version
+cd $env:TEMP
+Remove-Item -Recurse -Force verify-agent-prompts-git -ErrorAction SilentlyContinue
+mkdir verify-agent-prompts-git; cd verify-agent-prompts-git
+npm init -y | Out-Null
+npm i "git+https://github.com/lw24-1936/dsh-agent-prompts.git"
+node -e "import('dsh-agent-prompts').then(m=>console.log(m.name, m.SKILLS.map(s=>s.name)))"
 ```
 
-能输出 `0.1.0` 即成功；此后市场采集器拉到条目时，安装命令才会真正可用。
+期望输出六个技能名。
+
+### 3. 市场条目
+
+- 打开 https://dsh.market/ 搜索 `dsh-agent-prompts`；
+- 检查类型 `cordis-plugin`、简介、安装命令是否为 GitHub 地址；
+- 数据修正 issue 由每日 06:00 管道应用，次日再看。
+
+## 六、版本升级清单
+
+1. `package.json` 的 `version` 按语义化递增（改文案 patch；加技能/资源 minor；改结构 major）。
+2. `CHANGELOG.md` 增加条目；README 的技能表、目录、兼容性同步。
+3. 跑 `npm run verify` 与 `npm pack --dry-run`。
+4. `git add -A && git commit && git push`；打 tag：`git tag v<version> && git push --tags`。
+5. npm 发布（若已登录）：`npm publish --access public`。
+6. 市场：README 安装段保持 GitHub 命令在首位；必要时提交 `[数据修正]` issue。
+
+## 七、踩坑记录
+
+- **npm 镜像**：npmmirror 不支持 publish；项目级 `.npmrc` 必须指向 `https://registry.npmjs.org`。
+- **desktop profile**：命令行 `dsh plugin --profile web` 只对 web profile 有效；桌面版走插件设置。
+- **市场解析**：安装命令来自 README 安装段。GitHub 命令要放在 npm 命令之前，且写明完整 `git+https://…` 地址。
+- **资源路径**：技能注册的 `resourceBase` 用绝对路径（由 `import.meta.url` 解析），npm / git 安装都能定位到 `resources/`。
+- **扫描器**：只做启发式提示，误报需人工确认；正式门禁仍用 P3C / PMD / ESLint。

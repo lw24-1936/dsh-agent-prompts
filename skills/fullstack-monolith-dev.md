@@ -1,6 +1,8 @@
 # 全栈开发规范（单体版）
 
 > 加载本规范后，它就是本项目的硬约束。与用户指令冲突时先提问，不要自行放宽。
+>
+> **配套标准**：Java 写法遵循 `alibaba-java-standards`（P0 红线 + 章节路由），前端写法遵循 `f2e-spec`（ESLint + Vue 3 + 安全分级）。本文件管架构、流程、环境与门禁，不重复抄写编码条文。
 
 ## 一、开工前置（三件缺一不可）
 
@@ -122,7 +124,7 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 
 **输出格式固定**：`【理解确认】`→`【待澄清问题】`→`【UI 组合推荐】`→`【文件清单】`→`【开发文档变更】`→`【设计文档变更】`→`【代码】`→`【验证步骤】`。
 
-## 八、提交前门禁（八条，全过才交付）
+## 八、提交前门禁（十条，全过才交付）
 
 1. 前端 `pnpm build:test` / `build:pre` / `build:pro` 三条都能过，`dist/*` 产物存在。
 2. 后端 `mvn clean package -P<profile>` 能过，打包产物里 `spring.profiles.active` 已替换成目标环境。
@@ -132,8 +134,17 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 6. 连接信息全部来自环境变量；`.gitignore` 生效；日志与接口返回里看不到密码。
 7. `/actuator/health` 返回 UP；接口文档 dev 可访问、pre/pro 已关闭。
 8. `DEV.md` 与 `DESIGN.md` 已同步本次改动。
+9. **Java P0 扫描**：`node "<资源目录>/scan-redlines.mjs" --profile java --root .` 退出码 0；再人工复核线程池 / 日期时间 / `${}` 拼接 / 无 where 的 update·delete / 空 catch / 集合 return null / ThreadLocal 未 remove。
+10. **前端质量门禁**：`pnpm eslint . --max-warnings=0` 与 `vue-tsc --noEmit`（或项目约定的 `tsc`）通过；F2E P0 扫描退出码 0，或逐条说明豁免理由。
 
-## 九、必须停下来提问的情况
+## 九、编码规约（与标准技能联动）
+
+- **Java**：加载 `alibaba-java-standards`。P0 红线（新代码直接合规、被改到的存量代码发现即修复、不可口头豁免）在该技能正文；条文按需读 `alibaba-java/01…08` 章节。项目团队约定放 `.dsh/java-standards.md`（可从 `alibaba-java/project-template.md` 复制）。
+- **前端**：加载 `f2e-spec`。至少遵守：`const`/`let`、`===`、Hooks 规则、`v-for` 稳定 key、`v-if` 不与 `v-for` 同元素、`v-html` / `dangerouslySetInnerHTML` 必须消毒、`target="_blank"` 带 `noopener`。
+- **冲突裁决**：本文件的架构/技术栈/权限/门禁是项目硬约束；编码写法按两个标准技能。两者冲突时先问用户，不自行放宽 P0 或技术栈。
+- **原始文档**：`reference/fullstack-single.original.md`（完整保留，供对照）。
+
+## 十、必须停下来提问的情况
 
 - UI 库组合未确认 / 中间件范围未确认
 - 是否要接口幂等、是否用 Docker 未确认

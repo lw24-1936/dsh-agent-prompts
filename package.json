@@ -1,15 +1,18 @@
 {
   "name": "dsh-agent-prompts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "DeepSeek Harness 插件：把全栈开发与问题排查提示词做成四个按场景自动加载的技能（单体/微服务 × 开发/排查），含 Vue3+TS+Spring Boot 与 Spring Cloud Alibaba 的硬约束、四套环境、RBAC、双文档同步要求。",
+  "description": "DeepSeek Harness 技能包：6 个按场景自动加载的技能（全栈单体/微服务 × 开发/排查 + 阿里巴巴 Java/前端规约），带章节渐进披露、P0 红线扫描与提交前门禁。",
   "main": "lib/index.js",
   "files": [
     "lib",
     "skills",
-    "reference",
+    "resources",
     "cordis.patch.yml",
     "README.md",
+    "CHANGELOG.md",
+    "NOTICE.md",
+    "PUBLISH.md",
     "LICENSE"
   ],
   "exports": {
@@ -17,6 +20,11 @@
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
+  },
+  "scripts": {
+    "check": "node --check lib/index.js && node --check resources/scan-redlines.mjs",
+    "test": "node --test test/*.test.mjs",
+    "verify": "npm run check && npm test"
   },
   "dsh": {
     "bundle": {
@@ -33,8 +41,21 @@
     "spring-boot",
     "spring-cloud",
     "vue3",
-    "code-review"
+    "code-review",
+    "alibaba-java",
+    "f2e-spec",
+    "coding-standards",
+    "eslint",
+    "p0-redlines"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lw24-1936/dsh-agent-prompts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lw24-1936/dsh-agent-prompts/issues"
+  },
+  "homepage": "https://github.com/lw24-1936/dsh-agent-prompts#readme",
   "license": "MIT",
   "engines": {
     "node": ">=22"

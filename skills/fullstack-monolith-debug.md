@@ -2,6 +2,8 @@
 
 > 本规范的第一原则：**先复现，再定位；先证据，后结论**。
 > 没有证据的结论不写进报告，宁可写「未确认」。
+>
+> **修复代码时同样受规约约束**：Java 遵循 `alibaba-java-standards`（P0 红线不可用「先让它不报错」绕过），前端遵循 `f2e-spec`。本文件管定位流程与修复纪律。
 
 ## 一、开工前置
 
@@ -88,6 +90,10 @@
 2. 改动范围最小；不引入新依赖（确需引入先问用户）。
 3. 修完给出：根因 / 改了什么 / 为什么这样改 / 怎么验证 / 有无副作用。
 4. 涉及数据修复时，给出可回滚的 SQL 与备份步骤。
+5. **修复不得新增 P0 反例**：线程池、日期时间、SQL 拼接、无 where 的 update·delete、空 catch、集合 return null、ThreadLocal 未 remove。改完跑：
+   `node "<资源目录>/scan-redlines.mjs" --profile java --root .`
+   退出码必须为 0；若修复必须触碰存量红线，按 `alibaba-java-standards` 的「被改到即修复」处理。
+6. 前端修复后跑 `eslint` + `vue-tsc --noEmit`，并确认没有新增 `v-html` / `dangerouslySetInnerHTML` / `target="_blank"` 无 `noopener` 等 P0 问题。
 
 ## 七、排查记录格式（写入 `docs/DEV.md`）
 
@@ -130,3 +136,9 @@
 - 用「重启试试」代替定位（可以重启，但必须先说明为什么重启、重启后看什么）
 - 直接操作生产数据库
 - 把「改完不报错了」当作根因已解决（要看是否真的命中根因）
+
+## 十一、资源
+
+- 原始文档：`reference/fullstack-single.original.md`（资源基准目录下）。
+- 红线扫描：`node <资源目录>/scan-redlines.mjs --profile java --root .`。
+
