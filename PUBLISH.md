@@ -1,18 +1,19 @@
 # 发布与市场提交记录
 
-## 当前状态（2026-10-31）
+## 当前状态（2026-11-03）
 
 | 项 | 状态 | 说明 |
 |---|---|---|
-| 插件代码 / 文档 | ✅ 0.2.0 | 6 技能、资源目录、扫描器、测试 |
+| 插件代码 / 文档 | ✅ 0.3.0 | 6 技能、拆分章节、扫描器 CLI、CI/测试 |
 | GitHub 仓库 | ✅ 已上线 | https://github.com/lw24-1936/dsh-agent-prompts |
-| GitHub topics | ✅ 已设置 | `dsh-plugin`、`deepseek-harness`、`cordis-plugin`、`skill`、`prompt`、`fullstack`、`spring-boot`、`spring-cloud`、`vue3` |
+| GitHub topics | ✅ 已设置 | `dsh-plugin`、`deepseek-harness`、`cordis-plugin`、`skill`、`prompt`、`fullstack`、`spring-boot`、`spring-cloud`、`vue3`、`alibaba-java`、`f2e-spec`、`coding-standards`、`eslint`、`p0-redlines` |
 | DSH Market 收录 | ✅ 已收录 | 条目 `lw24-1936/dsh-agent-prompts`，类型 `cordis-plugin` |
 | 市场安装命令 | ⚠️ 待刷新 | 旧条目指向 npm 包 `dsh-agent-prompts`，但 npm 尚未发布 |
+| DSH Plugin Hub 收录 | ⏳ 已提交 | issue [#581](https://github.com/dshplugin/dsh-plugin-hub/issues/581)，源码安装；插件中心需 npm |
 | npm 发布 | ❌ 未完成 | 本机未登录 npm（`npm whoami` → `ENEEDAUTH`），需要账号交互 |
-| 市场数据修正 | ✅ 已提交 | issue [#313](https://github.com/2BingLing/dsh-market/issues/313)，把安装命令改为 GitHub 地址；次日 06:00 管道应用 |
+| DSH Market 数据修正 | ✅ 已提交 | issue [#313](https://github.com/2BingLing/dsh-market/issues/313)，把安装命令改为 GitHub 地址；次日 06:00 管道应用 |
 
-**结论**：在当前没有 npm 账号登录的情况下，GitHub 安装是可用路径；市场条目已存在，数据修正后安装命令会指向 GitHub。
+**结论**：在当前没有 npm 账号登录的情况下，GitHub 安装是可用路径；DSH Market 条目已存在，数据修正后安装命令会指向 GitHub；DSH Plugin Hub 只做源码收录，npm 发布后才会进入其「插件中心」。
 
 ## 一、安装方式（与 README 一致）
 
@@ -48,14 +49,24 @@ $plugins.plugins | Where-Object id -eq "lw24-1936/dsh-agent-prompts" | ConvertTo
 
 ## 三、刷新市场安装命令（数据修正）
 
-市场条目的 `install.commands` 由 README 安装段解析得到。0.2.0 的 README 已把 GitHub 命令放在最前，下一次采集会更新；为立即生效，另提交数据修正 issue：
+市场条目的 `install.commands` 由 README 安装段解析得到。0.3.0 的 README 已把 GitHub 命令放在最前，下一次采集会更新；为立即生效，另提交数据修正 issue：
 
 - issue 模板：`[数据修正] 插件全名`
 - 仓库地址：`https://github.com/lw24-1936/dsh-agent-prompts`
 - 修正内容：安装命令改为 `dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.git`
-- 简介同步为 0.2.0 的「6 技能 + 阿里 Java/前端规约」表述
+- 简介同步为 0.3.0 的「6 技能 + 阿里 Java/前端规约 + 红线扫描」表述
 
 提交记录：[#313](https://github.com/2BingLing/dsh-market/issues/313)（`[数据修正] lw24-1936/dsh-agent-prompts`，open）。该仓库的采集器按 issue 标题前缀 `[数据修正]` 识别，不依赖 label；每日 06:00 自动应用。
+
+## 三之二、DSH Plugin Hub（dsh-plugin.org）
+
+这是另一个市场（截图里的「DSH Plugin Hub」，数据源 `https://api.dsh-plugin.org/plugins.zh.json`），与 DSH Market 独立：
+
+- 提交入口：<https://dsh-plugin.org/zh/submit>；issue 标题 `[插件提交] <owner>/<repo> — <一句话价值>`。
+- 收录条件：公开仓库、`dsh-plugin` topic、README 安装命令、导出 `apply(ctx)`、根目录 `package.json`。
+- **「插件中心」只展示能用 npm 一键安装的包**；没有 npm 包的仓库只做网页收录（源码安装），不会出现在插件中心的搜索里。
+
+已提交：[#581](https://github.com/dshplugin/dsh-plugin-hub/issues/581)（源码安装）。npm 发布后需要再更新安装命令为 npm 包名，才能进入插件中心。
 
 ## 四、npm 发布（需要账号）
 
@@ -76,7 +87,7 @@ npm view dsh-agent-prompts version
 npm view dsh-agent-prompts dist.tarball
 ```
 
-预期版本 `0.2.0`。发布成功后，市场条目里的 npm 安装命令即可用；README 也可把 npm 方式放回首位。
+预期版本 `0.3.0`。发布成功后，市场条目里的 npm 安装命令即可用；README 也可把 npm 方式放回首位。
 
 ## 五、发布后自检
 
@@ -117,9 +128,9 @@ node -e "import('dsh-agent-prompts').then(m=>console.log(m.name, m.SKILLS.map(s=
 1. `package.json` 的 `version` 按语义化递增（改文案 patch；加技能/资源 minor；改结构 major）。
 2. `CHANGELOG.md` 增加条目；README 的技能表、目录、兼容性同步。
 3. 跑 `npm run verify` 与 `npm pack --dry-run`。
-4. `git add -A && git commit && git push`；打 tag：`git tag v<version> && git push --tags`。
+4. `git add -A && git commit && git push`；打 tag：`git tag v<version> && git push --tags`。`release.yml` 会自动跑 `npm run verify` 并创建 GitHub Release（不发布 npm）。
 5. npm 发布（若已登录）：`npm publish --access public`。
-6. 市场：README 安装段保持 GitHub 命令在首位；必要时提交 `[数据修正]` issue。
+6. 市场：README 安装段保持 GitHub 命令在首位；必要时提交 `[数据修正]` issue。npm 发布后同步更新 DSH Plugin Hub 的安装命令。
 
 ## 七、踩坑记录
 

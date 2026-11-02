@@ -23,6 +23,8 @@
 
 用户说「其他保持不变」**不能**让被触碰代码里的 P0 问题蒙混过关：先交付原需求，再在输出末尾列出红线修复。若用户明确拒绝修复，必须写明风险与依据，不能静默保留。
 
+**改动范围怎么定**：以 `git diff --name-only`、`git diff --cached --name-only` 和新增未跟踪文件为「被触碰」清单；没有 git 或无法判断时，先问用户。P0 只在这份清单内强制修复，P1 只约束本次新增/重写行。
+
 ## 二、P0 红线清单（每次写/改代码逐项自检）
 
 | 红线域 | 必查项 | 条文 |
@@ -60,7 +62,14 @@
 
 | 场景关键词 | 章节文件 |
 |---|---|
-| 命名、常量、格式、OOP、日期时间、集合、并发、控制语句、注释、前后端规约 | `alibaba-java/01-coding-standards.md` |
+| 命名风格：类名/方法名/布尔字段/包名 | `alibaba-java/01a-naming.md` |
+| 常量定义、代码格式：魔法值、`long` 后缀、缩进换行 | `alibaba-java/01b-constants-format.md` |
+| OOP：equals/hashCode、继承、接口、构造方法 | `alibaba-java/01c-oop.md` |
+| 日期时间：`yyyy`/`YYYY`、`java.time`、时区 | `alibaba-java/01d-datetime.md` |
+| 集合：空集合、`toMap`、`subList`、`Arrays.asList` | `alibaba-java/01e-collections.md` |
+| 并发：线程池、`ThreadLocal`、锁、`SimpleDateFormat` | `alibaba-java/01f-concurrency.md` |
+| 控制语句：`switch`、`if/else`、循环、参数校验 | `alibaba-java/01g-control-statements.md` |
+| 注释、前后端规约、其他 | `alibaba-java/01h-comments-frontend-other.md` |
 | 错误码、异常捕获、try-catch、NPE、日志框架/级别/输出 | `alibaba-java/02-exception-logging.md` |
 | AIR、测试独立性、覆盖率、BCDE、Mock、测试目录 | `alibaba-java/03-unit-testing.md` |
 | 权限校验、脱敏、SQL 注入、XSS、CSRF、参数校验、文件上传、防重放 | `alibaba-java/04-security-standards.md` |
@@ -68,19 +77,22 @@
 | 应用分层、DO/DTO/BO/VO/Query、二方库、GAV、服务器与 JVM | `alibaba-java/06-project-structure.md` |
 | 存储评审、UML、弱依赖与降级、SOLID/DRY、系统设计 | `alibaba-java/07-design-standards.md` |
 | 版本历史、专有名词、错误码全表 | `alibaba-java/08-appendix.md` |
+| JDK 17/21：records、`var`、pattern matching、虚拟线程、Optional、CompletableFuture | `alibaba-java/09-modern-java.md` |
 
-`alibaba-java/00-index.md` 是章节索引与执行摘要，可先读它再决定读哪章。
+`alibaba-java/00-index.md` 是章节索引与执行摘要，可先读它再决定读哪章。原「一、编程规约」已拆成 8 个文件（`01a`…`01h`），不要再整章读入。
 
 ### 触发词映射（命中即读对应章节）
 
 - JWT / OAuth2 / Token / 认证 / 授权 / 登录态 / 脱敏 / 加密 / 防重放 → `04`
-- 金额 / BigDecimal / 精度 / 舍入 / setScale → `01`（集合/类型）+ `05`
+- 金额 / BigDecimal / 精度 / 舍入 / setScale → `01e`（集合/类型）+ `05`
 - 分页 / PageHelper / 深分页 / 索引 / 最左前缀 / 覆盖索引 → `05`
-- 线程池 / 异步 / `@Async` / CompletableFuture / 锁 / Redisson / 分布式锁 → `01`
+- 线程池 / 异步 / `@Async` / CompletableFuture / 锁 / Redisson / 分布式锁 → `01f` + `09`
+- 日期 / LocalDateTime / SimpleDateFormat / 时区 → `01d`
 - 异常 / NPE / 全局异常 / `@ControllerAdvice` / 日志 / Logback / 级别 → `02`
 - 分层 / Controller / Service / Manager / DAO / DDD / DO / DTO / VO / MapStruct → `06`
 - Seata / TCC / Saga / 分布式事务 / Sentinel / 熔断 / 降级 → `07`（微服务专项另见 `fullstack-microservice-dev`）
 - 单测 / Mockito / `@SpringBootTest` / Testcontainers / 覆盖率 → `03`
+- records / `var` / 虚拟线程 / pattern matching / sealed / Optional → `09`
 
 ## 五、规约冲突与豁免
 
@@ -107,13 +119,36 @@
 - 集合方法 `return null;`
 - `ThreadLocal` 未 `remove()`
 
-可运行启发式扫描（资源目录下，需 Node.js）：
+可运行启发式扫描。作为 DSH 插件安装时，脚本在技能的资源基准目录下：
 
 ```bash
-node "<资源目录>/scan-redlines.mjs" --profile java --root <项目根目录>
+node "<资源目录>/scan-redlines.mjs" --profile java --root .
+node "<资源目录>/scan-redlines.mjs" --profile java --changed-only --root .
+node "<资源目录>/scan-redlines.mjs" --profile java --write-baseline .dsh/redlines-baseline.json --root .
+node "<资源目录>/scan-redlines.mjs" --profile java --baseline .dsh/redlines-baseline.json --root .
 ```
 
-扫描器只做**启发式提示**，不替代 P3C / PMD 与人工 review；退出码 1 表示发现 P0。
+如果项目把本包装进了 devDependencies（`npm i -D dsh-agent-prompts`），也可以用 bin：
+
+```bash
+npx dsh-agent-prompts-scan --profile java --changed-only --root .
+```
+
+扫描器只做**启发式提示**，不替代 P3C / PMD 与人工 review；退出码 1 表示发现达到 `--fail-on` 阈值的问题（默认 P0）。存量仓库先用 `--write-baseline`，之后只对新增问题失败。完整选项见 `docs/SCANNER.md`。
+
+### Review 输出格式
+
+发现违规时按此格式给结论，不要泛泛说「代码不规范」：
+
+```md
+- [P0/P1/P2] 规则：<规则名>（文件:行）
+  - 问题：<一句话>
+  - 修复：<可直接采用的写法/代码片段>
+```
+
+存量代码只汇总 P0；P1 一句话带过（如「另有 12 处命名/格式问题，属存量未强制」）；P2 默认不提。P0 修复必须引用规约编号（如 `01-(七)4【强制】`）。
+
+规则命中时，可先读资源目录 `examples/` 下的 before/after 示例（线程池、日期、SQL、空 catch、Vue key、XSS），再写修复代码。
 
 ## 七、项目级覆盖
 
@@ -124,6 +159,8 @@ node "<资源目录>/scan-redlines.mjs" --profile java --root <项目根目录>
 3. 本技能与手册原文（基线）。
 
 若项目规范与 P0 冲突，按项目规范执行但在输出末尾提示风险；若项目规范要求「关闭全部检查」，保留一行 P0 风险提示，是否处理由用户决定。
+
+项目接入片段：`AGENTS.snippet.md`（追加到项目根 `AGENTS.md`，让 agent 进入项目就知道加载哪些技能、跑什么扫描）。
 
 ## 八、与全栈技能的关系
 

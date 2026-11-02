@@ -1,7 +1,8 @@
 # F2E Spec 工具链配置参考
 
 > 目标：把规范变成提交前能跑过的命令，而不是靠记忆。
-> 按项目现有 ESLint 主版本选择配置方式；不要为了套模板破坏已有 lint 规则。
+> 基线：ESLint 9 flat config + `eslint-config-ali` 16.x（该版本只提供 flat config 的 `base` / `react` 导出）。ESLint 8 项目请用 F2ELint 或锁定旧版配置。
+> 不要为了套模板破坏项目已有 lint 规则；新规则先在新代码/新文件启用。
 
 ## 1. 脚本
 
@@ -11,6 +12,7 @@
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
+    "typecheck:vue": "vue-tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify": "pnpm lint && pnpm typecheck && pnpm build"
@@ -18,7 +20,7 @@
 }
 ```
 
-CI 至少跑 `lint` + `typecheck`；发布/合并前跑 `verify`。
+Vue 项目把 `typecheck` 换成 `vue-tsc --noEmit`。CI 至少跑 `lint` + `typecheck`；发布/合并前跑 `verify`。
 
 ## 2. Prettier（格式基线）
 
@@ -51,98 +53,142 @@ trim_trailing_whitespace = true
 trim_trailing_whitespace = false
 ```
 
-## 4. ESLint：Vue 3 + TypeScript（flat config，ESLint 9）
+## 4. 一键接入：F2ELint（不想手写配置时）
+
+```bash
+npx f2elint
+```
+
+F2ELint 会收敛 ESLint / stylelint / commitlint / markdownlint 的依赖与配置，适合存量项目快速接入。它生成的配置可能随版本变化；接入后仍以项目实际 `eslint.config.*` 为准。
+
+## 5. ESLint：基础 / React（flat config）
+
+`eslint-config-ali` 16.x 的导出只有 `base` 与 `react`：
 
 ```js
-// eslint.config.js
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginVue from 'eslint-plugin-vue';
+// eslint.config.mjs
+import { base } from 'eslint-config-ali';
 import prettier from 'eslint-config-prettier';
 
-export default tseslint.config(
+export default [
+  ...base,
+  {
+    rules: {
+      'no-var': 'error',
+      eqeqeq: ['error', 'always'],
+      'no-console': ['warn', { allow: ['error', 'warn'] }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+  prettier,
+];
+```
+
+React 项目：
+
+```js
+// eslint.config.mjs
+import { react } from 'eslint-config-ali';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import prettier from 'eslint-config-prettier';
+
+export default [
+  ...react,
+  {
+    plugins: { 'react-refresh': reactRefresh },
+    rules: {
+      'react-refresh/only-export-components': 'warn',
+      'react/jsx-key': 'error',
+      'no-var': 'error',
+      eqeqeq: ['error', 'always'],
+      'no-console': ['warn', { allow: ['error', 'warn'] }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+  prettier,
+];
+```
+
+依赖：
+
+```bash
+pnpm add -D eslint@^9 eslint-config-ali eslint-config-prettier prettier
+# React 额外
+pnpm add -D eslint-plugin-react-refresh
+```
+
+## 6. ESLint：Vue 3 + TypeScript（flat config）
+
+`eslint-config-ali` 16.x 没有 Vue 预设，用 `base` + `eslint-plugin-vue` 组合：
+
+```js
+// eslint.config.mjs
+import { base } from 'eslint-config-ali';
+import pluginVue from 'eslint-plugin-vue';
+import tseslint from 'typescript-eslint';
+import prettier from 'eslint-config-prettier';
+
+export default [
   { ignores: ['dist/**', 'coverage/**', 'node_modules/**'] },
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...base,
   ...pluginVue.configs['flat/recommended'],
   {
     files: ['**/*.vue'],
-    languageOptions: { parserOptions: { parser: tseslint.parser } },
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser,
+        extraFileExtensions: ['.vue'],
+        sourceType: 'module',
+      },
+    },
     rules: {
       'vue/multi-word-component-names': 'off',
       'vue/no-v-html': 'error',
       'vue/require-v-for-key': 'error',
       'vue/no-use-v-if-with-v-for': 'error',
+      'vue/no-mutating-props': 'error',
     },
   },
   {
     rules: {
       'no-var': 'error',
       eqeqeq: ['error', 'always'],
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-floating-promises': 'error',
       'no-console': ['warn', { allow: ['error', 'warn'] }],
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
   prettier,
-);
+];
 ```
 
-需要的依赖：
+依赖：
 
 ```bash
-pnpm add -D eslint @eslint/js typescript-eslint eslint-plugin-vue eslint-config-prettier prettier
+pnpm add -D eslint@^9 eslint-config-ali eslint-plugin-vue typescript-eslint eslint-config-prettier prettier vue-tsc
 ```
 
-## 5. ESLint：React + TypeScript（flat config）
+## 7. 类型感知规则（可选）
+
+`@typescript-eslint/no-floating-promises`、`no-misused-promises` 需要 TypeScript 类型信息。用 v8 的 `projectService` 开启：
 
 ```js
-// eslint.config.js
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import prettier from 'eslint-config-prettier';
-
-export default tseslint.config(
-  { ignores: ['dist/**', 'coverage/**', 'node_modules/**'] },
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  {
-    plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': 'warn',
-      'react/jsx-key': 'error',
-      'no-var': 'error',
-      eqeqeq: ['error', 'always'],
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-floating-promises': 'error',
+{
+  files: ['**/*.{ts,tsx,vue}'],
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
     },
   },
-  prettier,
-);
-```
-
-## 6. 使用 eslint-config-ali（eslintrc 时代）
-
-若项目仍用 ESLint 8 / `.eslintrc.cjs`：
-
-```js
-module.exports = {
-  extends: ['ali/typescript/react'],
   rules: {
-    'no-var': 'error',
-    eqeqeq: ['error', 'always'],
+    '@typescript-eslint/no-floating-promises': 'error',
   },
-};
+}
 ```
 
-Vue：`extends: ['ali/typescript/vue']`（若该子配置存在；不存在时用第 4 节组合）。
+首次开启会暴露存量问题，先只对新增目录/文件启用，或放进单独的 CI job。
 
-ESLint 9 想复用 eslintrc 配置时，用 `@eslint/eslintrc` 的 `FlatCompat` 包一层；确认 `eslint-config-ali` 的实际导出后再接入。
-
-## 7. tsconfig 关键项
+## 8. tsconfig 关键项
 
 ```json
 {
@@ -160,7 +206,7 @@ ESLint 9 想复用 eslintrc 配置时，用 `@eslint/eslintrc` 的 `FlatCompat` 
 
 `strict` 之外的新增项会暴露存量问题：先在新代码/新文件启用，不要一次性全仓库打开导致无法收敛。
 
-## 8. Git hooks（可选）
+## 9. Git hooks（可选）
 
 ```bash
 pnpm add -D husky lint-staged
@@ -178,10 +224,12 @@ npx husky init
 
 hooks 只做快速检查；完整 `lint` + `typecheck` 仍交给 CI。
 
-## 9. 常见坑
+## 10. 常见坑
 
 - ESLint 与 Prettier 规则打架：把 `eslint-config-prettier` 放最后。
-- `.vue` 文件 `parser` 配置两层：外层 `vue-eslint-parser`，`parserOptions.parser` 指向 TS parser。
+- `.vue` 文件 `parser` 配置两层：外层 `vue-eslint-parser`（`eslint-plugin-vue` 的 flat 预设已设），`parserOptions.parser` 指向 TS parser。
+- `eslint-config-ali` 16.x 是 flat config 专用；`extends: ['ali/typescript/react']` 是旧版写法，不要混用。
+- `eslint-config-ali` 采用 MPL-2.0；它只是规则包，不改变你的项目许可。
 - `tsc --noEmit` 与 Vite 的 `vue-tsc` 不同：Vue 项目用 `vue-tsc --noEmit`。
 - 不要在 CI 里跑 `eslint --fix` 后当作通过；fix 只用于本地。
 - 忽略目录（`dist`、`coverage`、生成代码）必须显式写在 `ignores`，否则噪声淹没真实问题。

@@ -2,7 +2,9 @@
 
 把「全栈开发 / 问题排查」与「阿里巴巴 Java / 前端规约」做成 **DeepSeek Harness 技能包**：装上之后不用再手动粘贴长提示词，模型会在合适的场景自行加载对应规范。
 
-[![version](https://img.shields.io/badge/version-0.2.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[English](./README.en.md) · 简体中文
+
+[![version](https://img.shields.io/badge/version-0.3.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
 [![topic](https://img.shields.io/badge/topic-dsh--plugin-0e7490)](https://github.com/topics/dsh-plugin)
@@ -15,11 +17,12 @@
 2. 开发 / 排查、单体 / 微服务、Java / 前端混在一起，靠人记该用哪份；
 3. 大量条文是重复或不可判定的表述，真正执行时反而是噪音。
 
-0.2.0 把它们拆成 **6 个按场景触发的技能**，并做了三件事：
+0.3.0 把它们拆成 **6 个按场景触发的技能**，并做了四件事：
 
 - **压缩与结构化**：只保留硬约束、流程、门禁与可执行断言；
-- **渐进披露**：长条文（Java 手册 8 章、原始全栈文档）放在资源目录，技能正文按需读取，不一次塞爆上下文；
-- **可执行化**：P0 红线 + 红线扫描器 + 提交前门禁，把「注意代码质量」变成能跑的命令。
+- **渐进披露**：长条文（Java 手册 8+1 节、原始全栈文档）放在资源目录；原「编程规约」1036 行已拆成 8 个文件（`01a`–`01h`），命中哪节只读哪节；
+- **可执行化**：P0 红线 + 红线扫描器 + 提交前门禁，把「注意代码质量」变成能跑的命令；
+- **存量友好**：扫描器支持 `--changed-only`、`--baseline`、`.dsh/redlines.json`、SARIF / GitHub 注解，老仓库可以先建基线、只拦新增问题。
 
 ## 六个技能
 
@@ -52,13 +55,15 @@
 
 ```
 resources/
-├── alibaba-java/          # 《Java 开发手册（黄山版）》8 章 + 索引 + 项目模板
+├── alibaba-java/          # 01a–01h 拆分章节 + 02–08 + 09 现代 Java + 索引/模板
 ├── f2e-spec/              # F2E 原始快照 + ESLint/Prettier/tsconfig 配置
+├── examples/              # 6 组 before/after 示例
 ├── reference/             # 原始全栈文档（逐字保留，供对照）
+├── AGENTS.snippet.md      # 项目 AGENTS.md 自动加载片段
 └── scan-redlines.mjs      # Java / 前端 P0 启发式扫描器
 ```
 
-每个技能注册时声明 `resourceBase`，DSH 加载技能时会给出资源基准目录；模型命中具体主题（如「金额用 BigDecimal 还是 Long」「索引最左前缀」）时，才去读对应章节。
+每个技能注册时声明 `resourceBase`，DSH 加载技能时会给出资源基准目录；模型命中具体主题（如「金额用 BigDecimal 还是 Long」「索引最左前缀」）时，才去读对应章节。拆分后单文件 3–13 KB，避免为了查一条命名规则载入整章 68 KB。
 
 ## 安装
 
@@ -76,13 +81,13 @@ dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.
 dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 ```
 
-### 方式三：npm（0.2.0 发布后可用）
+### 方式三：npm（0.3.0 发布后可用）
 
 ```bash
 dsh plugin --profile web add dsh-agent-prompts
 ```
 
-> 仓库已提交 DSH Market（条目 `lw24-1936/dsh-agent-prompts`）。市场里的 npm 安装命令要等 0.2.0 发布到 npm 后才可用；在那之前请用方式一。已提交数据修正 [#313](https://github.com/2BingLing/dsh-market/issues/313)，把安装命令更新为 GitHub 地址。
+> 仓库已提交 DSH Market（条目 `lw24-1936/dsh-agent-prompts`）与 DSH Plugin Hub（收录 issue [#581](https://github.com/dshplugin/dsh-plugin-hub/issues/581)，源码安装）。**截图里的「DSH Plugin Hub → 插件市场」只展示能用 npm 一键安装的包**；在 npm 发布前，请用方式一。DSH Market 的 GitHub 安装命令已通过数据修正 [#313](https://github.com/2BingLing/dsh-market/issues/313) 更新。
 
 装完重启 Harness（桌面版刷新页面）后，技能会出现在技能目录。
 
@@ -101,27 +106,89 @@ dsh plugin --profile web add dsh-agent-prompts
 
 ## 红线扫描器
 
-标准技能里带一个零依赖的启发式扫描器，用来在提交前抓最容易踩的 P0 反例。
+标准技能里带一个零依赖的启发式扫描器，用来在提交前抓最容易踩的 P0 反例。作为 DSH 插件安装时，脚本在技能的资源基准目录下：
 
 ```bash
-# Java / SQL
-node "<资源目录>/scan-redlines.mjs" --profile java --root <项目根目录>
+# Java / SQL（默认 P0 失败）
+node "<资源目录>/scan-redlines.mjs" --profile java --root .
+
+# 只扫 git 改动（工作区 + 暂存 + 未跟踪）
+node "<资源目录>/scan-redlines.mjs" --profile java --changed-only --root .
+
+# 存量仓库：先建基线，之后只拦新增问题
+node "<资源目录>/scan-redlines.mjs" --profile java --write-baseline .dsh/redlines-baseline.json --root .
+node "<资源目录>/scan-redlines.mjs" --profile java --baseline .dsh/redlines-baseline.json --root .
 
 # 前端
-node "<资源目录>/scan-redlines.mjs" --profile frontend --root <前端目录>
+node "<资源目录>/scan-redlines.mjs" --profile frontend --root .
 
-# 机器可读
-node "<资源目录>/scan-redlines.mjs" --profile java --root . --json
+# CI 格式
+node "<资源目录>/scan-redlines.mjs" --profile java --root . --format sarif > redlines.sarif
+node "<资源目录>/scan-redlines.mjs" --profile java --root . --format github
 ```
 
-资源目录就是技能加载时给出的 base directory（通常为 `<包目录>/resources`）。退出码：`0` 无 P0，`1` 发现 P0，`2` 参数/IO 错误。
+如果项目把本包装进了 devDependencies（`npm i -D dsh-agent-prompts`），可以用 bin：
+
+```bash
+npx dsh-agent-prompts-scan --profile java --changed-only --root .
+```
+
+资源目录就是技能加载时给出的 base directory（通常为 `<包目录>/resources`）。
+
+### 常用选项
+
+| 选项 | 作用 |
+|---|---|
+| `--changed-only` / `--base <ref>` | 只扫 git 改动；默认基准 `HEAD` |
+| `--baseline <file>` | 过滤已记录的存量问题，只对新问题失败 |
+| `--write-baseline <file>` | 把当前问题写入基线并退出 0 |
+| `--fail-on P0\|P1\|P2\|none` | 退出码阈值，默认 P0 |
+| `--ignore rule1,rule2` | 临时忽略规则 |
+| `--format text\|json\|sarif\|github` | 输出格式；`--json` 等价 json |
+| `--config <file>` | 配置文件，默认 `<root>/.dsh/redlines.json` |
+
+配置文件示例：
+
+```json
+{
+  "ignoreRules": ["F2E_CONSOLE"],
+  "ignorePaths": ["**/generated/**", "**/*.d.ts"],
+  "severity": { "JAVA_SYSTEM_OUT": "P2" },
+  "failOn": "P0"
+}
+```
+
+也支持按 profile 覆盖：`{ "java": { ... }, "frontend": { ... } }` 或 `{ "profiles": { "java": { ... } } }`。
 
 覆盖范围：
 
-- **Java**：`Executors` 工厂、裸 `new Thread`、`SimpleDateFormat`、`java.util.Date`/`Calendar`、空 `catch`、MyBatis `${}`、无 `where` 的 update/delete、集合 `return null`、`ThreadLocal` 未 `remove`、`printStackTrace`、`System.out`。
-- **前端**：`eval`/`new Function`、`v-html`、`dangerouslySetInnerHTML`、`target="_blank"` 缺 `noopener`、`v-for` 缺 key、`v-if`+`v-for`、`var`、`==`、`any`、`debugger`、`console`、`@ts-ignore`。
+- **Java**：`Executors` 工厂、裸 `new Thread`、`SimpleDateFormat`、`java.util.Date`/`Calendar`、空 `catch`、MyBatis `${}`、无 `where` 的 update/delete、集合 `return null`、`ThreadLocal` 未 `remove`、`printStackTrace`、`System.out`、`new BigDecimal(double)`。
+- **前端**：`eval`/`new Function`、`v-html`、`dangerouslySetInnerHTML`、`target="_blank"` 缺 `noopener`、`v-for` 缺 key、`v-if`+`v-for`、`var`、`==`、`any`、`debugger`、`console`、`@ts-ignore`、`innerHTML`。
 
-> 扫描器是正则级提示，不替代 P3C / PMD / ESLint / 人工 review；存在少量误报，按提示人工确认即可。
+准确性说明：
+
+- 扫描前会去掉注释，并把字符串内容遮罩（SQL/HTML 规则例外），所以「注释里写了 `SimpleDateFormat`」不会误报；`v-html="DOMPurify.sanitize(x)"` 会降为 P2 提示。
+- 仍是正则级启发式，不替代 P3C / PMD / ESLint / 人工 review；存在少量误报与漏报。
+- 不自动修代码：修复需要结合上下文，自动改可能引入更大问题。
+
+完整规则表、配置、baseline、SARIF 与 CI 接入见 [docs/SCANNER.md](./docs/SCANNER.md)。
+
+## 项目接入：AGENTS.md 片段
+
+把 [resources/AGENTS.snippet.md](./resources/AGENTS.snippet.md) 追加到项目根 `AGENTS.md`，agent 进入项目就知道该加载哪些技能、提交前跑什么检查。片段同时说明「被触碰代码」的 git 判定与基线用法。
+
+## 示例
+
+`resources/examples/` 有 6 组 before/after：
+
+| 文件 | 主题 |
+|---|---|
+| `java-threadpool.md` | 线程池显式参数、命名、拒绝策略 |
+| `java-datetime.md` | `java.time`、`DateTimeFormatter`、时区 |
+| `java-sql.md` | SQL 注入、无 where 的 update/delete |
+| `java-empty-catch.md` | 异常分类、日志、业务异常 |
+| `vue-key.md` | Vue 3 列表 key、v-if/v-for |
+| `xss.md` | HTML 消毒、外链 noopener |
 
 ## 相对原文档做了什么优化
 
@@ -155,47 +222,104 @@ dsh-agent-prompts/
 │   └── fullstack-microservice-debug.md
 ├── resources/
 │   ├── scan-redlines.mjs
-│   ├── alibaba-java/          # 00-index + 01…08 + project-template
+│   ├── alibaba-java/          # 00-index + 01a–01h + 02–08 + 09 + project-template
 │   ├── f2e-spec/              # original + toolchain
-│   └── reference/             # 原始全栈文档（逐字保留）
-├── test/                      # node:test：注册契约 + 扫描器
+│   ├── examples/              # 6 组 before/after
+│   ├── reference/             # 原始全栈文档（逐字保留）
+│   └── AGENTS.snippet.md      # 项目 AGENTS.md 片段
+├── test/                      # node:test：注册契约 + 扫描器 + 内容 + tarball
+├── docs/SCANNER.md            # 扫描器完整文档
+├── .github/workflows/         # ci.yml（Node 22/24）+ release.yml（tag 自动 GitHub Release）
 ├── CHANGELOG.md
 ├── NOTICE.md                  # 来源与许可
 ├── PUBLISH.md                 # 发布 / 市场提交记录
+├── README.en.md               # 英文简介
 └── README.md
 ```
 
 ## 实现说明
 
-- 纯 Host 插件，没有 client 半，不占侧边栏。
+- 纯 Host 插件，没有 client 半，不占侧边栏、不发起网络请求。
 - `inject: ['skills']` 是硬依赖：技能服务不存在时插件不激活，不会出现「装了但没效果」。
 - 技能正文运行时读盘（`skills/*.md`），改文案后重启即可生效，不用重新构建。
-- 每个技能注册 `resourceBase` 并统一指向 `resources/`：章节条文、原始文档与扫描器都在同一基准目录下。
+- 每个技能注册 `resourceBase` 并统一指向 `resources/`：章节条文、原始文档、示例与扫描器都在同一基准目录下。
 - `apply` 返回组合 disposer：插件卸载时注销全部技能，不留下幽灵条目。
 - 注册 `source: 'bundled'`，`invocation` 同时允许模型与用户触发。
+- 可选配置 `only` / `disabled`（profile 的 cordis 配置）：只注册或排除指定技能，名字用 kebab-case；不传时注册全部。
+- 扫描器注册为 npm bin `dsh-agent-prompts-scan`，也保留 `resources/scan-redlines.mjs` 直接执行方式。
 - 无运行时依赖；`npm test` 用 `node:test`，`npm run check` 做语法检查。
 
 ## 开发与验证
 
 ```bash
 npm run check    # node --check lib/index.js + scanner
-npm test         # 注册契约、资源存在性、Java/前端扫描器用例
+npm test         # 注册契约、内容、扫描器、tarball 集成
 npm run verify   # 以上两项
 npm pack --dry-run
+
+# 手动跑扫描器
+npm run scan:java -- --root .
+npm run scan:frontend -- --root .
 ```
+
+CI（`.github/workflows/ci.yml`）在 Node 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 6 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
 
 ## 兼容性
 
-- DeepSeek Harness：使用 `ctx.skills.register` 与 `resourceBase`，要求当前 DSH 版本（2026.10 桌面版实测）。
-- Node.js：>= 22（扫描器与测试使用 `node:test`、ESM）。
-- 扫描器零依赖，可在任意 Node 22+ 环境单独运行。
+- DeepSeek Harness：使用 `ctx.skills.register` 与 `resourceBase`，要求当前 DSH 版本（2026.10/11 桌面版实测）。
+- Node.js：>= 22.6（与 DSH Plugin Hub 要求对齐；扫描器与测试使用 `node:test`、ESM）。
+- 扫描器零依赖，可在任意 Node 22.6+ 环境单独运行。
+- 平台：Windows / macOS / Linux；扫描器的 `--changed-only` 需要 git。
 
 ## 版本
 
+- **0.3.0**：Java 第一章拆成 8 个文件 + 新增现代 Java 21 补充；扫描器增加 bin、`--changed-only`、`--baseline`、SARIF/GitHub 格式、配置文件与误报抑制；新增示例、AGENTS 片段、内容/tarball 测试与 CI；文档补充 FAQ/英文简介。
 - **0.2.0**：新增 `alibaba-java-standards`、`f2e-spec`；6 个技能全部声明 `resourceBase`；新增红线扫描器、测试与门禁；文档重写。
 - **0.1.0**：四个全栈技能（单体/微服务 × 开发/排查）首版。
 
 详见 [CHANGELOG.md](./CHANGELOG.md)。
+
+## FAQ
+
+### 为什么在 DSH Plugin Hub 的「插件市场」搜不到？
+
+你搜的是另一个市场。DSH 侧边栏可能同时装了两个市场：
+
+| 市场 | 数据源 | 收录方式 |
+|---|---|---|
+| **DSH Market** | `dsh.market` / `@dsh-market/plugin` | GitHub topic + 数据修正；本插件已收录 |
+| **DSH Plugin Hub** | `dsh-plugin.org` / `dsh-plugin` | 公开仓库 + `dsh-plugin` topic + 提交 issue；本插件已提交 [#581](https://github.com/dshplugin/dsh-plugin-hub/issues/581) |
+
+DSH Plugin Hub 的 FAQ 明确写着：**「插件中心」只展示能用 npm 一键安装的插件**。没有 npm 包的仓库只做网页收录（源码安装），不会出现在插件中心的搜索结果里。本插件 npm 包尚未发布，所以在「插件市场」搜索是 0 条。
+
+### 没有 npm 包，现在怎么装？
+
+用 GitHub：
+
+```bash
+dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.git
+```
+
+桌面版在「插件设置 → 安装」填这个地址；也可以填本地目录。
+
+### DSH Market 和 DSH Plugin Hub 要装哪个？
+
+装哪个都能用本插件，它们只是发现/安装入口不同。DSH Market 已收录本插件；DSH Plugin Hub 需要 npm 包才会进入插件中心。不要为了本插件重复装两个市场。
+
+### 扫描器为什么有误报/漏报？
+
+它是零依赖的正则级启发式：会先去掉注释、遮罩字符串，但对复杂表达式、动态拼接、跨文件数据流仍然只能给提示。正式门禁请用 P3C / PMD / ESLint + 人工 review。误报可以用 `--ignore` 或 `.dsh/redlines.json` 的 `ignoreRules` / `ignorePaths` / `severity` 处理。
+
+### 为什么不做自动修复？
+
+P0 修复涉及线程池参数、事务边界、SQL 语义、组件 key 选择等上下文；自动改容易把「能跑」改成「更难查」。本插件只负责定位、给出正例和门禁，修复由 agent 在理解上下文后完成。
+
+## 安全边界
+
+- 插件只注册技能，读取包内 `skills/` 与 `resources/`；不发起网络请求，不修改项目文件。
+- 扫描器只读本地文件、不执行目标代码、不访问网络；配置与 baseline 是本地 JSON。
+- 扫描器不是安全扫描器，也不构成合规认证；它只覆盖列出的启发式规则。
+- 技能会建议 agent 执行构建/测试命令（`mvn`、`pnpm`、`eslint` 等），这些命令按项目与你的权限执行。
 
 ## 来源与许可
 

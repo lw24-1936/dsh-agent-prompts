@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.0 — 2026-11-03
+
+### Added
+
+- **扫描器 CLI**：`dsh-agent-prompts-scan` bin + `exports["./scan"]`，可直接 `npx dsh-agent-prompts-scan`。
+- **存量友好扫描**：`--changed-only`（git 工作区/暂存/未跟踪）、`--write-baseline` / `--baseline`、`--fail-on P0|P1|P2|none`、`--ignore`、`.dsh/redlines.json`（忽略规则/路径/级别覆盖）。
+- **CI 输出**：`--format sarif` 与 `--format github`；保留 `--json`。
+- **误报抑制**：扫描前去掉注释并遮罩字符串；`v-html` / `dangerouslySetInnerHTML` 检测到 DOMPurify 等消毒调用时降为 P2；新增 `JAVA_BIGDECIMAL_DOUBLE`、`F2E_INNER_HTML`。
+- **Java 章节拆分**：原 1036 行 `01-coding-standards.md` 拆成 `01a-naming` … `01h-comments-frontend-other`，单文件 3–13 KB。
+- **`09-modern-java.md`**：JDK 17/21 records、`var`、pattern matching、虚拟线程、Optional、CompletableFuture 与手册冲突裁决。
+- **示例**：`resources/examples/` 6 组 before/after；`resources/AGENTS.snippet.md` 项目接入片段。
+- **测试与 CI**：内容一致性、tarball 集成测试；`.github/workflows/ci.yml` Node 22/24 矩阵。
+- **文档**：README FAQ（两个市场的区别、npm 门槛、误报、自动修复）、安全边界、英文 `README.en.md`。
+
+### Changed
+
+- Java 技能增加 Review 输出模板、`git diff` 改动范围判定、扫描器 CLI 用法。
+- F2E 工具链更新到 `eslint-config-ali` 16.x flat config（`base`/`react`），补 Vue 3 + `vue-tsc` 组合与 F2ELint。
+- `engines.node` 对齐到 `>=22.6`；扫描器版本 0.3.0。
+
+### Fixed
+
+- 配置/baseline JSON 支持 BOM；`BigDecimal` 规则不再误报整数字面量。
+- `--changed-only` 在非 git 目录回退全量并提示；`--fail-on` 的 CLI 显式值优先于配置。
+
 ## 0.2.0 — 2026-10-31
 
 ### Added

@@ -88,19 +88,28 @@
 
 ```bash
 pnpm eslint . --max-warnings=0
-pnpm tsc --noEmit
-pnpm build:test   # 或项目约定的构建命令
+pnpm tsc --noEmit            # React / 纯 TS
+pnpm vue-tsc --noEmit        # Vue 3
+pnpm build:test              # 或项目约定的构建命令
 ```
 
-- ESLint 规则包：`eslint-config-ali`；React 用 `eslint-config-ali/react` 或 `eslint-config-ali/typescript/react`；Vue 3 用 `eslint-plugin-vue` + `@typescript-eslint`。
+- ESLint：`eslint-config-ali` 16.x 只提供 flat config 的 `base` / `react` 导出（ESLint 9）。React 用 `react`；Vue 3 用 `base` + `eslint-plugin-vue` + `typescript-eslint`。不要再用 `extends: ['ali/typescript/react']`。
+- 一键接入：`npx f2elint`（适合存量项目；生成配置后仍按项目实际配置为准）。
 - 格式化：Prettier（2 空格、单引号、分号、100 列）；与 ESLint 的分工见资源文件 `f2e-spec/toolchain.md`。
-- 提交前可用启发式扫描：
+- 提交前可用启发式扫描（作为 DSH 插件安装时，脚本在资源基准目录下）：
 
 ```bash
-node "<资源目录>/scan-redlines.mjs" --profile frontend --root <前端目录>
+node "<资源目录>/scan-redlines.mjs" --profile frontend --root .
+node "<资源目录>/scan-redlines.mjs" --profile frontend --changed-only --root .
+node "<资源目录>/scan-redlines.mjs" --profile frontend --write-baseline .dsh/redlines-baseline.json --root .
+node "<资源目录>/scan-redlines.mjs" --profile frontend --baseline .dsh/redlines-baseline.json --root .
 ```
 
-扫描器只提示，不替代 ESLint；退出码 1 表示发现 P0。
+如果项目把本包装进了 devDependencies，也可以用 `npx dsh-agent-prompts-scan --profile frontend ...`。
+
+扫描器只提示，不替代 ESLint；退出码 1 表示发现达到 `--fail-on` 阈值的问题（默认 P0）。完整选项见 `docs/SCANNER.md`。
+
+规则命中时，可先读资源目录 `examples/vue-key.md` / `examples/xss.md` 对照修复。
 
 ## 十、Review 输出格式
 

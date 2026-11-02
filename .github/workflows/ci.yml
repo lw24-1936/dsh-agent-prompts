@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Verify
+        run: npm run verify
+
+      - name: Pack dry run
+        run: npm pack --dry-run
+
+      - name: Smoke test scanner
+        run: |
+          node resources/scan-redlines.mjs --profile java --root . --format sarif > /tmp/redlines.sarif
+          node -e "const fs=require('fs');const s=JSON.parse(fs.readFileSync('/tmp/redlines.sarif','utf8'));if(s.version!=='2.1.0')process.exit(1);console.log('sarif ok',s.runs.length)"

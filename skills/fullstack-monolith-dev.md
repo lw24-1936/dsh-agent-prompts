@@ -139,7 +139,7 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 
 ## 九、编码规约（与标准技能联动）
 
-- **Java**：加载 `alibaba-java-standards`。P0 红线（新代码直接合规、被改到的存量代码发现即修复、不可口头豁免）在该技能正文；条文按需读 `alibaba-java/01…08` 章节。项目团队约定放 `.dsh/java-standards.md`（可从 `alibaba-java/project-template.md` 复制）。
+- **Java**：加载 `alibaba-java-standards`。P0 红线（新代码直接合规、被改到的存量代码发现即修复、不可口头豁免）在该技能正文；条文按需读 `alibaba-java/` 下的 01a–01h 与 09 章节。项目团队约定放 `.dsh/java-standards.md`（可从 `alibaba-java/project-template.md` 复制）。
 - **前端**：加载 `f2e-spec`。至少遵守：`const`/`let`、`===`、Hooks 规则、`v-for` 稳定 key、`v-if` 不与 `v-for` 同元素、`v-html` / `dangerouslySetInnerHTML` 必须消毒、`target="_blank"` 带 `noopener`。
 - **冲突裁决**：本文件的架构/技术栈/权限/门禁是项目硬约束；编码写法按两个标准技能。两者冲突时先问用户，不自行放宽 P0 或技术栈。
 - **原始文档**：`reference/fullstack-single.original.md`（完整保留，供对照）。

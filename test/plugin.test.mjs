@@ -70,16 +70,23 @@ test('standards skills expose progressive-disclosure resources', () => {
   const f2e = registered.find((skill) => skill.name === 'f2e-spec');
   assert.equal(java.resourceBase.path, join(PACKAGE_ROOT, 'resources'));
   assert.equal(f2e.resourceBase.path, join(PACKAGE_ROOT, 'resources'));
-  assert.match(java.content, /01-coding-standards\.md/);
+  assert.match(java.content, /01a-naming\.md/);
+  assert.match(java.content, /01f-concurrency\.md/);
+  assert.match(java.content, /09-modern-java\.md/);
   assert.match(java.content, /scan-redlines\.mjs/);
   assert.match(java.content, /Alibaba-Java-P0-EXEMPT/);
   assert.match(f2e.content, /f2e-spec\/toolchain\.md/);
   assert.match(f2e.content, /scan-redlines\.mjs/);
   for (const file of [
-    'alibaba-java/01-coding-standards.md',
+    'alibaba-java/01a-naming.md',
+    'alibaba-java/01f-concurrency.md',
     'alibaba-java/08-appendix.md',
+    'alibaba-java/09-modern-java.md',
     'f2e-spec/original.md',
     'f2e-spec/toolchain.md',
+    'examples/java-threadpool.md',
+    'examples/xss.md',
+    'AGENTS.snippet.md',
     'scan-redlines.mjs',
   ]) {
     assert.ok(existsSync(join(PACKAGE_ROOT, 'resources', file)), `${file} missing`);
@@ -110,6 +117,22 @@ test('disposal unregisters every skill', () => {
   assert.equal(registered.length, 0);
   dispose();
   assert.equal(registered.length, 0);
+});
+
+test('config can limit or disable skills', () => {
+  const onlyContext = fakeContext();
+  apply(onlyContext.ctx, { only: ['f2e-spec'] });
+  assert.deepEqual(onlyContext.registered.map((skill) => skill.name), ['f2e-spec']);
+
+  const disabledContext = fakeContext();
+  apply(disabledContext.ctx, { disabled: ['f2e-spec', 'alibaba-java-standards'] });
+  assert.equal(disabledContext.registered.length, 4);
+  assert.ok(!disabledContext.registered.some((skill) => skill.name === 'f2e-spec'));
+
+  const unknownContext = fakeContext();
+  apply(unknownContext.ctx, { disabled: ['not-a-skill'] });
+  assert.equal(unknownContext.registered.length, 6);
+  assert.match(unknownContext.warnings.join('\n'), /not-a-skill/);
 });
 
 test('skill spec files all exist', () => {

@@ -1,15 +1,20 @@
 {
   "name": "dsh-agent-prompts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "DeepSeek Harness 技能包：6 个按场景自动加载的技能（全栈单体/微服务 × 开发/排查 + 阿里巴巴 Java/前端规约），带章节渐进披露、P0 红线扫描与提交前门禁。",
   "main": "lib/index.js",
+  "bin": {
+    "dsh-agent-prompts-scan": "./resources/scan-redlines.mjs"
+  },
   "files": [
     "lib",
     "skills",
     "resources",
+    "docs",
     "cordis.patch.yml",
     "README.md",
+    "README.en.md",
     "CHANGELOG.md",
     "NOTICE.md",
     "PUBLISH.md",
@@ -19,12 +24,16 @@
     ".": {
       "default": "./lib/index.js"
     },
+    "./scan": "./resources/scan-redlines.mjs",
     "./package.json": "./package.json"
   },
   "scripts": {
     "check": "node --check lib/index.js && node --check resources/scan-redlines.mjs",
     "test": "node --test test/*.test.mjs",
-    "verify": "npm run check && npm test"
+    "verify": "npm run check && npm test",
+    "scan:java": "node resources/scan-redlines.mjs --profile java",
+    "scan:frontend": "node resources/scan-redlines.mjs --profile frontend",
+    "prepublishOnly": "npm run verify"
   },
   "dsh": {
     "bundle": {
@@ -58,6 +67,6 @@
   "homepage": "https://github.com/lw24-1936/dsh-agent-prompts#readme",
   "license": "MIT",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.6"
   }
 }
