@@ -108,6 +108,8 @@ dsh plugin --profile web add dsh-agent-prompts
 
 标准技能里带一个零依赖的启发式扫描器，用来在提交前抓最容易踩的 P0 反例。作为 DSH 插件安装时，脚本在技能的资源基准目录下：
 
+![扫描器终端演示](./docs/assets/scan-demo.svg)
+
 ```bash
 # Java / SQL（默认 P0 失败）
 node "<资源目录>/scan-redlines.mjs" --profile java --root .

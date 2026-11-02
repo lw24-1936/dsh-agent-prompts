@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" role="img" aria-label="dsh-agent-prompts 红线扫描器终端演示">
+  <rect width="900" height="440" rx="14" fill="#0f172a"/>
+  <rect x="0" y="0" width="900" height="38" rx="14" fill="#1e293b"/>
+  <rect x="0" y="24" width="900" height="14" fill="#1e293b"/>
+  <circle cx="24" cy="19" r="6" fill="#ef4444"/>
+  <circle cx="44" cy="19" r="6" fill="#f59e0b"/>
+  <circle cx="64" cy="19" r="6" fill="#22c55e"/>
+  <text x="88" y="24" fill="#94a3b8" font-family="Consolas, 'Courier New', monospace" font-size="13">dsh-agent-prompts · 红线扫描</text>
+  <g font-family="Consolas, 'Courier New', monospace" font-size="14">
+    <text x="28" y="76" fill="#93c5fd">$ node resources/scan-redlines.mjs --profile java --changed-only --root .</text>
+    <text x="28" y="104" fill="#cbd5e1">dsh-agent-prompts 红线扫描 · profile=java · mode=changed</text>
+    <text x="28" y="126" fill="#94a3b8">files: scanned=3 skipped=41</text>
+    <text x="28" y="154" fill="#f87171" font-weight="bold">P0 (2)</text>
+    <text x="44" y="178" fill="#fca5a5">src/OrderService.java:42  [JAVA_THREADPOOL_FACTORY]</text>
+    <text x="44" y="198" fill="#fecaca">禁止用 Executors 工厂创建线程池，改用 new ThreadPoolExecutor(...) 显式参数</text>
+    <text x="60" y="218" fill="#e2e8f0">private final ExecutorService pool = Executors.newFixedThreadPool(8);</text>
+    <text x="44" y="244" fill="#fca5a5">src/UserMapper.xml:18  [XML_SQL_DOLLAR]</text>
+    <text x="44" y="264" fill="#fecaca">MyBatis SQL 禁止 ${} 拼接，改用 #{}</text>
+    <text x="60" y="284" fill="#e2e8f0">where name like '%${keyword}%'</text>
+    <text x="28" y="316" fill="#fbbf24">P1 (1)</text>
+    <text x="44" y="338" fill="#fcd34d">src/OrderService.java:51  [JAVA_SYSTEM_OUT]</text>
+    <text x="28" y="370" fill="#cbd5e1">summary: P0=2 P1=1 P2=0  baselined=0</text>
+    <text x="28" y="392" fill="#f87171">结果：发现 P0 问题，修复后再提交。</text>
+    <text x="28" y="418" fill="#64748b"># 启发式提示，不替代 P3C / PMD / ESLint / 人工 review</text>
+  </g>
+</svg>
