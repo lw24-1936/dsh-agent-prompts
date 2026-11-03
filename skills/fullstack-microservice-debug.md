@@ -4,6 +4,8 @@
 > 本文件只补微服务特有的排查路径与故障模式；通用纪律见 `fullstack-monolith-debug`。
 >
 > **修复代码时同样受规约约束**：Java 遵循 `alibaba-java-standards`，前端遵循 `f2e-spec`；降级/熔断代码里尤其不能吞异常、不能用「返回 null」掩盖下游失败。
+>
+> **流程**：排障按事件响应流程（止血 → 复现 → 定位 → 修复 → 复盘）；项目级流程选择见 `software-engineering-process`，排障不改变项目主流程。
 
 ## 一、开工前置
 

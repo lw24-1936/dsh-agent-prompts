@@ -20,7 +20,7 @@ function runNpm(args, cwd) {
   return spawnSync(NPM, args, options);
 }
 
-test('packed tarball installs and exposes six skills plus scanner', { timeout: 120000 }, async () => {
+test('packed tarball installs and exposes seven skills plus scanner', { timeout: 120000 }, async () => {
   const npmVersion = runNpm(['--version'], ROOT);
   if (npmVersion.status !== 0) {
     test.skip('npm not available');
@@ -51,7 +51,7 @@ test('packed tarball installs and exposes six skills plus scanner', { timeout: 1
 
     const installed = join(installDir, 'node_modules', 'dsh-agent-prompts');
     const pkg = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
-    assert.equal(pkg.version, '0.4.0');
+    assert.equal(pkg.version, '0.5.0');
     assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
     for (const file of [
       'lib/index.js',
@@ -75,7 +75,7 @@ test('packed tarball installs and exposes six skills plus scanner', { timeout: 1
     const mod = await import(moduleUrl);
     assert.equal(mod.name, 'dsh-agent-prompts');
     assert.deepEqual(mod.inject, ['skills']);
-    assert.equal(mod.SKILLS.length, 6);
+    assert.equal(mod.SKILLS.length, 7);
     assert.deepEqual(mod.SKILLS.map((skill) => skill.name).sort(), [
       'alibaba-java-standards',
       'f2e-spec',
@@ -83,6 +83,7 @@ test('packed tarball installs and exposes six skills plus scanner', { timeout: 1
       'fullstack-microservice-dev',
       'fullstack-monolith-debug',
       'fullstack-monolith-dev',
+      'software-engineering-process',
     ]);
   } finally {
     rmSync(packDir, { recursive: true, force: true });

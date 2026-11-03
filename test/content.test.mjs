@@ -13,6 +13,7 @@ const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
 const SKILL_FILES = [
   'alibaba-java-standards.md',
   'f2e-spec.md',
+  'software-engineering-process.md',
   'fullstack-monolith-dev.md',
   'fullstack-monolith-debug.md',
   'fullstack-microservice-dev.md',
@@ -45,7 +46,7 @@ function read(path) {
 }
 
 test('package metadata advertises the scanner and Node 20+', () => {
-  assert.equal(pkg.version, '0.4.0');
+  assert.equal(pkg.version, '0.5.0');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');
   assert.match(pkg.engines.node, />=20/);
@@ -54,7 +55,7 @@ test('package metadata advertises the scanner and Node 20+', () => {
   assert.match(pkg.scripts.verify, /npm run check/);
 });
 
-test('all six skills exist, are unique, and fit the catalog description cap', () => {
+test('all seven skills exist, are unique, and fit the catalog description cap', () => {
   const names = new Set();
   for (const file of SKILL_FILES) {
     const path = join(ROOT, 'skills', file);
@@ -66,7 +67,7 @@ test('all six skills exist, are unique, and fit the catalog description cap', ()
     assert.ok(!names.has(file), `duplicate skill file ${file}`);
     names.add(file);
   }
-  assert.equal(SKILL_FILES.length, 6);
+  assert.equal(SKILL_FILES.length, 7);
 });
 
 test('catalog descriptions are unique, version-agnostic, and under 500 chars', () => {
@@ -133,6 +134,22 @@ test('modern Java and examples are wired into the Java skill', () => {
   assert.match(java, /Review 输出格式/);
 });
 
+test('process skill auto-selects and fullstack skills link to it', () => {
+  const process = read('skills/software-engineering-process.md');
+  for (const token of ['自动选择', 'V-Model', 'Spiral', 'Scrum', 'Kanban', 'XP', 'DevOps', 'PROCESS.md', 'DoR', 'DoD']) {
+    assert.ok(process.includes(token), `process skill missing ${token}`);
+  }
+  assert.match(process, /不要停下来问|不先问/);
+  for (const file of [
+    'fullstack-monolith-dev.md',
+    'fullstack-monolith-debug.md',
+    'fullstack-microservice-dev.md',
+    'fullstack-microservice-debug.md',
+  ]) {
+    assert.match(read(`skills/${file}`), /software-engineering-process/, `${file} does not link process skill`);
+  }
+});
+
 test('active skills do not pin technology versions', () => {
   const active = [
     ...SKILL_FILES.map((file) => `skills/${file}`),
@@ -182,8 +199,10 @@ test('examples index lists every example file', () => {
   }
 });
 
-test('CHANGELOG records 0.3.0', () => {
+test('CHANGELOG records 0.5.0 and 0.3.0', () => {
   const changelog = read('CHANGELOG.md');
+  assert.match(changelog, /## 0\.5\.0/);
+  assert.match(changelog, /software-engineering-process/);
   assert.match(changelog, /## 0\.3\.0/);
   assert.match(changelog, /changed-only|baseline|拆分|SARIF/i);
 });

@@ -5,6 +5,8 @@
 > **配套标准**：Java 写法遵循 `alibaba-java-standards`，前端写法遵循 `f2e-spec`。本文件管拆分、模块、网关、事务与门禁；**不锁定技术版本**。
 >
 > **版本原则**：先读项目父 POM / `dependencyManagement` / BOM / `package.json`，按项目现有版本执行；没有版本信息时先问用户，不要求升级，也不凭记忆写版本号。
+>
+> **流程**：开工前加载 `software-engineering-process`，由它按项目约束自动选择开发流程（不先问用户选 Scrum 还是瀑布）；本文件的服务拆分、模块、网关与门禁继续适用。
 
 ## 一、开工前置（四件缺一不可）
 

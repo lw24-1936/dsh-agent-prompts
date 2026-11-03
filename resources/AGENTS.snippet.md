@@ -7,6 +7,7 @@
 
 - 写、改或 review Java/SQL 前，先加载技能 `alibaba-java-standards`，按其「P0 红线」执行；条文按需读 `alibaba-java/01a…09`。
 - 写、改或 review 前端（JS/TS/React/Vue，框架版本按项目）前，先加载技能 `f2e-spec`。
+- 开始新项目/新模块/大改动前，先加载 `software-engineering-process`，由它按项目约束自动选择开发流程；不要先问用户选 Scrum 还是瀑布。
 - 技术版本以项目 `pom.xml` / `build.gradle` / `package.json` / 父 POM / BOM 为准；不要求升级，没有版本信息时先问用户。
 - 修复线上问题时同样受 P0 约束：不得用「先让它不报错」绕过空 catch、SQL 拼接、线程池红线。
 - 「被本次改动触碰的代码」= `git diff --name-only` + `git diff --cached --name-only` + 新增未跟踪文件；P0 在这份清单内发现即修复，P1 只约束新增/重写行。

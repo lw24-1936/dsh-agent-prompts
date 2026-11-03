@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.0 — 2026-11-03
+
+### Added
+
+- **`software-engineering-process` 技能**：软件工程开发流程自动选择与执行。
+  - 读项目约束（需求稳定性、合规/安全、合同/交付节奏、团队规模、存量占比、反馈通道），自动选 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps / 混合门禁。
+  - 提供流程库、0→1/持续产品/固定范围/存量/合规/事故/AI Agent 场景模板、DoR/DoD、度量与反模式。
+  - 输出「流程选择 + 依据 + 节奏 + 产物 + 门禁 + 何时重选」，不先让用户选方法论。
+- 四个全栈技能与 `AGENTS.snippet.md` 接入流程选择；README/README.en 增加流程说明。
+
+### Changed
+
+- 技能数从 6 个增加到 7 个；CI/tarball 测试同步更新。
+- 版本 0.5.0；扫描器版本同步。
+
 ## 0.4.0 — 2026-11-03
 
 ### Changed

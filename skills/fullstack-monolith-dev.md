@@ -5,6 +5,8 @@
 > **配套标准**：Java 写法遵循 `alibaba-java-standards`（P0 红线 + 章节路由），前端写法遵循 `f2e-spec`（ESLint + Vue/React + 安全分级）。本文件管架构、流程、环境与门禁，不重复抄写编码条文。
 >
 > **版本原则**：本技能不锁定任何技术版本。先读项目的 `pom.xml` / `build.gradle` / `package.json` / 父 POM 或 BOM，按项目现有版本执行；没有版本信息时先问用户，不要求升级，也不凭记忆写版本号。
+>
+> **流程**：开工前加载 `software-engineering-process`，由它按项目约束自动选择开发流程（不先问用户选 Scrum 还是瀑布）；本文件的架构、技术栈与门禁继续适用。
 
 ## 一、开工前置（三件缺一不可）
 

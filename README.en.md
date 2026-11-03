@@ -1,10 +1,10 @@
 # dsh-agent-prompts
 
-A **DeepSeek Harness skill pack** that turns full-stack development/debugging guidance and the Alibaba Java / F2E frontend conventions into six on-demand skills. The agent loads the right skill when the task matches, so you no longer paste long prompts into every session.
+A **DeepSeek Harness skill pack** that turns full-stack development/debugging guidance, the Alibaba Java / F2E frontend conventions, and software-engineering process selection into seven on-demand skills. The agent loads the right skill when the task matches, so you no longer paste long prompts into every session.
 
 [中文](./README.md) · English
 
-[![version](https://img.shields.io/badge/version-0.4.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.5.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 ## Skills
@@ -13,10 +13,15 @@ A **DeepSeek Harness skill pack** that turns full-stack development/debugging gu
 |---|---|
 | `alibaba-java-standards` | Writing, changing, or reviewing Java/SQL: thread pools, date/time, SQL injection, resources, exceptions, collections, ThreadLocal |
 | `f2e-spec` | Writing, changing, or reviewing JS/TS/React/Vue (project versions): formatting, Hooks, Vue 3 examples, security, a11y |
+| `software-engineering-process` | New project/module/major change, planning, "which process?", or a process that no longer fits |
 | `fullstack-monolith-dev` | Monolith stack: Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token (project versions) |
 | `fullstack-monolith-debug` | Monolith failures: 500/401/403/404, data inconsistency, slow queries, middleware connectivity |
 | `fullstack-microservice-dev` | Spring Cloud Alibaba: Nacos / Gateway / OpenFeign / Sentinel / Seata + Maven multi-module |
 | `fullstack-microservice-debug` | Microservice tracing: registration, gateway 404, Feign timeout/fallback, circuit breaker, Seata, MQ backlog |
+
+## Process auto-selection
+
+`software-engineering-process` reads the project constraints (requirement stability, compliance/safety, contract and delivery cadence, team size, legacy share, feedback channel) and chooses a primary process: Waterfall, V-Model, Incremental, Iterative, Spiral, Scrum, Kanban, XP, DevOps, or a hybrid with stage gates. It states the cadence, artifacts, gates, and re-selection triggers, then proceeds — it does not ask the user to pick a methodology first.
 
 ## Version policy: no hard technology pins
 

@@ -4,7 +4,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[![version](https://img.shields.io/badge/version-0.4.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.5.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
 [![topic](https://img.shields.io/badge/topic-dsh--plugin-0e7490)](https://github.com/topics/dsh-plugin)
@@ -17,25 +17,27 @@
 2. 开发 / 排查、单体 / 微服务、Java / 前端混在一起，靠人记该用哪份；
 3. 大量条文是重复或不可判定的表述，真正执行时反而是噪音。
 
-本插件把它们拆成 **6 个按场景触发的技能**，并做了四件事：
+本插件把它们拆成 **7 个按场景触发的技能**，并做了五件事：
 
 - **压缩与结构化**：只保留硬约束、流程、门禁与可执行断言；
 - **渐进披露**：长条文（Java 手册 8+1 节、原始全栈文档）放在资源目录；原「编程规约」1036 行已拆成 8 个文件（`01a`–`01h`），命中哪节只读哪节；
 - **可执行化**：P0 红线 + 红线扫描器 + 提交前门禁，把「注意代码质量」变成能跑的命令；
-- **存量友好**：扫描器支持 `--changed-only`、`--baseline`、`.dsh/redlines.json`、SARIF / GitHub 注解，老仓库可以先建基线、只拦新增问题。
+- **存量友好**：扫描器支持 `--changed-only`、`--baseline`、`.dsh/redlines.json`、SARIF / GitHub 注解，老仓库可以先建基线、只拦新增问题；
+- **流程自动选择**：按需求稳定性、合规/安全、合同、风险、团队与存量占比，自动选 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps，不先让用户选方法论。
 
-## 六个技能
+## 七个技能
 
 | 技能 | 何时自动加载 | 正文 |
 |---|---|---|
 | `alibaba-java-standards` | 写/改/review Java 或 SQL：线程池、日期、SQL 注入、资源、异常、集合、ThreadLocal | P0 红线 + 三级管控 + 章节路由 + API 速查 |
 | `f2e-spec` | 写/改/review JS/TS/React/Vue（版本按项目）：格式、Hooks、Vue 3 示例、安全、a11y | 规则分级 + 工具链 + Review 格式 |
+| `software-engineering-process` | 新项目/新模块/大改动、排期拆分、用户问「用什么流程」、现有流程不适配 | 自动选择算法 + 流程库 + 场景模板 + DoR/DoD + 度量 |
 | `fullstack-monolith-dev` | 单体全栈开发：Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token（版本按项目） | 技术栈与版本策略、四套环境、RBAC、双文档、门禁 |
 | `fullstack-monolith-debug` | 单体故障排查：500/401/403/404、数据不一致、慢查询、连不上中间件 | 定位流程 + 分层清单 + 排查记录 |
 | `fullstack-microservice-dev` | 微服务开发：Nacos / Gateway / OpenFeign / Sentinel / Seata + Maven 多模块 | 版本读取、拆分、模块、网关、事务 |
 | `fullstack-microservice-debug` | 微服务链路排查：注册失败、网关 404、Feign 超时、熔断、Seata 不回滚、MQ 堆积 | 逐跳定位 + 故障速查 |
 
-新增的两个标准技能是**横切能力**：四个全栈技能管架构、流程、环境与门禁；Java / 前端代码怎么写，交给两个标准技能。
+两个标准技能 + 一个流程技能是**横切能力**：四个全栈技能管架构、技术栈、环境与门禁；Java / 前端代码怎么写，交给两个标准技能；项目该用哪种开发流程，交给 `software-engineering-process` 自动判断。
 
 ## 版本策略：不锁技术版本
 
@@ -57,6 +59,21 @@
 
 老仓库代码再乱也不怕：P1 只管新写的代码；但被改到的文件里如果出现 `Executors.newFixedThreadPool`、`SimpleDateFormat`、`${}` 拼接 SQL、空 `catch`、集合 `return null` 这类 P0，必须顺手修掉——这正是 CI 质量门禁会阻断的项。
 
+## 流程自动选择：不先让你选方法论
+
+`software-engineering-process` 在开工前读项目约束（需求稳定性、合规/安全、合同/交付节奏、团队规模、存量占比、反馈通道），按**硬约束优先**自动选择：
+
+| 条件 | 主流程 |
+|---|---|
+| 高合规/安全/审计 | V-Model / 阶段门禁瀑布（阶段内可迭代） |
+| 固定总价/固定范围 | 增量交付 + 基线 + 变更控制 |
+| 高不确定性/未验证技术 | Spiral / 迭代式发现 |
+| 持续产品、需求常变 | Scrum |
+| 运维/存量维护/持续流入 | Kanban + DevOps |
+| 1–3 人一次性/内部工具 | 轻量迭代 |
+
+它输出「流程选择 + 依据 + 节奏 + 产物 + 门禁 + 何时重选」，然后直接执行；缺少关键事实才问，最多 3 个问题，且问事实不问「想用 Scrum 还是瀑布」。完整流程库、场景模板、DoR/DoD、度量与反模式见 [software-engineering-process.md](./skills/software-engineering-process.md)。
+
 ## 渐进披露：长条文不占常驻上下文
 
 技能正文只放执行策略与路由；完整内容放在包内资源目录：
@@ -66,7 +83,7 @@ resources/
 ├── alibaba-java/          # 01a–01h 拆分章节 + 02–08 + 09 现代 Java + 索引/模板
 ├── f2e-spec/              # F2E 原始快照 + ESLint/Prettier/tsconfig 配置
 ├── examples/              # 6 组 before/after 示例
-├── reference/             # 原始全栈文档（逐字保留，供对照）
+├── reference/             # 历史原文（版本锁定不生效）
 ├── AGENTS.snippet.md      # 项目 AGENTS.md 自动加载片段
 └── scan-redlines.mjs      # Java / 前端 P0 启发式扫描器
 ```
@@ -89,7 +106,7 @@ dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.
 dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 ```
 
-### 方式三：npm（0.4.0 发布后可用）
+### 方式三：npm（0.5.0 发布后可用）
 
 ```bash
 dsh plugin --profile web add dsh-agent-prompts
@@ -101,11 +118,12 @@ dsh plugin --profile web add dsh-agent-prompts
 
 ## 用法
 
-装好后不需要任何操作。当你提出「新建一个 Spring Boot 项目」「这个接口 500 了帮我查」「这段 Java 有没有阿里规约问题」「审查这个 Vue 组件」这类请求时，对应技能会出现在技能目录里，由模型按需加载。
+装好后不需要任何操作。当你提出「新建一个 Spring Boot 项目」「这个接口 500 了帮我查」「这段 Java 有没有阿里规约问题」「审查这个 Vue 组件」这类请求时，对应技能会出现在技能目录里，由模型按需加载。新项目/新模块会先由 `software-engineering-process` 读项目约束自动选择流程，不会先问你「选 Scrum 还是瀑布」。
 
 也可以显式触发（在对话里说出技能名）：
 
 ```
+用 software-engineering-process 判断这个项目该用什么流程
 用 alibaba-java-standards 检查这个 Service
 用 f2e-spec 审查这个 Vue 页面
 用 fullstack-microservice-dev 规范帮我搭骨架
@@ -205,7 +223,7 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 | 项 | 原文档 | 本插件 |
 |---|---|---|
 | 结构 | 编号章节平铺，H1 混在中段 | 统一「前置 → 硬绑定 → 约定 → 流程 → 门禁 → 提问触发」 |
-| 长度 | 单体 1978 行 / 微服务 2719 行 / Java 手册约 2500 行 | 每个技能约 150–230 行；长条文进资源目录按需读 |
+| 长度 | 单体 1978 行 / 微服务 2719 行 / Java 手册约 2500 行 | 每个技能约 150–300 行；长条文进资源目录按需读 |
 | 重复 | 环境变量、自检清单、禁止事项多处重复 | 去重，每个约束只出现一次 |
 | 可判定性 | 部分要求无法判定（"注意代码质量"） | 改成可检查的断言、命令、门禁 |
 | 自检清单 | 60+ 项勾选，实际不会逐条执行 | 压成 10–12 条提交前门禁，附扫描器 |
@@ -222,10 +240,11 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 dsh-agent-prompts/
 ├── package.json
 ├── cordis.patch.yml           # profile 补丁：插入一条插件行
-├── lib/index.js               # 注册 6 个技能，声明 resourceBase
+├── lib/index.js               # 注册 7 个技能，声明 resourceBase
 ├── skills/                    # 技能正文（改文案不用改代码）
 │   ├── alibaba-java-standards.md
 │   ├── f2e-spec.md
+│   ├── software-engineering-process.md
 │   ├── fullstack-monolith-dev.md
 │   ├── fullstack-monolith-debug.md
 │   ├── fullstack-microservice-dev.md
@@ -272,7 +291,7 @@ npm run scan:java -- --root .
 npm run scan:frontend -- --root .
 ```
 
-CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 6 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
+CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 7 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
 
 ## 兼容性
 
@@ -283,6 +302,7 @@ CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`�
 
 ## 版本
 
+- **0.5.0**：新增 `software-engineering-process`，按项目约束自动选择 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps / 混合门禁，并给出节奏、产物、门禁与重选条件；四个全栈技能与 AGENTS 片段接入流程选择。
 - **0.4.0**：移除技术版本硬绑定——Spring Boot / Spring Cloud / JDK / Vue / MySQL / ESLint 等版本改为从项目 POM/BOM/package.json 读取；Java 现代写法按项目 JDK 选择；Node 引擎下限放宽到 20；同步文档与 CI。
 - **0.3.0**：Java 第一章拆成 8 个文件 + 新增现代 Java 补充（按项目 JDK）；扫描器增加 bin、`--changed-only`、`--baseline`、SARIF/GitHub 格式、配置文件与误报抑制；新增示例、AGENTS 片段、内容/tarball 测试与 CI；文档补充 FAQ/英文简介。
 - **0.2.0**：新增 `alibaba-java-standards`、`f2e-spec`；6 个技能全部声明 `resourceBase`；新增红线扫描器、测试与门禁；文档重写。

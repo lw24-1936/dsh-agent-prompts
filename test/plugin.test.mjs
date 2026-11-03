@@ -12,6 +12,7 @@ const PACKAGE_ROOT = resolve(HERE, '..');
 const EXPECTED = [
   'alibaba-java-standards',
   'f2e-spec',
+  'software-engineering-process',
   'fullstack-monolith-dev',
   'fullstack-monolith-debug',
   'fullstack-microservice-dev',
@@ -45,7 +46,7 @@ test('exports a Cordis plugin contract', () => {
   assert.equal(typeof apply, 'function');
 });
 
-test('registers six skills in the catalog order', () => {
+test('registers seven skills in the catalog order', () => {
   const { ctx, registered, warnings } = fakeContext();
   apply(ctx);
   assert.equal(warnings.length, 0);
@@ -112,7 +113,7 @@ test('fullstack skills point at the original documents inside resources', () => 
 test('disposal unregisters every skill', () => {
   const { ctx, registered } = fakeContext();
   const dispose = apply(ctx);
-  assert.equal(registered.length, 6);
+  assert.equal(registered.length, 7);
   dispose();
   assert.equal(registered.length, 0);
   dispose();
@@ -126,12 +127,12 @@ test('config can limit or disable skills', () => {
 
   const disabledContext = fakeContext();
   apply(disabledContext.ctx, { disabled: ['f2e-spec', 'alibaba-java-standards'] });
-  assert.equal(disabledContext.registered.length, 4);
+  assert.equal(disabledContext.registered.length, 5);
   assert.ok(!disabledContext.registered.some((skill) => skill.name === 'f2e-spec'));
 
   const unknownContext = fakeContext();
   apply(unknownContext.ctx, { disabled: ['not-a-skill'] });
-  assert.equal(unknownContext.registered.length, 6);
+  assert.equal(unknownContext.registered.length, 7);
   assert.match(unknownContext.warnings.join('\n'), /not-a-skill/);
 });
 
