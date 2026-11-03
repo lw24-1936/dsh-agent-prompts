@@ -1,7 +1,7 @@
-# Vue 3：v-for key / v-if 与 v-for 同元素
+# Vue（Vue 3 示例）：v-for key / v-if 与 v-for 同元素
 
 - 规则：`F2E_V_FOR_NO_KEY` / `F2E_V_IF_FOR` / `F2E_INDEX_KEY`
-- 规范：Vue 3 列表渲染
+- 规范：Vue 列表渲染（Vue 2 用 Options API 等价写法，不强制升级）
 
 ## ❌ 反例
 

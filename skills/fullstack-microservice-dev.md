@@ -1,42 +1,51 @@
 # 全栈开发规范（微服务版）
 
-> 加载本规范后，它就是本项目的硬约束。前端部分与单体版一致，本文件只强调**差异点**与微服务硬绑定。
+> 加载本规范后，它就是本项目的硬约束。前端部分与单体版一致，本文件只强调**差异点**与微服务结构约束。
 >
-> **配套标准**：Java 写法遵循 `alibaba-java-standards`，前端写法遵循 `f2e-spec`。本文件管版本、拆分、模块、网关、事务与门禁。
+> **配套标准**：Java 写法遵循 `alibaba-java-standards`，前端写法遵循 `f2e-spec`。本文件管拆分、模块、网关、事务与门禁；**不锁定技术版本**。
+>
+> **版本原则**：先读项目父 POM / `dependencyManagement` / BOM / `package.json`，按项目现有版本执行；没有版本信息时先问用户，不要求升级，也不凭记忆写版本号。
 
 ## 一、开工前置（四件缺一不可）
 
 1. **中间件表已填**：MySQL（每服务独立库）、Redis、Nacos、RabbitMQ、Sentinel、Seata、向量库（按需）。
 2. **服务拆分清单已确认**：按业务域拆，不按技术层拆；数量与粒度由用户确认。
 3. **UI 库组合已确认**。
-4. **版本三元组已锁定**（见下），不得凭记忆选。
+4. **版本基线已读取**（见下），以项目 POM/BOM 为准，不在技能里写死。
 
-## 二、版本兼容（最高优先级）
+## 二、版本与兼容（以项目为准）
 
-```
-Spring Boot:          3.5.x
-Spring Cloud:         2025.0.x（Northfields）
-Spring Cloud Alibaba: 2025.0.0.0
-```
+先读父 POM、`dependencyManagement`、Spring Boot/Cloud/Alibaba 的 BOM 或 Gradle platform，再从项目现有配置提取版本：
 
-**禁止**混用不同 Spring Cloud 版本；**禁止**擅自升降级任何微服务组件；**禁止**凭记忆写版本号。
+| 组件 | 版本来源 |
+|---|---|
+| Spring Boot | 父 POM / `spring-boot-dependencies` |
+| Spring Cloud | 父 POM / `spring-cloud-dependencies` |
+| Spring Cloud Alibaba | 父 POM / `spring-cloud-alibaba-dependencies` |
+| JDK | `maven.compiler.release` / `java.version` |
 
-## 三、技术栈
+规则：
+
+- 三个版本必须来自同一套官方兼容矩阵；升级前查官方文档，不凭记忆。
+- 不混用不兼容版本；不擅自升降级；需要升级时先给方案、影响面与回归清单。
+- 项目没有版本信息时问用户，不猜；不要把外部示例版本当成项目基线。
+
+## 三、技术栈（版本随项目）
 
 | 层 | 选型 |
 |---|---|
-| 前端 | Vue 3 + TS + Vite + Vue Router 4 + Pinia + Axios + pnpm（与单体版一致） |
-| 后端框架 | Spring Boot 3.5.x / Java 21 / Maven 多模块 |
+| 前端 | Vue（项目版本）+ TS + Vite + Vue Router + Pinia + Axios + pnpm（与单体版一致） |
+| 后端框架 | Spring Boot / JDK（项目版本）/ Maven 多模块 |
 | 网关 | Spring Cloud Gateway |
 | 注册 + 配置 | Spring Cloud Alibaba Nacos |
 | 服务调用 | OpenFeign + Spring Cloud LoadBalancer |
 | 容错 | Spring Cloud Alibaba Sentinel |
 | 消息 | RabbitMQ |
 | 分布式事务 | Seata |
-| 数据库 | MySQL 8，**每服务独立库** |
+| 数据库 | MySQL（项目版本），**每服务独立库** |
 | ORM / 池 | MyBatis-Plus + HikariCP |
 | 权限 | Sa-Token + RBAC |
-| 转换 / 加密 | MapStruct / BCrypt(10) |
+| 转换 / 加密 | MapStruct / BCrypt（强度按项目安全规范） |
 | 日志 / 追踪 | SLF4J + Logback + MDC，Micrometer Tracing + Brave |
 | 文档 | SpringDoc OpenAPI，网关聚合 |
 | 健康检查 | Actuator，只暴露 health / info |
@@ -165,8 +174,8 @@ public interface UserFeignClient {
 
 - **Java**：加载 `alibaba-java-standards`。Feign / 网关 / 事务代码同样受 P0 红线约束；Seata、Sentinel 的设计条文按需读 `alibaba-java/07-design-standards.md`。
 - **前端**：加载 `f2e-spec`，与单体版相同。
-- **冲突裁决**：版本三元组、服务拆分、模块依赖、网关规则、事务模式以本文件为准；编码写法按标准技能。冲突时先问用户。
-- **原始文档**：`reference/fullstack-microservice.original.md`（完整保留，供对照）。
+- **冲突裁决**：版本以项目 POM/BOM 为准；服务拆分、模块依赖、网关规则、事务模式以本文件为准；编码写法按标准技能。冲突时先问用户。
+- **原始文档**：`reference/fullstack-microservice.original.md`（历史快照，其中的版本锁定不再生效；以项目 POM/BOM 与本技能为准）。
 
 ## 十六、必须停下来提问
 

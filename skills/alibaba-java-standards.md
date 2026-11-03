@@ -77,7 +77,7 @@
 | 应用分层、DO/DTO/BO/VO/Query、二方库、GAV、服务器与 JVM | `alibaba-java/06-project-structure.md` |
 | 存储评审、UML、弱依赖与降级、SOLID/DRY、系统设计 | `alibaba-java/07-design-standards.md` |
 | 版本历史、专有名词、错误码全表 | `alibaba-java/08-appendix.md` |
-| JDK 17/21：records、`var`、pattern matching、虚拟线程、Optional、CompletableFuture | `alibaba-java/09-modern-java.md` |
+| 现代 Java（按项目 JDK 版本选择）：records、`var`、pattern matching、虚拟线程（JDK 21+）、Optional、CompletableFuture | `alibaba-java/09-modern-java.md` |
 
 `alibaba-java/00-index.md` 是章节索引与执行摘要，可先读它再决定读哪章。原「一、编程规约」已拆成 8 个文件（`01a`…`01h`），不要再整章读入。
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.0 — 2026-11-03
+
+### Changed
+
+- **移除技术版本硬绑定**：单体/微服务技能不再锁定 Spring Boot、Spring Cloud、Spring Cloud Alibaba、JDK、Vue、MySQL、ESLint 等版本；改为从项目 POM/BOM/package.json/父 POM 读取，缺版本时先问用户。
+- **版本相关写法改为条件化**：Spring Boot 2/3 的 `javax`/`jakarta`、Vue 2/3 的 Options API/`<script setup>`、JDK 8–21 的语言特性、ESLint 8/9 配置均按项目版本选择，不强制升级。
+- **现代 Java 文档**：`09-modern-java.md` 改为「按项目 JDK 版本选择」，新增特性最低 JDK 表；虚拟线程明确标注 JDK 21+。
+- **F2E 工具链**：ESLint 9 / `eslint-config-ali` 16.x 示例改为参考，不再要求升级；Vue 2 给出等价配置说明。
+- **Node 引擎**：`engines.node` 从 `>=22.6` 放宽到 `>=20`；CI 矩阵增加 Node 20。
+- **文档**：README/README.en 增加「不锁版本」策略；`resources/reference/README.md` 说明历史原文中的版本锁定不生效。
+
 ## 0.3.0 — 2026-11-03
 
 ### Added

@@ -29,7 +29,7 @@
 | `06-project-structure.md` | 工程结构：应用分层、DO/DTO/BO/VO/Query、二方库、GAV、服务器与 JVM | 分层与依赖 |
 | `07-design-standards.md` | 设计规约：存储评审、UML、弱依赖与降级、SOLID/DRY、系统设计 | 架构与设计 |
 | `08-appendix.md` | 附录：版本历史、专有名词、错误码全表 | 查名词/错误码 |
-| `09-modern-java.md` | JDK 17/21 补充：records、`var`、pattern matching、虚拟线程、Optional、CompletableFuture | 现代 Java 写法与手册冲突裁决 |
+| `09-modern-java.md` | 现代 Java（按项目 JDK 版本）：records、`var`、pattern matching、虚拟线程（JDK 21+）、Optional、CompletableFuture | 现代 Java 写法与手册冲突裁决 |
 | `project-template.md` | 项目级规约配置模板 | 团队覆盖与存量策略 |
 
 ## 读法

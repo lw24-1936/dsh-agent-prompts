@@ -139,6 +139,6 @@
 
 ## 十一、资源
 
-- 原始文档：`reference/fullstack-single.original.md`（资源基准目录下）。
+- 原始文档：`reference/fullstack-single.original.md`（历史快照，其中的版本锁定不再生效；排查时以项目实际版本为准）。
 - 红线扫描：`node <资源目录>/scan-redlines.mjs --profile java --root .`。
 

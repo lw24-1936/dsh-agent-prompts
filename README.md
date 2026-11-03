@@ -4,7 +4,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[![version](https://img.shields.io/badge/version-0.3.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.4.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
 [![topic](https://img.shields.io/badge/topic-dsh--plugin-0e7490)](https://github.com/topics/dsh-plugin)
@@ -17,7 +17,7 @@
 2. 开发 / 排查、单体 / 微服务、Java / 前端混在一起，靠人记该用哪份；
 3. 大量条文是重复或不可判定的表述，真正执行时反而是噪音。
 
-0.3.0 把它们拆成 **6 个按场景触发的技能**，并做了四件事：
+本插件把它们拆成 **6 个按场景触发的技能**，并做了四件事：
 
 - **压缩与结构化**：只保留硬约束、流程、门禁与可执行断言；
 - **渐进披露**：长条文（Java 手册 8+1 节、原始全栈文档）放在资源目录；原「编程规约」1036 行已拆成 8 个文件（`01a`–`01h`），命中哪节只读哪节；
@@ -29,13 +29,21 @@
 | 技能 | 何时自动加载 | 正文 |
 |---|---|---|
 | `alibaba-java-standards` | 写/改/review Java 或 SQL：线程池、日期、SQL 注入、资源、异常、集合、ThreadLocal | P0 红线 + 三级管控 + 章节路由 + API 速查 |
-| `f2e-spec` | 写/改/review JS/TS/React/Vue 3：格式、Hooks、Vue 3、安全、a11y | 规则分级 + 工具链 + Review 格式 |
-| `fullstack-monolith-dev` | 单体全栈开发：Vue 3 + TS + Vite + Pinia / Spring Boot 3 + JDK 21 + MyBatis-Plus + Sa-Token | 技术栈、四套环境、RBAC、双文档、门禁 |
+| `f2e-spec` | 写/改/review JS/TS/React/Vue（版本按项目）：格式、Hooks、Vue 3 示例、安全、a11y | 规则分级 + 工具链 + Review 格式 |
+| `fullstack-monolith-dev` | 单体全栈开发：Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token（版本按项目） | 技术栈与版本策略、四套环境、RBAC、双文档、门禁 |
 | `fullstack-monolith-debug` | 单体故障排查：500/401/403/404、数据不一致、慢查询、连不上中间件 | 定位流程 + 分层清单 + 排查记录 |
-| `fullstack-microservice-dev` | 微服务开发：Nacos / Gateway / OpenFeign / Sentinel / Seata + Maven 多模块 | 版本三元组、拆分、模块、网关、事务 |
+| `fullstack-microservice-dev` | 微服务开发：Nacos / Gateway / OpenFeign / Sentinel / Seata + Maven 多模块 | 版本读取、拆分、模块、网关、事务 |
 | `fullstack-microservice-debug` | 微服务链路排查：注册失败、网关 404、Feign 超时、熔断、Seata 不回滚、MQ 堆积 | 逐跳定位 + 故障速查 |
 
 新增的两个标准技能是**横切能力**：四个全栈技能管架构、流程、环境与门禁；Java / 前端代码怎么写，交给两个标准技能。
+
+## 版本策略：不锁技术版本
+
+- **不硬绑版本**：Spring Boot / Spring Cloud / Spring Cloud Alibaba / JDK / Vue / MySQL / ESLint / TypeScript 等，都以项目 `pom.xml` / `build.gradle` / `package.json` / 父 POM / BOM 为准。
+- **示例不是要求**：文档里的 `3.5.x`、`2025.0.x`、`JDK 21`、`ESLint 9` 等只用于说明兼容关系，不是升级指令；项目没有这些版本时按项目实际版本给等价写法。
+- **先检测再写代码**：没有版本信息时先问用户；不凭记忆写版本号，不擅自升降级。
+- **升级是项目决策**：需要升级时先给影响面、兼容矩阵与回归清单，由用户确认。
+- **存量优先**：Vue 2 / Spring Boot 2 / JDK 8/11/17 等项目不因技能加载而被要求迁移；技能给出对应版本的等价写法。
 
 ## 三级管控：为什么 P0 要单独拎出来
 
@@ -81,7 +89,7 @@ dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.
 dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 ```
 
-### 方式三：npm（0.3.0 发布后可用）
+### 方式三：npm（0.4.0 发布后可用）
 
 ```bash
 dsh plugin --profile web add dsh-agent-prompts
@@ -99,7 +107,7 @@ dsh plugin --profile web add dsh-agent-prompts
 
 ```
 用 alibaba-java-standards 检查这个 Service
-用 f2e-spec 审查这个 Vue 3 页面
+用 f2e-spec 审查这个 Vue 页面
 用 fullstack-microservice-dev 规范帮我搭骨架
 用 fullstack-monolith-debug 流程排查这个 500
 ```
@@ -189,7 +197,7 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 | `java-datetime.md` | `java.time`、`DateTimeFormatter`、时区 |
 | `java-sql.md` | SQL 注入、无 where 的 update/delete |
 | `java-empty-catch.md` | 异常分类、日志、业务异常 |
-| `vue-key.md` | Vue 3 列表 key、v-if/v-for |
+| `vue-key.md` | Vue 列表 key、v-if/v-for（Vue 3 示例） |
 | `xss.md` | HTML 消毒、外链 noopener |
 
 ## 相对原文档做了什么优化
@@ -203,7 +211,7 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 | 自检清单 | 60+ 项勾选，实际不会逐条执行 | 压成 10–12 条提交前门禁，附扫描器 |
 | 顺序 | 开发与排查混在同一文件 | 按「单体/微服务 × 开发/排查」四象限拆分 |
 | Java 规约 | 整本手册塞 prompt 会爆上下文 | 执行层 + 8 章按需路由 + P0 token 内联到 description |
-| 前端规约 | 原始 Skill 部分规则停留在 class 组件时代 | 现代化为 Hooks / TS / Vue 3，并加 P0 安全分级 |
+| 前端规约 | 原始 Skill 部分规则停留在 class 组件时代 | 现代化为 Hooks / TS / Vue（Vue 3 示例），并加 P0 安全分级 |
 | 原文 | —— | 完整保留在 `resources/`（含 `resources/reference/`），可随时对照 |
 
 **没有删掉任何硬约束**：技术栈版本、四套环境、包结构、Feign 契约位置、网关规则、RBAC、双文档同步、验证命令、Java P0 红线、前端安全规则全部保留并改写成可执行形式。
@@ -227,11 +235,11 @@ dsh-agent-prompts/
 │   ├── alibaba-java/          # 00-index + 01a–01h + 02–08 + 09 + project-template
 │   ├── f2e-spec/              # original + toolchain
 │   ├── examples/              # 6 组 before/after
-│   ├── reference/             # 原始全栈文档（逐字保留）
+│   ├── reference/             # 历史原文（版本锁定不生效，见 reference/README.md）
 │   └── AGENTS.snippet.md      # 项目 AGENTS.md 片段
 ├── test/                      # node:test：注册契约 + 扫描器 + 内容 + tarball
 ├── docs/SCANNER.md            # 扫描器完整文档
-├── .github/workflows/         # ci.yml（Node 22/24）+ release.yml（tag 自动 GitHub Release）
+├── .github/workflows/         # ci.yml（Node 20/22/24）+ release.yml（tag 自动 GitHub Release）
 ├── CHANGELOG.md
 ├── NOTICE.md                  # 来源与许可
 ├── PUBLISH.md                 # 发布 / 市场提交记录
@@ -264,18 +272,19 @@ npm run scan:java -- --root .
 npm run scan:frontend -- --root .
 ```
 
-CI（`.github/workflows/ci.yml`）在 Node 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 6 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
+CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 6 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
 
 ## 兼容性
 
 - DeepSeek Harness：使用 `ctx.skills.register` 与 `resourceBase`，要求当前 DSH 版本（2026.10/11 桌面版实测）。
-- Node.js：>= 22.6（与 DSH Plugin Hub 要求对齐；扫描器与测试使用 `node:test`、ESM）。
-- 扫描器零依赖，可在任意 Node 22.6+ 环境单独运行。
+- Node.js：>= 20（插件自身；DSH 宿主对 Node 的要求以 DSH 为准；扫描器与测试使用 `node:test`、ESM）。
+- 扫描器零依赖，可在任意 Node 20+ 环境单独运行。
 - 平台：Windows / macOS / Linux；扫描器的 `--changed-only` 需要 git。
 
 ## 版本
 
-- **0.3.0**：Java 第一章拆成 8 个文件 + 新增现代 Java 21 补充；扫描器增加 bin、`--changed-only`、`--baseline`、SARIF/GitHub 格式、配置文件与误报抑制；新增示例、AGENTS 片段、内容/tarball 测试与 CI；文档补充 FAQ/英文简介。
+- **0.4.0**：移除技术版本硬绑定——Spring Boot / Spring Cloud / JDK / Vue / MySQL / ESLint 等版本改为从项目 POM/BOM/package.json 读取；Java 现代写法按项目 JDK 选择；Node 引擎下限放宽到 20；同步文档与 CI。
+- **0.3.0**：Java 第一章拆成 8 个文件 + 新增现代 Java 补充（按项目 JDK）；扫描器增加 bin、`--changed-only`、`--baseline`、SARIF/GitHub 格式、配置文件与误报抑制；新增示例、AGENTS 片段、内容/tarball 测试与 CI；文档补充 FAQ/英文简介。
 - **0.2.0**：新增 `alibaba-java-standards`、`f2e-spec`；6 个技能全部声明 `resourceBase`；新增红线扫描器、测试与门禁；文档重写。
 - **0.1.0**：四个全栈技能（单体/微服务 × 开发/排查）首版。
 

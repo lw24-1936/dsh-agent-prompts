@@ -4,7 +4,7 @@ A **DeepSeek Harness skill pack** that turns full-stack development/debugging gu
 
 [中文](./README.md) · English
 
-[![version](https://img.shields.io/badge/version-0.3.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.4.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 ## Skills
@@ -12,11 +12,18 @@ A **DeepSeek Harness skill pack** that turns full-stack development/debugging gu
 | Skill | Loads when |
 |---|---|
 | `alibaba-java-standards` | Writing, changing, or reviewing Java/SQL: thread pools, date/time, SQL injection, resources, exceptions, collections, ThreadLocal |
-| `f2e-spec` | Writing, changing, or reviewing JS/TS/React/Vue 3: formatting, Hooks, Vue 3, security, a11y |
-| `fullstack-monolith-dev` | Monolith stack: Vue 3 + TS + Vite + Pinia / Spring Boot 3 + JDK 21 + MyBatis-Plus + Sa-Token |
+| `f2e-spec` | Writing, changing, or reviewing JS/TS/React/Vue (project versions): formatting, Hooks, Vue 3 examples, security, a11y |
+| `fullstack-monolith-dev` | Monolith stack: Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token (project versions) |
 | `fullstack-monolith-debug` | Monolith failures: 500/401/403/404, data inconsistency, slow queries, middleware connectivity |
 | `fullstack-microservice-dev` | Spring Cloud Alibaba: Nacos / Gateway / OpenFeign / Sentinel / Seata + Maven multi-module |
 | `fullstack-microservice-debug` | Microservice tracing: registration, gateway 404, Feign timeout/fallback, circuit breaker, Seata, MQ backlog |
+
+## Version policy: no hard technology pins
+
+- Spring Boot / Spring Cloud / Spring Cloud Alibaba / JDK / Vue / MySQL / ESLint / TypeScript versions come from the project's `pom.xml`, `build.gradle`, `package.json`, parent POM, or BOM.
+- Version numbers in examples (`3.5.x`, `2025.0.x`, `JDK 21`, `ESLint 9`) describe compatibility, not upgrade requirements.
+- If the project has no version metadata, the agent asks; it never invents versions or upgrades dependencies on its own.
+- Vue 2 / Spring Boot 2 / JDK 8/11/17 projects are not forced to migrate; the skills give equivalent patterns for the project's version.
 
 ## Three-tier enforcement
 
@@ -86,7 +93,7 @@ npm pack --dry-run
 ## Compatibility
 
 - DeepSeek Harness with `ctx.skills.register` and `resourceBase` (tested on the 2026 desktop build).
-- Node.js >= 22.6.
+- Node.js >= 20 for the plugin itself; the DSH host may require a newer Node version. The scanner runs on Node 20+.
 - Windows / macOS / Linux; `--changed-only` requires git.
 
 ## Marketplaces

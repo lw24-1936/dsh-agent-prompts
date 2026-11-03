@@ -12,7 +12,7 @@
 
 - 来源：《Java 开发手册（黄山版）》v1.7.1，2022.02.03 发布，版权归 **阿里巴巴集团** 所有。
 - 本仓库 `resources/alibaba-java/01a…01h`、`02…08` 为条文的工程化快照，用于按需查阅；`skills/alibaba-java-standards.md` 的执行策略、分级、路由与速查表为本项目整理。
-- `resources/alibaba-java/09-modern-java.md` 为本项目补充的 JDK 17/21 说明，不属阿里巴巴官方条文。
+- `resources/alibaba-java/09-modern-java.md` 为本项目补充的现代 Java 说明（按项目 JDK 版本选择），不属阿里巴巴官方条文。
 - 封装结构参考：[Sxuan-Coder/alibaba-java-development-guide](https://github.com/Sxuan-Coder/alibaba-java-development-guide)（MIT）。
 - 手册相关开源项目：[alibaba/p3c](https://github.com/alibaba/p3c)。
 
@@ -24,7 +24,7 @@
 
 ## 4. 全栈原始文档
 
-- `resources/reference/fullstack-single.original.md`、`resources/reference/fullstack-microservice.original.md`：随包保留的原始全栈提示词文档，版权归原作者，仅作对照用途；本插件对其的压缩、拆分与改写不改变原文档的归属。
+- `resources/reference/fullstack-single.original.md`、`resources/reference/fullstack-microservice.original.md`：随包保留的原始全栈提示词文档，版权归原作者，仅作对照用途；文件头已加「版本锁定不生效」说明，正文保留原文。本插件对其的压缩、拆分与改写不改变原文档的归属。
 
 ## 5. 示例与扫描器
 

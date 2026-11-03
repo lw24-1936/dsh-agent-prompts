@@ -1,8 +1,8 @@
 {
   "name": "dsh-agent-prompts",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
-  "description": "DeepSeek Harness 技能包：6 个按场景自动加载的技能（全栈单体/微服务 × 开发/排查 + 阿里巴巴 Java/前端规约），带章节渐进披露、P0 红线扫描与提交前门禁。",
+  "description": "DeepSeek Harness 技能包：6 个按场景自动加载的技能（全栈单体/微服务 × 开发/排查 + 阿里巴巴 Java/前端规约），带章节渐进披露、P0 红线扫描与提交前门禁；技术版本跟随项目，不硬绑。",
   "main": "lib/index.js",
   "bin": {
     "dsh-agent-prompts-scan": "./resources/scan-redlines.mjs"
@@ -67,6 +67,6 @@
   "homepage": "https://github.com/lw24-1936/dsh-agent-prompts#readme",
   "license": "MIT",
   "engines": {
-    "node": ">=22.6"
+    "node": ">=20"
   }
 }

@@ -4,6 +4,8 @@ import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { SKILLS } from '../lib/index.js';
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
 const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
@@ -42,11 +44,11 @@ function read(path) {
   return readFileSync(join(ROOT, path), 'utf8');
 }
 
-test('package metadata advertises the scanner and Node 22.6+', () => {
-  assert.equal(pkg.version, '0.3.0');
+test('package metadata advertises the scanner and Node 20+', () => {
+  assert.equal(pkg.version, '0.4.0');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');
-  assert.match(pkg.engines.node, />=22\.6/);
+  assert.match(pkg.engines.node, />=20/);
   assert.ok(pkg.files.includes('resources'));
   assert.ok(pkg.files.includes('skills'));
   assert.match(pkg.scripts.verify, /npm run check/);
@@ -65,6 +67,17 @@ test('all six skills exist, are unique, and fit the catalog description cap', ()
     names.add(file);
   }
   assert.equal(SKILL_FILES.length, 6);
+});
+
+test('catalog descriptions are unique, version-agnostic, and under 500 chars', () => {
+  const names = new Set();
+  for (const spec of SKILLS) {
+    assert.ok(spec.description.length <= 500, `${spec.name} description is ${spec.description.length} chars`);
+    assert.ok(spec.description.length > 80, `${spec.name} description too short`);
+    assert.ok(!names.has(spec.name), `duplicate skill name ${spec.name}`);
+    names.add(spec.name);
+    assert.doesNotMatch(spec.description, /Spring Boot 3|JDK 21|Vue 3|MySQL 8|3\.5|2025\.0/, `${spec.name} description pins a version`);
+  }
 });
 
 test('java chapter is split and no stale monolith reference remains', () => {
@@ -118,6 +131,27 @@ test('modern Java and examples are wired into the Java skill', () => {
   assert.match(java, /examples\//);
   assert.match(java, /git diff --name-only/);
   assert.match(java, /Review 输出格式/);
+});
+
+test('active skills do not pin technology versions', () => {
+  const active = [
+    ...SKILL_FILES.map((file) => `skills/${file}`),
+    'resources/alibaba-java/09-modern-java.md',
+    'resources/f2e-spec/toolchain.md',
+    'resources/AGENTS.snippet.md',
+  ];
+  for (const file of active) {
+    const content = read(file);
+    assert.doesNotMatch(
+      content,
+      /Spring Boot\s*3\.5|Spring Cloud\s*2025|Spring Cloud Alibaba\s*2025|java\.version\s*=\s*21|JDK 21（LTS）|MySQL\s*8\b/,
+      `${file} still pins a technology version`,
+    );
+  }
+  assert.match(read('skills/fullstack-microservice-dev.md'), /版本与兼容（以项目为准）/);
+  assert.match(read('resources/alibaba-java/09-modern-java.md'), /按项目 JDK 版本选择/);
+  assert.match(read('resources/alibaba-java/09-modern-java.md'), /不要求升级/);
+  assert.match(read('resources/reference/README.md'), /不再作为强制约束|版本锁定不再生效/);
 });
 
 test('scanner is executable, documented, and has a bin shebang', () => {

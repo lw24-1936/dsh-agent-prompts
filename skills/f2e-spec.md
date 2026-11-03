@@ -1,6 +1,7 @@
 # 阿里巴巴前端代码规范（F2E Spec）· 执行层
 
-> 写 / 改 / review 前端代码（JS / TS / React / Vue 3）时加载。规范基线来自 [alibaba/f2e-spec](https://github.com/alibaba/f2e-spec)，本技能做了**现代化修订**（Hooks、TypeScript、Vue 3、安全分级）与可执行化。
+> 写 / 改 / review 前端代码（JS / TS / React / Vue，按项目版本）时加载。规范基线来自 [alibaba/f2e-spec](https://github.com/alibaba/f2e-spec)，本技能做了**现代化修订**（Hooks、TypeScript、Vue 3 示例、安全分级）与可执行化。
+> **版本原则**：不要求升级前端框架或工具链。Vue 3 优先展示 `<script setup>` 写法；Vue 2 项目用 Options API 的等价结构；React 用函数组件 + Hooks；ESLint/TypeScript 版本以项目为准。
 > 与后端 `alibaba-java-standards` 同一套三级管控：P0 必须改，P1 只管新代码，P2 可忽略。
 
 ## 一、三级管控
@@ -45,7 +46,9 @@
 - 派生状态用渲染期计算或 `useMemo`，不要用 `useEffect` 同步 state（容易多一次渲染）。
 - 事件用箭头函数或 `useCallback`，不在 JSX 里 `.bind()`。
 
-## 五、Vue 3（本项目主栈）
+## 五、Vue（3 优先；Vue 2 用 Options API 等价结构）
+
+> 以下以 Vue 3 `<script setup>` 为例；Vue 2 项目用 `data` / `computed` / `methods` / `props` 的等价写法，不强制升级。
 
 - 统一 `<script setup lang="ts">`；不混用 Options API（存量组件除外）。
 - Props：`defineProps<{ id: string }>()`；Emits：`defineEmits<{ change: [value: string] }>()`；不用运行时 `props: []`。
@@ -89,11 +92,11 @@
 ```bash
 pnpm eslint . --max-warnings=0
 pnpm tsc --noEmit            # React / 纯 TS
-pnpm vue-tsc --noEmit        # Vue 3
+pnpm vue-tsc --noEmit        # Vue 项目
 pnpm build:test              # 或项目约定的构建命令
 ```
 
-- ESLint：`eslint-config-ali` 16.x 只提供 flat config 的 `base` / `react` 导出（ESLint 9）。React 用 `react`；Vue 3 用 `base` + `eslint-plugin-vue` + `typescript-eslint`。不要再用 `extends: ['ali/typescript/react']`。
+- ESLint：本仓库示例基于 `eslint-config-ali` 16.x 的 flat config（ESLint 9）；项目用其他 ESLint 版本时按对应配置方式（ESLint 8 用 F2ELint / legacy），**不强制升级**。React 用 `react`；Vue 用 `base` + `eslint-plugin-vue` + `typescript-eslint`（Vue 3 用 `<script setup>`，Vue 2 用 Options API 的等价规则）。不要再用旧版 `extends: ['ali/typescript/react']` 混搭 flat config。
 - 一键接入：`npx f2elint`（适合存量项目；生成配置后仍按项目实际配置为准）。
 - 格式化：Prettier（2 空格、单引号、分号、100 列）；与 ESLint 的分工见资源文件 `f2e-spec/toolchain.md`。
 - 提交前可用启发式扫描（作为 DSH 插件安装时，脚本在资源基准目录下）：
@@ -126,4 +129,4 @@ node "<资源目录>/scan-redlines.mjs" --profile frontend --baseline .dsh/redli
 ## 十一、来源与许可
 
 - 规范来源：[阿里巴巴前端代码规范 F2E Spec](https://github.com/alibaba/f2e-spec)（MIT）。
-- 原始 Skill 快照见资源文件 `f2e-spec/original.md`；本技能在其基础上做了 Hooks / TS / Vue 3 / 安全分级修订，冲突时以本技能与项目 ESLint 配置为准。
+- 原始 Skill 快照见资源文件 `f2e-spec/original.md`；本技能在其基础上做了 Hooks / TS / Vue（按项目版本）/ 安全分级修订，冲突时以本技能与项目 ESLint 配置为准。

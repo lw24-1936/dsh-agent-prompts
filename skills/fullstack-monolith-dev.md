@@ -2,7 +2,9 @@
 
 > 加载本规范后，它就是本项目的硬约束。与用户指令冲突时先提问，不要自行放宽。
 >
-> **配套标准**：Java 写法遵循 `alibaba-java-standards`（P0 红线 + 章节路由），前端写法遵循 `f2e-spec`（ESLint + Vue 3 + 安全分级）。本文件管架构、流程、环境与门禁，不重复抄写编码条文。
+> **配套标准**：Java 写法遵循 `alibaba-java-standards`（P0 红线 + 章节路由），前端写法遵循 `f2e-spec`（ESLint + Vue/React + 安全分级）。本文件管架构、流程、环境与门禁，不重复抄写编码条文。
+>
+> **版本原则**：本技能不锁定任何技术版本。先读项目的 `pom.xml` / `build.gradle` / `package.json` / 父 POM 或 BOM，按项目现有版本执行；没有版本信息时先问用户，不要求升级，也不凭记忆写版本号。
 
 ## 一、开工前置（三件缺一不可）
 
@@ -21,30 +23,32 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 
 `.gitignore` 必须含：`.env.local`、`.env.*.local`、`application-local.yml`、`application-*.local.yml`。
 
-## 二、技术栈（硬绑定，禁改）
+## 二、技术栈与版本（以项目为准，不硬绑版本）
+
+**版本原则**：技能只约束能力、结构与流程，不锁定版本。先读 `pom.xml` / `build.gradle` / `package.json` / 父 POM 或 BOM，按项目实际版本执行；项目没有版本时先问用户，不要凭记忆填。
 
 | 层 | 选型 | 关键要求 |
 |---|---|---|
-| 前端框架 | Vue 3 | `<script setup>` 组合式 API |
-| 前端语言 | TypeScript | 必须，不用纯 JS |
-| 构建 | Vite | 四套环境 |
-| 路由 | Vue Router 4 | — |
-| 状态 | Pinia + persistedstate | **只持久化 token / 用户 / 权限** |
-| 请求 | Axios | 统一封装，见「请求层」 |
-| 包管理 | pnpm | 项目已有 npm/yarn 则随项目 |
-| 后端框架 | Spring Boot 3 | JDK **21** |
-| ORM | MyBatis-Plus | `mybatis-plus-spring-boot3-starter` |
-| 连接池 | HikariCP | 参数显式配置 |
-| 权限 | Sa-Token + RBAC | 见「权限」 |
-| 对象转换 | MapStruct | DTO/Entity/VO 之间 |
-| 密码 | BCrypt | 强度 10，库里存密文 |
-| 数据库 | MySQL 8 | utf8mb4 / utf8mb4_general_ci / InnoDB |
-| 接口文档 | SpringDoc OpenAPI | pre/pro 关闭 |
-| 健康检查 | Actuator | 只暴露 health / info |
+| 前端框架 | Vue（项目版本；新项目建议 3） | Vue 3 用 `<script setup>`；Vue 2 用 Options API 的等价结构，不强制升级 |
+| 前端语言 | TypeScript（项目已有则用） | 新项目建议 TS；存量 JS 项目不强制迁移 |
+| 构建 | Vite（项目版本） | 四套环境 |
+| 路由 | Vue Router（项目版本） | — |
+| 状态 | Pinia（项目版本） | **只持久化 token / 用户 / 权限** |
+| 请求 | Axios（项目版本） | 统一封装，见「请求层」 |
+| 包管理 | pnpm（或项目现有 npm/yarn） | 随项目 |
+| 后端框架 | Spring Boot（项目版本） | JDK 按项目与 Boot 要求；Boot 3 用 `jakarta.*`，Boot 2 用 `javax.*` |
+| ORM | MyBatis-Plus（项目版本） | Boot 3 用 `mybatis-plus-spring-boot3-starter`；Boot 2 用 `mybatis-plus-boot-starter` |
+| 连接池 | HikariCP（项目版本） | 参数显式配置 |
+| 权限 | Sa-Token + RBAC（项目版本） | 见「权限」 |
+| 对象转换 | MapStruct（项目版本） | DTO/Entity/VO 之间 |
+| 密码 | BCrypt | 强度按项目安全规范，库里存密文 |
+| 数据库 | MySQL（项目版本） | utf8mb4 / utf8mb4_general_ci / InnoDB；版本随项目 |
+| 接口文档 | SpringDoc OpenAPI（项目版本） | pre/pro 关闭 |
+| 健康检查 | Actuator（项目版本） | 只暴露 health / info |
 
 **禁止**：换框架；引入 vue-i18n（文案中文硬编码）；新增第 5 套环境；同一定位引入两个通用 UI 库；一个主 UI 库之外再引整库；全量引入组件库。
 
-`pom.xml` 必须声明 `java.version=21`；Maven 资源过滤分隔符用 `@` 且 `useDefaultDelimiters=false`；`application.yml` 用 `@profiles.active@`。
+`pom.xml` 声明项目实际使用的 `java.version` / `maven.compiler.release`（不要写死 21）；Maven 资源过滤分隔符用 `@` 且 `useDefaultDelimiters=false`；`application.yml` 用 `@profiles.active@`。
 
 ## 三、前端约定
 
@@ -141,8 +145,8 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 
 - **Java**：加载 `alibaba-java-standards`。P0 红线（新代码直接合规、被改到的存量代码发现即修复、不可口头豁免）在该技能正文；条文按需读 `alibaba-java/` 下的 01a–01h 与 09 章节。项目团队约定放 `.dsh/java-standards.md`（可从 `alibaba-java/project-template.md` 复制）。
 - **前端**：加载 `f2e-spec`。至少遵守：`const`/`let`、`===`、Hooks 规则、`v-for` 稳定 key、`v-if` 不与 `v-for` 同元素、`v-html` / `dangerouslySetInnerHTML` 必须消毒、`target="_blank"` 带 `noopener`。
-- **冲突裁决**：本文件的架构/技术栈/权限/门禁是项目硬约束；编码写法按两个标准技能。两者冲突时先问用户，不自行放宽 P0 或技术栈。
-- **原始文档**：`reference/fullstack-single.original.md`（完整保留，供对照）。
+- **冲突裁决**：本文件的架构/分层/权限/门禁是项目硬约束；技术版本以项目 POM / package.json 为准；编码写法按两个标准技能。两者冲突时先问用户，不自行放宽 P0 或技术栈。
+- **原始文档**：`reference/fullstack-single.original.md`（历史快照，其中的版本锁定不再生效；以本技能与项目实际版本为准）。
 
 ## 十、必须停下来提问的情况
 
