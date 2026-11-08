@@ -51,15 +51,17 @@ test('packed tarball installs and exposes seven skills plus scanner', { timeout:
 
     const installed = join(installDir, 'node_modules', 'dsh-agent-prompts');
     const pkg = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
-    assert.equal(pkg.version, '0.5.0');
+    assert.equal(pkg.version, '0.5.1');
     assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
     for (const file of [
       'lib/index.js',
       'skills/alibaba-java-standards.md',
+      'skills/software-engineering-process.md',
       'resources/scan-redlines.mjs',
       'resources/alibaba-java/01a-naming.md',
       'resources/alibaba-java/09-modern-java.md',
       'resources/reference/fullstack-single.original.md',
+      'resources/templates/PROCESS.md',
       'cordis.patch.yml',
       'README.md',
       'README.en.md',

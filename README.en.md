@@ -4,7 +4,7 @@ A **DeepSeek Harness skill pack** that turns full-stack development/debugging gu
 
 [中文](./README.md) · English
 
-[![version](https://img.shields.io/badge/version-0.5.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.5.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 ## Skills
@@ -21,7 +21,7 @@ A **DeepSeek Harness skill pack** that turns full-stack development/debugging gu
 
 ## Process auto-selection
 
-`software-engineering-process` reads the project constraints (requirement stability, compliance/safety, contract and delivery cadence, team size, legacy share, feedback channel) and chooses a primary process: Waterfall, V-Model, Incremental, Iterative, Spiral, Scrum, Kanban, XP, DevOps, or a hybrid with stage gates. It states the cadence, artifacts, gates, and re-selection triggers, then proceeds — it does not ask the user to pick a methodology first.
+`software-engineering-process` reads the project constraints (requirement stability, compliance/safety, contract and delivery cadence, team size, legacy share, feedback channel) and chooses a primary process: Waterfall, V-Model, Incremental, Iterative, Spiral, Scrum, Kanban, XP, DevOps, or a hybrid with stage gates. It states the cadence, artifacts, gates, and re-selection triggers, then proceeds — it does not ask the user to pick a methodology first. Record the result with [templates/PROCESS.md](./resources/templates/PROCESS.md).
 
 ## Version policy: no hard technology pins
 

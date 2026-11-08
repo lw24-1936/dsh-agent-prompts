@@ -46,7 +46,7 @@ function read(path) {
 }
 
 test('package metadata advertises the scanner and Node 20+', () => {
-  assert.equal(pkg.version, '0.5.0');
+  assert.equal(pkg.version, '0.5.1');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');
   assert.match(pkg.engines.node, />=20/);
@@ -112,11 +112,12 @@ test('resource references in skill bodies resolve', () => {
     'examples/vue-key.md',
     'examples/xss.md',
     'AGENTS.snippet.md',
+    'templates/PROCESS.md',
     'scan-redlines.mjs',
   ]);
   for (const file of SKILL_FILES) {
     const content = read(join('skills', file));
-    for (const match of content.matchAll(/`((?:alibaba-java|f2e-spec|reference|examples)\/[^`\s]+|scan-redlines\.mjs|AGENTS\.snippet\.md)`/g)) {
+    for (const match of content.matchAll(/`((?:alibaba-java|f2e-spec|reference|examples|templates)\/[^`\s]+|scan-redlines\.mjs|AGENTS\.snippet\.md)`/g)) {
       const ref = match[1];
       assert.ok(known.has(ref), `${file} references unknown resource ${ref}`);
       assert.ok(existsSync(join(ROOT, 'resources', ref)), `${file} references missing ${ref}`);
@@ -140,6 +141,11 @@ test('process skill auto-selects and fullstack skills link to it', () => {
     assert.ok(process.includes(token), `process skill missing ${token}`);
   }
   assert.match(process, /不要停下来问|不先问/);
+  assert.match(process, /templates\/PROCESS\.md/);
+  const template = read('resources/templates/PROCESS.md');
+  for (const token of ['项目画像', '流程选择', '执行节奏', '产物与门禁', '重选条件', '变更记录']) {
+    assert.ok(template.includes(token), `PROCESS template missing ${token}`);
+  }
   for (const file of [
     'fullstack-monolith-dev.md',
     'fullstack-monolith-debug.md',
@@ -199,8 +205,10 @@ test('examples index lists every example file', () => {
   }
 });
 
-test('CHANGELOG records 0.5.0 and 0.3.0', () => {
+test('CHANGELOG records 0.5.1, 0.5.0 and 0.3.0', () => {
   const changelog = read('CHANGELOG.md');
+  assert.match(changelog, /## 0\.5\.1/);
+  assert.match(changelog, /templates\/PROCESS\.md/);
   assert.match(changelog, /## 0\.5\.0/);
   assert.match(changelog, /software-engineering-process/);
   assert.match(changelog, /## 0\.3\.0/);

@@ -1,4 +1,4 @@
-# 项目 AGENTS.md 片段：Java / 前端规约自动加载
+# 项目 AGENTS.md 片段：编码规约与流程自动加载
 
 > 把下面这段追加到项目根 `AGENTS.md`（或 `CLAUDE.md` 等 agent 指令文件），让 agent 在进入项目时就知道该加载哪些技能、提交前跑什么检查。按项目实际情况改路径与命令。
 
@@ -20,6 +20,6 @@
 
 ## 说明
 
-- 技能名必须与目录中的完全一致：`alibaba-java-standards`、`f2e-spec`。
+- 技能名必须与目录中的完全一致：`alibaba-java-standards`、`f2e-spec`、`software-engineering-process`、`fullstack-monolith-dev`、`fullstack-monolith-debug`、`fullstack-microservice-dev`、`fullstack-microservice-debug`。
 - 作为 DSH 插件安装时，扫描器在技能资源目录的 `scan-redlines.mjs`；只有把本包装进项目 devDependencies 时才有 `dsh-agent-prompts-scan` 这个 bin。
 - 扫描器是启发式提示，正式门禁仍以 P3C / PMD / ESLint 与人工 review 为准。

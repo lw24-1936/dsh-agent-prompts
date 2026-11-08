@@ -4,7 +4,7 @@
 
 | 项 | 状态 | 说明 |
 |---|---|---|
-| 插件代码 / 文档 | ✅ 0.5.0 | 7 技能、流程自动选择、拆分章节、扫描器 CLI、CI/测试、不锁技术版本 |
+| 插件代码 / 文档 | ✅ 0.5.1 | 7 技能、流程自动选择、PROCESS 模板、拆分章节、扫描器 CLI、CI/测试、不锁技术版本 |
 | GitHub 仓库 | ✅ 已上线 | https://github.com/lw24-1936/dsh-agent-prompts |
 | GitHub topics | ✅ 已设置 | `dsh-plugin`、`deepseek-harness`、`cordis-plugin`、`skill`、`prompt`、`fullstack`、`spring-boot`、`spring-cloud`、`vue3`、`alibaba-java`、`f2e-spec`、`coding-standards`、`eslint`、`p0-redlines` |
 | DSH Market 收录 | ✅ 已收录 | 条目 `lw24-1936/dsh-agent-prompts`，类型 `cordis-plugin` |
@@ -49,12 +49,12 @@ $plugins.plugins | Where-Object id -eq "lw24-1936/dsh-agent-prompts" | ConvertTo
 
 ## 三、刷新市场安装命令（数据修正）
 
-市场条目的 `install.commands` 由 README 安装段解析得到。0.5.0 的 README 已把 GitHub 命令放在最前，下一次采集会更新；为立即生效，另提交数据修正 issue：
+市场条目的 `install.commands` 由 README 安装段解析得到。0.5.1 的 README 已把 GitHub 命令放在最前，下一次采集会更新；为立即生效，另提交数据修正 issue：
 
 - issue 模板：`[数据修正] 插件全名`
 - 仓库地址：`https://github.com/lw24-1936/dsh-agent-prompts`
 - 修正内容：安装命令改为 `dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.git`
-- 简介同步为 0.5.0 的「7 技能 + 阿里 Java/前端规约 + 流程自动选择 + 红线扫描 + 不锁技术版本」表述
+- 简介同步为 0.5.1 的「7 技能 + 阿里 Java/前端规约 + 流程自动选择 + 红线扫描 + 不锁技术版本」表述
 
 提交记录：[#313](https://github.com/2BingLing/dsh-market/issues/313)（`[数据修正] lw24-1936/dsh-agent-prompts`，open）。该仓库的采集器按 issue 标题前缀 `[数据修正]` 识别，不依赖 label；每日 06:00 自动应用。
 
@@ -87,7 +87,7 @@ npm view dsh-agent-prompts version
 npm view dsh-agent-prompts dist.tarball
 ```
 
-预期版本 `0.5.0`。发布成功后，市场条目里的 npm 安装命令即可用；README 也可把 npm 方式放回首位。
+预期版本 `0.5.1`。发布成功后，市场条目里的 npm 安装命令即可用；README 也可把 npm 方式放回首位。
 
 ## 五、发布后自检
 

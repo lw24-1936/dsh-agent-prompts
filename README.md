@@ -4,7 +4,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[![version](https://img.shields.io/badge/version-0.5.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.5.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
 [![topic](https://img.shields.io/badge/topic-dsh--plugin-0e7490)](https://github.com/topics/dsh-plugin)
@@ -72,7 +72,7 @@
 | 运维/存量维护/持续流入 | Kanban + DevOps |
 | 1–3 人一次性/内部工具 | 轻量迭代 |
 
-它输出「流程选择 + 依据 + 节奏 + 产物 + 门禁 + 何时重选」，然后直接执行；缺少关键事实才问，最多 3 个问题，且问事实不问「想用 Scrum 还是瀑布」。完整流程库、场景模板、DoR/DoD、度量与反模式见 [software-engineering-process.md](./skills/software-engineering-process.md)。
+它输出「流程选择 + 依据 + 节奏 + 产物 + 门禁 + 何时重选」，然后直接执行；缺少关键事实才问，最多 3 个问题，且问事实不问「想用 Scrum 还是瀑布」。完整流程库、场景模板、DoR/DoD、度量与反模式见 [software-engineering-process.md](./skills/software-engineering-process.md)；项目落地用 [templates/PROCESS.md](./resources/templates/PROCESS.md) 记录。
 
 ## 渐进披露：长条文不占常驻上下文
 
@@ -84,6 +84,7 @@ resources/
 ├── f2e-spec/              # F2E 原始快照 + ESLint/Prettier/tsconfig 配置
 ├── examples/              # 6 组 before/after 示例
 ├── reference/             # 历史原文（版本锁定不生效）
+├── templates/             # PROCESS.md 等项目模板
 ├── AGENTS.snippet.md      # 项目 AGENTS.md 自动加载片段
 └── scan-redlines.mjs      # Java / 前端 P0 启发式扫描器
 ```
@@ -106,7 +107,7 @@ dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.
 dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 ```
 
-### 方式三：npm（0.5.0 发布后可用）
+### 方式三：npm（0.5.1 发布后可用）
 
 ```bash
 dsh plugin --profile web add dsh-agent-prompts
@@ -203,7 +204,7 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 
 ## 项目接入：AGENTS.md 片段
 
-把 [resources/AGENTS.snippet.md](./resources/AGENTS.snippet.md) 追加到项目根 `AGENTS.md`，agent 进入项目就知道该加载哪些技能、提交前跑什么检查。片段同时说明「被触碰代码」的 git 判定与基线用法。
+把 [resources/AGENTS.snippet.md](./resources/AGENTS.snippet.md) 追加到项目根 `AGENTS.md`，agent 进入项目就知道该加载哪些技能、提交前跑什么检查。片段同时说明「被触碰代码」的 git 判定与基线用法。流程选择结果按 [templates/PROCESS.md](./resources/templates/PROCESS.md) 记录，约束变化时更新。
 
 ## 示例
 
@@ -302,6 +303,7 @@ CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`�
 
 ## 版本
 
+- **0.5.1**：补齐流程技能的项目模板 `templates/PROCESS.md`、AGENTS 片段中的 7 个技能名、单体/微服务描述与流程联动；内容测试覆盖模板与引用。
 - **0.5.0**：新增 `software-engineering-process`，按项目约束自动选择 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps / 混合门禁，并给出节奏、产物、门禁与重选条件；四个全栈技能与 AGENTS 片段接入流程选择。
 - **0.4.0**：移除技术版本硬绑定——Spring Boot / Spring Cloud / JDK / Vue / MySQL / ESLint 等版本改为从项目 POM/BOM/package.json 读取；Java 现代写法按项目 JDK 选择；Node 引擎下限放宽到 20；同步文档与 CI。
 - **0.3.0**：Java 第一章拆成 8 个文件 + 新增现代 Java 补充（按项目 JDK）；扫描器增加 bin、`--changed-only`、`--baseline`、SARIF/GitHub 格式、配置文件与误报抑制；新增示例、AGENTS 片段、内容/tarball 测试与 CI；文档补充 FAQ/英文简介。

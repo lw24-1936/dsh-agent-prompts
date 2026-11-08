@@ -26,7 +26,7 @@ import {
 } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 
-const SCANNER_VERSION = '0.5.0';
+const SCANNER_VERSION = '0.5.1';
 const SCANNER_NAME = 'dsh-agent-prompts/scan-redlines';
 
 const IGNORED_DIRS = new Set([

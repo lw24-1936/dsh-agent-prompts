@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.5.1 — 2026-11-08
+
+### Added
+
+- **`resources/templates/PROCESS.md`**：项目流程记录模板（画像、选择、节奏、产物/门禁、风险、度量、重选条件、变更记录）。
+
+### Fixed
+
+- `AGENTS.snippet.md` 的「技能名必须一致」列表补齐 7 个技能，避免项目接入时只认两个标准技能。
+- 单体/微服务技能描述与正文补上「开工前联动 `software-engineering-process`」，提升自动加载命中率。
+- 内容测试覆盖模板存在性、模板章节与 `templates/PROCESS.md` 引用。
+
+### Changed
+
+- 版本 0.5.1；扫描器版本同步。
+
 ## 0.5.0 — 2026-11-03
 
 ### Added
