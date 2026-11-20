@@ -62,7 +62,7 @@
 - 架构测试覆盖依赖方向/命名/字段注入/禁用 API；规则失败修代码或显式豁免。
 - 不删断言、不 `@Disabled`、不为绿改测试。
 
-详细：`spring-boot/testing-and-modulith.md`；构建/本地开发/可选能力：`spring-boot/quality-and-local.md`；反模式：`spring-boot/anti-patterns.md`。
+详细：`spring-boot/testing-and-modulith.md`；安全：`spring-boot/security.md`；构建/本地开发/可选能力：`spring-boot/quality-and-local.md`；反模式：`spring-boot/anti-patterns.md`。
 
 ## 七、Spring Modulith
 

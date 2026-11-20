@@ -51,8 +51,9 @@ test('packed tarball installs and exposes ten skills plus scanner', { timeout: 1
 
     const installed = join(installDir, 'node_modules', 'dsh-agent-prompts');
     const pkg = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
-    assert.equal(pkg.version, '0.6.0');
+    assert.equal(pkg.version, '0.7.0');
     assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
+    assert.equal(pkg.bin['dsh-agent-prompts-design'], './resources/frontend-design/check-design.mjs');
     for (const file of [
       'lib/index.js',
       'skills/alibaba-java-standards.md',
@@ -65,16 +66,25 @@ test('packed tarball installs and exposes ten skills plus scanner', { timeout: 1
       'resources/alibaba-java/09-modern-java.md',
       'resources/reference/fullstack-single.original.md',
       'resources/spring-boot/api-and-service.md',
+      'resources/spring-boot/security.md',
       'resources/spring-boot/quality-and-local.md',
       'resources/vue3/core.md',
       'resources/vue3/component-patterns.md',
       'resources/frontend-design/browser-check.md',
+      'resources/frontend-design/check-design.mjs',
       'resources/engineering/delivery.md',
       'resources/templates/PROCESS.md',
       'resources/templates/DELIVERY.md',
       'docs/REFERENCE-SKILL-ANALYSIS.md',
       'docs/SKILL-AUTHORING.md',
       'cordis.patch.yml',
+      'AGENTS.md',
+      'agent.md',
+      'CONTRIBUTING.md',
+      'SECURITY.md',
+      'docs/ARCHITECTURE.md',
+      'docs/DESIGN-CHECK.md',
+      'docs/TRIGGER-MATRIX.md',
       'README.md',
       'README.en.md',
       'CHANGELOG.md',

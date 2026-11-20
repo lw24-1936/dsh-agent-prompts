@@ -74,6 +74,14 @@
 
 详见 `frontend-design/browser-check.md`。
 
+静态反模式检查（可选，可做门禁）：
+
+```bash
+node "<资源目录>/frontend-design/check-design.mjs" --root . --fail-on P1
+```
+
+它只查紫色渐变、`transition: all`、lorem ipsum、图片缺 alt、可点击 div 等低误报项；**不判断好看**，不能替代上面的四视口浏览器验收。
+
 ## 七、设计评审
 
 按 `frontend-design/visual-review.md`：

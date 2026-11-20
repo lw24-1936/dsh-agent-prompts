@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.7.0 — 2026-11-20
+
+### Added
+
+- **`AGENTS.md` / `agent.md`**：本仓库的 agent 维护指南（命令、技能编写、版本/发布、审查清单）。
+- **`resources/spring-boot/security.md`**：认证/授权、FilterChain、方法级鉴权、密码/会话/JWT、CSRF/CORS、安全测试。
+- **`resources/frontend-design/check-design.mjs`**：零依赖、保守的静态设计反模式检查器（紫色渐变、`transition: all`、lorem ipsum、缺 alt、可点击 div、`outline: none`、`z-index: 9999`）。
+- **`docs/TRIGGER-MATRIX.md`**：22 条触发样例、主/次技能判定与重叠处理。
+- **`docs/ARCHITECTURE.md`**：注册契约、渐进披露、配置、兼容性。
+- **`docs/DESIGN-CHECK.md`**：设计检查器用法/规则/限制。
+- **`CONTRIBUTING.md` / `SECURITY.md`**：贡献流程与漏洞报告。
+- **`.gitattributes`**：统一 LF，减少跨平台行尾差异。
+
+### Changed
+
+- **README / README.en 重写**：按优秀开源项目结构组织（badges、30 秒上手、技能矩阵、工作原理、门禁、示例、配置、版本策略、文档、开发、FAQ、许可）。
+- `apply` 配置校验：非数组忽略并 warn、重复名去重、`only`/`disabled` 冲突提示、未知技能名 warn。
+- 设计技能增加可执行检查器入口；Spring 技能增加 Security 资源路由。
+- 版本 0.7.0；扫描器/设计检查器版本同步；tarball bin 增加 `dsh-agent-prompts-design`。
+
+### Fixed
+
+- 配置 `null` / 非数组 / 重复项不再静默异常或产生歧义。
+- 新增文档/资源纳入内容、tarball 与链接一致性测试。
+
+### Credits
+
+延续 0.6.0 对 SivaLabs、AI Java Workflow、Vuejs AI、Anthony Fu、VueUse、Anthropic Frontend Design、Taste Skill、Impeccable 的学习；本轮补上 Spring Security、设计静态检查、触发矩阵与仓库协作文档。
+
 ## 0.6.0 — 2026-11-20
 
 ### Added

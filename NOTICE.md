@@ -28,7 +28,7 @@
 
 ## 5. 参考 Skill 的学习来源
 
-以下公开仓库为 0.6.0 的**学习与设计参考**；本仓库吸收其方法并用自己的话重写，没有复制其大段正文、代码、脚本或资产。逐项映射见 [docs/REFERENCE-SKILL-ANALYSIS.md](./docs/REFERENCE-SKILL-ANALYSIS.md)。
+以下公开仓库为 0.6.0 起的学习与设计参考；本仓库吸收其方法并用自己的话重写，没有复制其大段正文、代码、脚本或资产。逐项映射见 [docs/REFERENCE-SKILL-ANALYSIS.md](./docs/REFERENCE-SKILL-ANALYSIS.md)。
 
 | 来源 | 许可 | 本仓库使用方式 |
 |---|---|---|

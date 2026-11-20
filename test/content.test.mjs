@@ -49,9 +49,11 @@ function read(path) {
 }
 
 test('package metadata advertises the scanner and Node 20+', () => {
-  assert.equal(pkg.version, '0.6.0');
+  assert.equal(pkg.version, '0.7.0');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
+  assert.equal(pkg.bin['dsh-agent-prompts-design'], './resources/frontend-design/check-design.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');
+  assert.equal(pkg.exports['./design-check'], './resources/frontend-design/check-design.mjs');
   assert.match(pkg.engines.node, />=20/);
   assert.ok(pkg.files.includes('resources'));
   assert.ok(pkg.files.includes('skills'));
@@ -123,6 +125,7 @@ test('resource references in skill bodies resolve', () => {
     'spring-boot/README.md',
     'spring-boot/api-and-service.md',
     'spring-boot/testing-and-modulith.md',
+    'spring-boot/security.md',
     'spring-boot/quality-and-local.md',
     'spring-boot/anti-patterns.md',
     'vue3/README.md',
@@ -135,6 +138,7 @@ test('resource references in skill bodies resolve', () => {
     'frontend-design/brief-and-direction.md',
     'frontend-design/visual-review.md',
     'frontend-design/browser-check.md',
+    'frontend-design/check-design.mjs',
     'frontend-design/anti-slop.md',
     'frontend-design/patterns.md',
     'engineering/README.md',
@@ -271,6 +275,42 @@ test('reference analysis covers every source and authoring guidance exists', () 
   assert.ok(existsSync(join(ROOT, 'docs', 'SKILL-AUTHORING.md')));
 });
 
+test('new resource packs stay version-neutral', () => {
+  const files = [
+    'resources/spring-boot/README.md',
+    'resources/spring-boot/api-and-service.md',
+    'resources/spring-boot/testing-and-modulith.md',
+    'resources/spring-boot/security.md',
+    'resources/spring-boot/quality-and-local.md',
+    'resources/vue3/README.md',
+    'resources/vue3/core.md',
+    'resources/vue3/ecosystem.md',
+    'resources/vue3/component-patterns.md',
+    'resources/frontend-design/README.md',
+    'resources/frontend-design/brief-and-direction.md',
+    'resources/frontend-design/browser-check.md',
+    'resources/engineering/README.md',
+    'resources/engineering/evidence-and-review.md',
+    'resources/engineering/delivery.md',
+  ];
+  const hardPin = /Spring Boot\s*\d+\.\d+|Spring Cloud\s+20\d\d|Vue\s+3\.\d+|JDK\s+2\d|MySQL\s+8|ESLint\s+9\.\d+/;
+  for (const file of files) {
+    assert.doesNotMatch(read(file), hardPin, `${file} pins a concrete version`);
+  }
+  assert.match(read('resources/spring-boot/README.md'), /按项目版本|版本以项目/);
+  assert.match(read('resources/vue3/README.md'), /按项目/);
+});
+
+test('trigger matrix covers every skill and key scenarios', () => {
+  const matrix = read('docs/TRIGGER-MATRIX.md');
+  for (const spec of SKILLS) {
+    assert.ok(matrix.includes(spec.name), `trigger matrix missing ${spec.name}`);
+  }
+  for (const token of ['新建', '排障', '评审', 'Testcontainers', 'XSS', '落地页', 'Scrum']) {
+    assert.ok(matrix.includes(token), `trigger matrix missing scenario ${token}`);
+  }
+});
+
 test('delivery templates exist and carry evidence fields', () => {
   for (const [file, tokens] of [
     ['REQUIREMENTS.md', ['验收', '改变项', '保持项', '未决']],
@@ -285,8 +325,13 @@ test('delivery templates exist and carry evidence fields', () => {
   }
 });
 
-test('CHANGELOG records 0.6.0, 0.5.1, 0.5.0 and 0.3.0', () => {
+test('CHANGELOG records 0.7.0 and earlier releases', () => {
   const changelog = read('CHANGELOG.md');
+  assert.match(changelog, /## 0\.7\.0/);
+  assert.match(changelog, /AGENTS\.md/);
+  assert.match(changelog, /check-design\.mjs/);
+  assert.match(changelog, /security\.md/);
+  assert.match(changelog, /TRIGGER-MATRIX\.md/);
   assert.match(changelog, /## 0\.6\.0/);
   assert.match(changelog, /spring-boot-engineering/);
   assert.match(changelog, /vue3-engineering/);

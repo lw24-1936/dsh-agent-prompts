@@ -1,6 +1,6 @@
 # 参考 Skill 分析与吸收映射
 
-> 本文件记录 `dsh-agent-prompts` 0.6.0 对 8 个公开 Agent Skill/仓库的学习结果：哪些优点被吸收、落在哪个文件、哪些内容**没有**照搬。它是分析记录，不是原文合集。
+> 本文件记录 `dsh-agent-prompts` 0.6.0 对 8 个公开 Agent Skill/仓库的学习结果；0.7.0 又补上了 Spring Security、设计反模式检查器、触发矩阵与仓库协作文档。它记录哪些优点被吸收、落在哪个文件、哪些内容**没有**照搬，不是原文合集。
 
 ## 0. 结论先行
 
@@ -36,6 +36,7 @@
 | 版本差异（Boot 2/3/4、Jackson 2/3、Testcontainers 1/2） | `resources/spring-boot/README.md` 只写“按项目选择”，**不锁定版本** |
 | 反模式/评审顺序 | `resources/spring-boot/anti-patterns.md` |
 | Maven 质量插件、Docker Compose、Taskfile、Thymeleaf、容器/部署 | `resources/spring-boot/quality-and-local.md` |
+| Spring Security 认证/授权/CSRF/CORS/测试 | `resources/spring-boot/security.md` |
 
 ### 没有照搬
 
@@ -177,6 +178,7 @@
 | 一屏一个 section、等左右边、hero 入场、微交互 | `brief-and-direction.md`、`patterns.md` |
 | 真实摄影/产品图；没有资产就诚实占位；不编客户/评价 | `brief-and-direction.md`、`anti-slop.md` |
 | 四档视口（1440/1024/768/390）与浏览器验收 | `browser-check.md` |
+| 反模式静态检查脚本（保守、可门禁） | `resources/frontend-design/check-design.mjs` |
 | 文案/CTA/错误/空态规则 | `brief-and-direction.md` |
 | “每个视觉都要渲染，不能空背景” | `browser-check.md`、`anti-slop.md` |
 | 不删/改 kit 文件来绕过检查（检查完整性） | `docs/SKILL-AUTHORING.md` 的“不 gaming 门禁” |

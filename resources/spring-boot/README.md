@@ -8,6 +8,7 @@
 |---|---|---|
 | `api-and-service.md` | 包结构、REST API、DTO/值对象、Service/事务、JPA | 写接口、改服务、建模块 |
 | `testing-and-modulith.md` | 单元/切片/冒烟/E2E、Testcontainers、ArchUnit、Spring Modulith | 补测试、拆模块、配 CI |
+| `security.md` | 认证/授权、FilterChain、方法级鉴权、密码/会话/JWT、CSRF/CORS、安全测试 | 写/改/审查安全配置 |
 | `quality-and-local.md` | 构建质量插件、Docker Compose、Taskfile、Thymeleaf、容器/部署 | 配构建、本地环境、可选能力 |
 | `anti-patterns.md` | 高频反模式与修复方向 | review、重构、排障 |
 

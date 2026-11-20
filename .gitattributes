@@ -1,0 +1,13 @@
+# Normalize text to LF in the repository; binaries stay binary.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tgz binary
+*.tar.gz binary

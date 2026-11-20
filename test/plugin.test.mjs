@@ -97,6 +97,7 @@ test('standards skills expose progressive-disclosure resources', () => {
     'spring-boot/README.md',
     'spring-boot/api-and-service.md',
     'spring-boot/testing-and-modulith.md',
+    'spring-boot/security.md',
     'spring-boot/quality-and-local.md',
     'spring-boot/anti-patterns.md',
     'vue3/README.md',
@@ -109,6 +110,7 @@ test('standards skills expose progressive-disclosure resources', () => {
     'frontend-design/brief-and-direction.md',
     'frontend-design/visual-review.md',
     'frontend-design/browser-check.md',
+    'frontend-design/check-design.mjs',
     'frontend-design/anti-slop.md',
     'frontend-design/patterns.md',
     'engineering/README.md',
@@ -164,6 +166,27 @@ test('config can limit or disable skills', () => {
   apply(unknownContext.ctx, { disabled: ['not-a-skill'] });
   assert.equal(unknownContext.registered.length, 10);
   assert.match(unknownContext.warnings.join('\n'), /not-a-skill/);
+});
+
+test('config rejects invalid shapes and de-duplicates names', () => {
+  const invalidContext = fakeContext();
+  apply(invalidContext.ctx, { only: 'f2e-spec' });
+  assert.equal(invalidContext.registered.length, 10);
+  assert.match(invalidContext.warnings.join('\n'), /必须是字符串数组/);
+
+  const duplicateContext = fakeContext();
+  apply(duplicateContext.ctx, { only: ['f2e-spec', 'f2e-spec'] });
+  assert.deepEqual(duplicateContext.registered.map((skill) => skill.name), ['f2e-spec']);
+  assert.match(duplicateContext.warnings.join('\n'), /重复/);
+
+  const conflictContext = fakeContext();
+  apply(conflictContext.ctx, { only: ['f2e-spec'], disabled: ['f2e-spec'] });
+  assert.deepEqual(conflictContext.registered.map((skill) => skill.name), ['f2e-spec']);
+  assert.match(conflictContext.warnings.join('\n'), /only 优先/);
+
+  const nullContext = fakeContext();
+  apply(nullContext.ctx, null);
+  assert.equal(nullContext.registered.length, 10);
 });
 
 test('skill spec files all exist', () => {

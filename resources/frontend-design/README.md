@@ -9,6 +9,7 @@
 | `brief-and-direction.md` | 需求简报、surface 模式、视觉方向、排版/色彩/布局/动效、参考图 | 开始设计/改版前 |
 | `visual-review.md` | 评审维度、认知负荷、Nielsen 启发式、P0–P3 分级 | 设计/代码评审 |
 | `browser-check.md` | 四档视口、截图、状态、键盘、对比度、reduced-motion 验收 | 实现后/交付前 |
+| `check-design.mjs` | 保守静态反模式检查（可做 `--fail-on P1` 门禁） | 实现后/CI |
 | `anti-slop.md` | 通用 AI 味页面清单与替代方案 | 设计/评审/自查 |
 | `patterns.md` | 落地页/后台/文档/表单/空态/错误态的版式套路 | 选版式时 |
 

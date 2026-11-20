@@ -31,6 +31,9 @@ jobs:
       - name: Pack dry run
         run: npm pack --dry-run
 
+      - name: Design anti-patterns
+        run: npm run check:design
+
       - name: Smoke test scanner
         run: |
           node resources/scan-redlines.mjs --profile java --root . --format sarif > /tmp/redlines.sarif
