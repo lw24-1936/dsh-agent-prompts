@@ -1,10 +1,18 @@
 # Changelog
 
+## 0.7.1 — 2026-11-20
+
+### Changed
+
+- **删除 `agent.md`**：只保留标准入口 `AGENTS.md`，避免两份维护指南漂移。
+- 同步更新 `package.json` `files`、tarball 测试、文档一致性测试与 CHANGELOG；`AGENTS.md` 仍是唯一的 agent 指令入口。
+- 版本 0.7.1；扫描器/设计检查器版本同步。
+
 ## 0.7.0 — 2026-11-20
 
 ### Added
 
-- **`AGENTS.md` / `agent.md`**：本仓库的 agent 维护指南（命令、技能编写、版本/发布、审查清单）。
+- **`AGENTS.md`**：本仓库的 agent 维护指南（命令、技能编写、版本/发布、审查清单）。
 - **`resources/spring-boot/security.md`**：认证/授权、FilterChain、方法级鉴权、密码/会话/JWT、CSRF/CORS、安全测试。
 - **`resources/frontend-design/check-design.mjs`**：零依赖、保守的静态设计反模式检查器（紫色渐变、`transition: all`、lorem ipsum、缺 alt、可点击 div、`outline: none`、`z-index: 9999`）。
 - **`docs/TRIGGER-MATRIX.md`**：22 条触发样例、主/次技能判定与重叠处理。

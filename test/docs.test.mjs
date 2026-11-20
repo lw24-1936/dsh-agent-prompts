@@ -63,9 +63,13 @@ test('README skill table lists exactly the registered skills', () => {
 });
 
 test('agent entry points and maintenance docs exist', () => {
-  for (const file of ['AGENTS.md', 'agent.md', 'docs/TRIGGER-MATRIX.md', 'docs/REFERENCE-SKILL-ANALYSIS.md', 'docs/SKILL-AUTHORING.md', '.gitattributes']) {
+  for (const file of ['AGENTS.md', 'docs/TRIGGER-MATRIX.md', 'docs/REFERENCE-SKILL-ANALYSIS.md', 'docs/SKILL-AUTHORING.md', '.gitattributes']) {
     assert.ok(existsSync(join(ROOT, file)), `${file} missing`);
   }
-  assert.match(read('agent.md'), /AGENTS\.md/);
+  const agents = read('AGENTS.md');
+  assert.ok(agents.length > 3000, 'AGENTS.md should be a full document');
+  assert.match(agents, /## 2\. 最小工作流/);
+  assert.match(agents, /spring-boot-engineering/);
+  assert.match(agents, /check-design\.mjs/);
   assert.match(read('.gitattributes'), /text=auto/);
 });

@@ -49,7 +49,7 @@ function read(path) {
 }
 
 test('package metadata advertises the scanner and Node 20+', () => {
-  assert.equal(pkg.version, '0.7.0');
+  assert.equal(pkg.version, '0.7.1');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
   assert.equal(pkg.bin['dsh-agent-prompts-design'], './resources/frontend-design/check-design.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');

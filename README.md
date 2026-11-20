@@ -6,7 +6,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[![version](https://img.shields.io/badge/version-0.7.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts/releases)
+[![version](https://img.shields.io/badge/version-0.7.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts/releases)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20-339933)](https://nodejs.org/)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)

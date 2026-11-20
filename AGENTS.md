@@ -45,7 +45,7 @@ npm run check:design # 对本仓库跑设计反模式检查
 
 - `lib/index.js`：只做注册、配置过滤、资源基座；不引入运行时依赖。
 - `skills/`：技能正文；改文案不需要改代码。
-- `resources/`：长文、模板、扫描器、设计检查器；路径相对 `resources/`。
+- `resources/`：长文、模板、扫描器（`resources/scan-redlines.mjs`）、设计检查器（`resources/frontend-design/check-design.mjs`）；路径相对 `resources/`。
 - `test/`：Node 内置 `node:test`，不引测试框架。
 - `docs/`：面向维护者/使用者的说明；`docs/SCANNER.md`、`docs/DESIGN-CHECK.md`、`docs/TRIGGER-MATRIX.md`、`docs/ARCHITECTURE.md`、`docs/REFERENCE-SKILL-ANALYSIS.md`、`docs/SKILL-AUTHORING.md`。
 - `cordis.patch.yml`：profile 补丁；Host-only，无 client 半。
