@@ -20,7 +20,7 @@ function runNpm(args, cwd) {
   return spawnSync(NPM, args, options);
 }
 
-test('packed tarball installs and exposes seven skills plus scanner', { timeout: 120000 }, async () => {
+test('packed tarball installs and exposes ten skills plus scanner', { timeout: 120000 }, async () => {
   const npmVersion = runNpm(['--version'], ROOT);
   if (npmVersion.status !== 0) {
     test.skip('npm not available');
@@ -51,17 +51,29 @@ test('packed tarball installs and exposes seven skills plus scanner', { timeout:
 
     const installed = join(installDir, 'node_modules', 'dsh-agent-prompts');
     const pkg = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
-    assert.equal(pkg.version, '0.5.1');
+    assert.equal(pkg.version, '0.6.0');
     assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
     for (const file of [
       'lib/index.js',
       'skills/alibaba-java-standards.md',
+      'skills/spring-boot-engineering.md',
+      'skills/vue3-engineering.md',
+      'skills/frontend-design-craft.md',
       'skills/software-engineering-process.md',
       'resources/scan-redlines.mjs',
       'resources/alibaba-java/01a-naming.md',
       'resources/alibaba-java/09-modern-java.md',
       'resources/reference/fullstack-single.original.md',
+      'resources/spring-boot/api-and-service.md',
+      'resources/spring-boot/quality-and-local.md',
+      'resources/vue3/core.md',
+      'resources/vue3/component-patterns.md',
+      'resources/frontend-design/browser-check.md',
+      'resources/engineering/delivery.md',
       'resources/templates/PROCESS.md',
+      'resources/templates/DELIVERY.md',
+      'docs/REFERENCE-SKILL-ANALYSIS.md',
+      'docs/SKILL-AUTHORING.md',
       'cordis.patch.yml',
       'README.md',
       'README.en.md',
@@ -77,15 +89,18 @@ test('packed tarball installs and exposes seven skills plus scanner', { timeout:
     const mod = await import(moduleUrl);
     assert.equal(mod.name, 'dsh-agent-prompts');
     assert.deepEqual(mod.inject, ['skills']);
-    assert.equal(mod.SKILLS.length, 7);
+    assert.equal(mod.SKILLS.length, 10);
     assert.deepEqual(mod.SKILLS.map((skill) => skill.name).sort(), [
       'alibaba-java-standards',
       'f2e-spec',
+      'frontend-design-craft',
       'fullstack-microservice-debug',
       'fullstack-microservice-dev',
       'fullstack-monolith-debug',
       'fullstack-monolith-dev',
       'software-engineering-process',
+      'spring-boot-engineering',
+      'vue3-engineering',
     ]);
   } finally {
     rmSync(packDir, { recursive: true, force: true });

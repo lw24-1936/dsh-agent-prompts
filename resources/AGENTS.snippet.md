@@ -5,12 +5,14 @@
 ```md
 ## 编码规约（dsh-agent-prompts）
 
-- 写、改或 review Java/SQL 前，先加载技能 `alibaba-java-standards`，按其「P0 红线」执行；条文按需读 `alibaba-java/01a…09`。
-- 写、改或 review 前端（JS/TS/React/Vue，框架版本按项目）前，先加载技能 `f2e-spec`。
+- 写、改或 review Java/SQL 前，先加载技能 `alibaba-java-standards`，按其「P0 红线」执行；条文按需读 `alibaba-java/01a…09`。Spring Boot 结构/API/事务/JPA/测试同时加载 `spring-boot-engineering`，按需读 `spring-boot/`。
+- 写、改或 review 前端（JS/TS/React/Vue，框架版本按项目）前，先加载技能 `f2e-spec`；Vue 3 组件/响应式/Router/Pinia/测试同时加载 `vue3-engineering`，按需读 `vue3/`。
+- 做/改/评审页面、落地页、后台或设计系统前，加载 `frontend-design-craft`；UI 改动按四视口、四态、键盘/对比度/reduced-motion 验收。
 - 开始新项目/新模块/大改动前，先加载 `software-engineering-process`，由它按项目约束自动选择开发流程；不要先问用户选 Scrum 还是瀑布。
 - 技术版本以项目 `pom.xml` / `build.gradle` / `package.json` / 父 POM / BOM 为准；不要求升级，没有版本信息时先问用户。
 - 修复线上问题时同样受 P0 约束：不得用「先让它不报错」绕过空 catch、SQL 拼接、线程池红线。
 - 「被本次改动触碰的代码」= `git diff --name-only` + `git diff --cached --name-only` + 新增未跟踪文件；P0 在这份清单内发现即修复，P1 只约束新增/重写行。
+- 交付前按技能资源 `engineering/delivery.md` 分开记录实现/编译/测试/审查/提交/推送/部署/验收；测试通过不等于已上线；不删断言、不跳测试、不假报完成。
 - 提交前跑（`<资源目录>` 替换为技能加载时给出的 base directory；若项目已 `npm i -D dsh-agent-prompts`，可改用 `npx dsh-agent-prompts-scan`）：
   `node "<资源目录>/scan-redlines.mjs" --profile java --changed-only --root .`
   `node "<资源目录>/scan-redlines.mjs" --profile frontend --changed-only --root .`
@@ -20,6 +22,6 @@
 
 ## 说明
 
-- 技能名必须与目录中的完全一致：`alibaba-java-standards`、`f2e-spec`、`software-engineering-process`、`fullstack-monolith-dev`、`fullstack-monolith-debug`、`fullstack-microservice-dev`、`fullstack-microservice-debug`。
+- 技能名必须与目录中的完全一致：`alibaba-java-standards`、`spring-boot-engineering`、`f2e-spec`、`vue3-engineering`、`frontend-design-craft`、`software-engineering-process`、`fullstack-monolith-dev`、`fullstack-monolith-debug`、`fullstack-microservice-dev`、`fullstack-microservice-debug`。
 - 作为 DSH 插件安装时，扫描器在技能资源目录的 `scan-redlines.mjs`；只有把本包装进项目 devDependencies 时才有 `dsh-agent-prompts-scan` 这个 bin。
 - 扫描器是启发式提示，正式门禁仍以 P3C / PMD / ESLint 与人工 review 为准。

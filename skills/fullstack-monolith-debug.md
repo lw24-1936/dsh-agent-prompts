@@ -3,7 +3,9 @@
 > 本规范的第一原则：**先复现，再定位；先证据，后结论**。
 > 没有证据的结论不写进报告，宁可写「未确认」。
 >
-> **修复代码时同样受规约约束**：Java 遵循 `alibaba-java-standards`（P0 红线不可用「先让它不报错」绕过），前端遵循 `f2e-spec`。本文件管定位流程与修复纪律。
+> **修复代码时同样受规约约束**：Java 遵循 `alibaba-java-standards`（P0 红线不可用「先让它不报错」绕过）与 `spring-boot-engineering`，前端遵循 `f2e-spec` 与 `vue3-engineering`。本文件管定位流程与修复纪律。
+>
+> **证据纪律**：根因/数据损失等高影响结论按 `engineering/evidence-and-review.md` 做竞争解释、主动反例与敏感性检查；修复/交付按 `engineering/delivery.md` 记录状态。
 >
 > **流程**：排障按事件响应流程（止血 → 复现 → 定位 → 修复 → 复盘）；项目级流程选择见 `software-engineering-process`，排障不改变项目主流程。
 

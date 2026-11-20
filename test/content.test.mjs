@@ -12,7 +12,10 @@ const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
 
 const SKILL_FILES = [
   'alibaba-java-standards.md',
+  'spring-boot-engineering.md',
   'f2e-spec.md',
+  'vue3-engineering.md',
+  'frontend-design-craft.md',
   'software-engineering-process.md',
   'fullstack-monolith-dev.md',
   'fullstack-monolith-debug.md',
@@ -46,7 +49,7 @@ function read(path) {
 }
 
 test('package metadata advertises the scanner and Node 20+', () => {
-  assert.equal(pkg.version, '0.5.1');
+  assert.equal(pkg.version, '0.6.0');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');
   assert.match(pkg.engines.node, />=20/);
@@ -55,7 +58,7 @@ test('package metadata advertises the scanner and Node 20+', () => {
   assert.match(pkg.scripts.verify, /npm run check/);
 });
 
-test('all seven skills exist, are unique, and fit the catalog description cap', () => {
+test('all ten skills exist, are unique, and fit the catalog description cap', () => {
   const names = new Set();
   for (const file of SKILL_FILES) {
     const path = join(ROOT, 'skills', file);
@@ -67,7 +70,7 @@ test('all seven skills exist, are unique, and fit the catalog description cap', 
     assert.ok(!names.has(file), `duplicate skill file ${file}`);
     names.add(file);
   }
-  assert.equal(SKILL_FILES.length, 7);
+  assert.equal(SKILL_FILES.length, 10);
 });
 
 test('catalog descriptions are unique, version-agnostic, and under 500 chars', () => {
@@ -77,7 +80,7 @@ test('catalog descriptions are unique, version-agnostic, and under 500 chars', (
     assert.ok(spec.description.length > 80, `${spec.name} description too short`);
     assert.ok(!names.has(spec.name), `duplicate skill name ${spec.name}`);
     names.add(spec.name);
-    assert.doesNotMatch(spec.description, /Spring Boot 3|JDK 21|Vue 3|MySQL 8|3\.5|2025\.0/, `${spec.name} description pins a version`);
+    assert.doesNotMatch(spec.description, /Spring Boot 3|JDK 21|MySQL 8|3\.5|2025\.0/, `${spec.name} description pins a version`);
   }
 });
 
@@ -113,11 +116,36 @@ test('resource references in skill bodies resolve', () => {
     'examples/xss.md',
     'AGENTS.snippet.md',
     'templates/PROCESS.md',
+    'templates/REQUIREMENTS.md',
+    'templates/DESIGN.md',
+    'templates/REVIEW.md',
+    'templates/DELIVERY.md',
+    'spring-boot/README.md',
+    'spring-boot/api-and-service.md',
+    'spring-boot/testing-and-modulith.md',
+    'spring-boot/quality-and-local.md',
+    'spring-boot/anti-patterns.md',
+    'vue3/README.md',
+    'vue3/core.md',
+    'vue3/component-patterns.md',
+    'vue3/ecosystem.md',
+    'vue3/debugging.md',
+    'vue3/anti-patterns.md',
+    'frontend-design/README.md',
+    'frontend-design/brief-and-direction.md',
+    'frontend-design/visual-review.md',
+    'frontend-design/browser-check.md',
+    'frontend-design/anti-slop.md',
+    'frontend-design/patterns.md',
+    'engineering/README.md',
+    'engineering/evidence-and-review.md',
+    'engineering/delivery.md',
+    'engineering/simplify.md',
     'scan-redlines.mjs',
   ]);
   for (const file of SKILL_FILES) {
     const content = read(join('skills', file));
-    for (const match of content.matchAll(/`((?:alibaba-java|f2e-spec|reference|examples|templates)\/[^`\s]+|scan-redlines\.mjs|AGENTS\.snippet\.md)`/g)) {
+    for (const match of content.matchAll(/`((?:alibaba-java|f2e-spec|reference|examples|templates|spring-boot|vue3|frontend-design|engineering)\/[^`\s]+|scan-redlines\.mjs|AGENTS\.snippet\.md)`/g)) {
       const ref = match[1];
       assert.ok(known.has(ref), `${file} references unknown resource ${ref}`);
       assert.ok(existsSync(join(ROOT, 'resources', ref)), `${file} references missing ${ref}`);
@@ -205,8 +233,64 @@ test('examples index lists every example file', () => {
   }
 });
 
-test('CHANGELOG records 0.5.1, 0.5.0 and 0.3.0', () => {
+test('spring boot, vue and design skills are wired to their resources', () => {
+  const spring = read('skills/spring-boot-engineering.md');
+  for (const token of ['spring-boot/api-and-service.md', 'spring-boot/testing-and-modulith.md', 'spring-boot/anti-patterns.md', 'Testcontainers', 'ArchUnit', 'Modulith']) {
+    assert.ok(spring.includes(token), `spring skill missing ${token}`);
+  }
+  const vue = read('skills/vue3-engineering.md');
+  for (const token of ['vue3/core.md', 'vue3/ecosystem.md', 'vue3/debugging.md', 'vue3/anti-patterns.md', 'Composition API', 'Pinia', 'Vitest']) {
+    assert.ok(vue.includes(token), `vue skill missing ${token}`);
+  }
+  const design = read('skills/frontend-design-craft.md');
+  for (const token of ['frontend-design/brief-and-direction.md', 'frontend-design/visual-review.md', 'frontend-design/browser-check.md', 'frontend-design/anti-slop.md', '1440', '390', 'prefers-reduced-motion']) {
+    assert.ok(design.includes(token), `design skill missing ${token}`);
+  }
+  const agents = read('resources/AGENTS.snippet.md');
+  for (const token of ['spring-boot-engineering', 'vue3-engineering', 'frontend-design-craft', 'engineering/delivery.md']) {
+    assert.ok(agents.includes(token), `AGENTS snippet missing ${token}`);
+  }
+});
+
+test('reference analysis covers every source and authoring guidance exists', () => {
+  const analysis = read('docs/REFERENCE-SKILL-ANALYSIS.md');
+  for (const token of [
+    'sivaprasadreddy/sivalabs-agent-skills',
+    'Lanqiao-Luca/ai-java-workflow',
+    'vuejs-ai/skills',
+    'antfu/skills',
+    'vueuse/skills',
+    'anthropics/skills',
+    'Leonxlnx/taste-skill',
+    'pbakaus/impeccable',
+  ]) {
+    assert.ok(analysis.includes(token), `reference analysis missing ${token}`);
+  }
+  assert.match(analysis, /许可|license/i);
+  assert.match(analysis, /没有照搬|不复制/);
+  assert.ok(existsSync(join(ROOT, 'docs', 'SKILL-AUTHORING.md')));
+});
+
+test('delivery templates exist and carry evidence fields', () => {
+  for (const [file, tokens] of [
+    ['REQUIREMENTS.md', ['验收', '改变项', '保持项', '未决']],
+    ['DESIGN.md', ['方案', '取舍', '验证']],
+    ['REVIEW.md', ['关闭标准', 'PASS/FAIL/NOT_RUN']],
+    ['DELIVERY.md', ['实现', '推送', '部署', '恢复点']],
+  ]) {
+    const content = read(`resources/templates/${file}`);
+    for (const token of tokens) {
+      assert.ok(content.includes(token), `${file} missing ${token}`);
+    }
+  }
+});
+
+test('CHANGELOG records 0.6.0, 0.5.1, 0.5.0 and 0.3.0', () => {
   const changelog = read('CHANGELOG.md');
+  assert.match(changelog, /## 0\.6\.0/);
+  assert.match(changelog, /spring-boot-engineering/);
+  assert.match(changelog, /vue3-engineering/);
+  assert.match(changelog, /frontend-design-craft/);
   assert.match(changelog, /## 0\.5\.1/);
   assert.match(changelog, /templates\/PROCESS\.md/);
   assert.match(changelog, /## 0\.5\.0/);

@@ -11,7 +11,10 @@ const PACKAGE_ROOT = resolve(HERE, '..');
 
 const EXPECTED = [
   'alibaba-java-standards',
+  'spring-boot-engineering',
   'f2e-spec',
+  'vue3-engineering',
+  'frontend-design-craft',
   'software-engineering-process',
   'fullstack-monolith-dev',
   'fullstack-monolith-debug',
@@ -46,7 +49,7 @@ test('exports a Cordis plugin contract', () => {
   assert.equal(typeof apply, 'function');
 });
 
-test('registers seven skills in the catalog order', () => {
+test('registers ten skills in the catalog order', () => {
   const { ctx, registered, warnings } = fakeContext();
   apply(ctx);
   assert.equal(warnings.length, 0);
@@ -78,6 +81,12 @@ test('standards skills expose progressive-disclosure resources', () => {
   assert.match(java.content, /Alibaba-Java-P0-EXEMPT/);
   assert.match(f2e.content, /f2e-spec\/toolchain\.md/);
   assert.match(f2e.content, /scan-redlines\.mjs/);
+  const spring = registered.find((skill) => skill.name === 'spring-boot-engineering');
+  const vue = registered.find((skill) => skill.name === 'vue3-engineering');
+  const design = registered.find((skill) => skill.name === 'frontend-design-craft');
+  assert.match(spring.content, /spring-boot\/api-and-service\.md/);
+  assert.match(vue.content, /vue3\/core\.md/);
+  assert.match(design.content, /frontend-design\/browser-check\.md/);
   for (const file of [
     'alibaba-java/01a-naming.md',
     'alibaba-java/01f-concurrency.md',
@@ -85,6 +94,27 @@ test('standards skills expose progressive-disclosure resources', () => {
     'alibaba-java/09-modern-java.md',
     'f2e-spec/original.md',
     'f2e-spec/toolchain.md',
+    'spring-boot/README.md',
+    'spring-boot/api-and-service.md',
+    'spring-boot/testing-and-modulith.md',
+    'spring-boot/quality-and-local.md',
+    'spring-boot/anti-patterns.md',
+    'vue3/README.md',
+    'vue3/core.md',
+    'vue3/component-patterns.md',
+    'vue3/ecosystem.md',
+    'vue3/debugging.md',
+    'vue3/anti-patterns.md',
+    'frontend-design/README.md',
+    'frontend-design/brief-and-direction.md',
+    'frontend-design/visual-review.md',
+    'frontend-design/browser-check.md',
+    'frontend-design/anti-slop.md',
+    'frontend-design/patterns.md',
+    'engineering/README.md',
+    'engineering/evidence-and-review.md',
+    'engineering/delivery.md',
+    'engineering/simplify.md',
     'examples/java-threadpool.md',
     'examples/xss.md',
     'AGENTS.snippet.md',
@@ -113,7 +143,7 @@ test('fullstack skills point at the original documents inside resources', () => 
 test('disposal unregisters every skill', () => {
   const { ctx, registered } = fakeContext();
   const dispose = apply(ctx);
-  assert.equal(registered.length, 7);
+  assert.equal(registered.length, 10);
   dispose();
   assert.equal(registered.length, 0);
   dispose();
@@ -127,12 +157,12 @@ test('config can limit or disable skills', () => {
 
   const disabledContext = fakeContext();
   apply(disabledContext.ctx, { disabled: ['f2e-spec', 'alibaba-java-standards'] });
-  assert.equal(disabledContext.registered.length, 5);
+  assert.equal(disabledContext.registered.length, 8);
   assert.ok(!disabledContext.registered.some((skill) => skill.name === 'f2e-spec'));
 
   const unknownContext = fakeContext();
   apply(unknownContext.ctx, { disabled: ['not-a-skill'] });
-  assert.equal(unknownContext.registered.length, 7);
+  assert.equal(unknownContext.registered.length, 10);
   assert.match(unknownContext.warnings.join('\n'), /not-a-skill/);
 });
 

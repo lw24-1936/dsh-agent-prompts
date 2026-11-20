@@ -1,10 +1,10 @@
 # dsh-agent-prompts
 
-A **DeepSeek Harness skill pack** that turns full-stack development/debugging guidance, the Alibaba Java / F2E frontend conventions, and software-engineering process selection into seven on-demand skills. The agent loads the right skill when the task matches, so you no longer paste long prompts into every session.
+A **DeepSeek Harness skill pack** that turns full-stack development/debugging guidance, Spring Boot and Vue 3 engineering practice, frontend visual design, the Alibaba Java / F2E conventions, and software-engineering process selection into ten on-demand skills. The agent loads the right skill when the task matches, so you no longer paste long prompts into every session.
 
 [中文](./README.md) · English
 
-[![version](https://img.shields.io/badge/version-0.5.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.6.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 ## Skills
@@ -12,7 +12,10 @@ A **DeepSeek Harness skill pack** that turns full-stack development/debugging gu
 | Skill | Loads when |
 |---|---|
 | `alibaba-java-standards` | Writing, changing, or reviewing Java/SQL: thread pools, date/time, SQL injection, resources, exceptions, collections, ThreadLocal |
-| `f2e-spec` | Writing, changing, or reviewing JS/TS/React/Vue (project versions): formatting, Hooks, Vue 3 examples, security, a11y |
+| `spring-boot-engineering` | Spring Boot structure/REST/transactions/JPA, sliced tests/Testcontainers/ArchUnit/Modulith |
+| `f2e-spec` | Writing, changing, or reviewing JS/TS/React/Vue (project versions): formatting, Hooks, security, a11y |
+| `vue3-engineering` | Vue 3 components/reactivity/composables, Router/Pinia/VueUse, Vitest/Playwright, performance/debugging |
+| `frontend-design-craft` | Designing, changing, or reviewing pages, landing pages, dashboards, forms, design systems |
 | `software-engineering-process` | New project/module/major change, planning, "which process?", or a process that no longer fits |
 | `fullstack-monolith-dev` | Monolith stack: Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token (project versions) |
 | `fullstack-monolith-debug` | Monolith failures: 500/401/403/404, data inconsistency, slow queries, middleware connectivity |
@@ -44,12 +47,17 @@ Skill bodies contain execution policy and routing. Long content lives in `resour
 
 ```
 resources/
-├── alibaba-java/     # 01a–01h split chapters + 02–08 + 09 modern Java + index/template
-├── f2e-spec/         # original snapshot + ESLint/Prettier/tsconfig reference
-├── examples/         # six before/after examples
-├── reference/        # original full-stack documents
-├── AGENTS.snippet.md # project AGENTS.md snippet
-└── scan-redlines.mjs # heuristic P0 scanner
+├── alibaba-java/      # 01a–01h split chapters + 02–08 + 09 modern Java + index/template
+├── f2e-spec/          # original snapshot + ESLint/Prettier/tsconfig reference
+├── spring-boot/       # architecture/API/JPA + testing/Modulith + anti-patterns
+├── vue3/              # reactivity/components + ecosystem/testing + debugging
+├── frontend-design/   # brief/direction + review rubric + browser check + anti-slop
+├── engineering/       # evidence/review/delivery/simplify discipline
+├── examples/          # six before/after examples
+├── reference/         # original full-stack documents
+├── templates/         # PROCESS / REQUIREMENTS / DESIGN / REVIEW / DELIVERY
+├── AGENTS.snippet.md  # project AGENTS.md snippet
+└── scan-redlines.mjs  # heuristic P0 scanner
 ```
 
 ## Install
@@ -112,5 +120,6 @@ npm pack --dry-run
 - Java rules: *Java Development Manual (Huangshan edition)* v1.7.1, copyright Alibaba Group; wrapper inspired by [Sxuan-Coder/alibaba-java-development-guide](https://github.com/Sxuan-Coder/alibaba-java-development-guide) (MIT).
 - Frontend rules: [alibaba/f2e-spec](https://github.com/alibaba/f2e-spec) (MIT).
 - Original full-stack documents: retained in `resources/reference/` for comparison.
+- Eight public skills/repos studied for 0.6.0, with an adoption map: [docs/REFERENCE-SKILL-ANALYSIS.md](./docs/REFERENCE-SKILL-ANALYSIS.md); skill authoring notes: [docs/SKILL-AUTHORING.md](./docs/SKILL-AUTHORING.md).
 
 See [NOTICE.md](./NOTICE.md) for details.

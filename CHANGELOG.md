@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.6.0 — 2026-11-20
+
+### Added
+
+- **三个新技能**：`spring-boot-engineering`、`vue3-engineering`、`frontend-design-craft`；技能数 7 → 10。
+- **Spring Boot 资源包** `resources/spring-boot/`：domain 分包/模块 API、REST/ProblemDetail、Service 事务、JPA、测试切片/Testcontainers/ArchUnit、Spring Modulith、反模式。
+- **Vue 3 资源包** `resources/vue3/`：响应式/组件/composables、Router/Pinia/VueUse、Vitest/Playwright、调试索引、反模式。
+- **前端设计资源包** `resources/frontend-design/`：brief/视觉方向、评审 rubric、四视口浏览器验收、反 AI 味、页面模式。
+- **交付纪律资源包** `resources/engineering/`：候选/证据/行为保持/风险验证/审查关闭/有界收敛/反证、交付状态/PR/提交、ablation 简化。
+- **模板** `resources/templates/`：REQUIREMENTS / DESIGN / REVIEW / DELIVERY（原有 PROCESS）。
+- **文档**：`docs/REFERENCE-SKILL-ANALYSIS.md`（8 个参考 Skill 的完整吸收映射与“未照搬”清单）、`docs/SKILL-AUTHORING.md`（技能编写实践）。
+- **测试**：新技能/资源/模板/参考分析/描述长度/打包内容覆盖；`npm run verify` 用例 33 → 36，全部通过。
+
+### Changed
+
+- `AGENTS.snippet.md` 补齐 10 个技能名，并增加 Spring/Vue/设计/交付门禁。
+- 全栈技能描述与正文联动 Spring/Vue/设计/证据技能；单体门禁 10 → 11 条，微服务 12 → 13 条。
+- 版本 0.6.0；扫描器版本同步；README / README.en / PUBLISH / NOTICE 更新。
+
+### Credits
+
+学习并吸收以下公开资料的方法（重写，不复制原文/代码）：
+
+- [SivaLabs Spring Boot Skill](https://github.com/sivaprasadreddy/sivalabs-agent-skills)（MIT）
+- [AI Java Workflow](https://github.com/Lanqiao-Luca/ai-java-workflow)（MIT）
+- [Vuejs AI Skills](https://github.com/vuejs-ai/skills)（MIT）
+- [Anthony Fu Skills](https://github.com/antfu/skills)（MIT）
+- [VueUse Skills](https://github.com/vueuse/skills)（MIT）
+- [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+- [Taste Skill](https://github.com/Leonxlnx/taste-skill)（MIT）
+- [Impeccable](https://github.com/pbakaus/impeccable)（Apache-2.0）
+
 ## 0.5.1 — 2026-11-08
 
 ### Added

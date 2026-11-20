@@ -1,10 +1,10 @@
 # dsh-agent-prompts
 
-把「全栈开发 / 问题排查」与「阿里巴巴 Java / 前端规约」做成 **DeepSeek Harness 技能包**：装上之后不用再手动粘贴长提示词，模型会在合适的场景自行加载对应规范。
+把「全栈开发 / 问题排查」「Spring Boot / Vue 3 工程实践」「前端视觉设计」与「阿里巴巴 Java / 前端规约」做成 **DeepSeek Harness 技能包**：装上之后不用再手动粘贴长提示词，模型会在合适的场景自行加载对应规范。
 
 [English](./README.en.md) · 简体中文
 
-[![version](https://img.shields.io/badge/version-0.5.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
+[![version](https://img.shields.io/badge/version-0.6.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
 [![topic](https://img.shields.io/badge/topic-dsh--plugin-0e7490)](https://github.com/topics/dsh-plugin)
@@ -17,27 +17,32 @@
 2. 开发 / 排查、单体 / 微服务、Java / 前端混在一起，靠人记该用哪份；
 3. 大量条文是重复或不可判定的表述，真正执行时反而是噪音。
 
-本插件把它们拆成 **7 个按场景触发的技能**，并做了五件事：
+本插件把它们拆成 **10 个按场景触发的技能**，并做了七件事：
 
 - **压缩与结构化**：只保留硬约束、流程、门禁与可执行断言；
-- **渐进披露**：长条文（Java 手册 8+1 节、原始全栈文档）放在资源目录；原「编程规约」1036 行已拆成 8 个文件（`01a`–`01h`），命中哪节只读哪节；
+- **渐进披露**：长条文（Java 手册 8+1 节、原始全栈文档、Spring/Vue 参考）放在资源目录；原「编程规约」1036 行已拆成 8 个文件（`01a`–`01h`），命中哪节只读哪节；
 - **可执行化**：P0 红线 + 红线扫描器 + 提交前门禁，把「注意代码质量」变成能跑的命令；
 - **存量友好**：扫描器支持 `--changed-only`、`--baseline`、`.dsh/redlines.json`、SARIF / GitHub 注解，老仓库可以先建基线、只拦新增问题；
-- **流程自动选择**：按需求稳定性、合规/安全、合同、风险、团队与存量占比，自动选 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps，不先让用户选方法论。
+- **流程自动选择**：按需求稳定性、合规/安全、合同、风险、团队与存量占比，自动选 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps，不先让用户选方法论；
+- **工程纵深**：Spring Boot 的分层/事务/JPA/Testcontainers/ArchUnit/Modulith，Vue 3 的响应式/组件/composables/Router/Pinia/测试，都做成独立可加载技能；
+- **设计质量**：视觉方向、排版/色彩/布局/动效、反 AI 味、四视口浏览器验收与 P0–P3 评审，补上“能用但像模板”的缺口。
 
-## 七个技能
+## 十个技能
 
 | 技能 | 何时自动加载 | 正文 |
 |---|---|---|
 | `alibaba-java-standards` | 写/改/review Java 或 SQL：线程池、日期、SQL 注入、资源、异常、集合、ThreadLocal | P0 红线 + 三级管控 + 章节路由 + API 速查 |
-| `f2e-spec` | 写/改/review JS/TS/React/Vue（版本按项目）：格式、Hooks、Vue 3 示例、安全、a11y | 规则分级 + 工具链 + Review 格式 |
-| `software-engineering-process` | 新项目/新模块/大改动、排期拆分、用户问「用什么流程」、现有流程不适配 | 自动选择算法 + 流程库 + 场景模板 + DoR/DoD + 度量 |
+| `spring-boot-engineering` | Spring Boot 包结构/REST/Service 事务/JPA/测试切片/Testcontainers/ArchUnit/Modulith | 结构/API/事务/JPA + 测试/模块化 + 反模式 |
+| `f2e-spec` | 写/改/review JS/TS/React/Vue（版本按项目）：格式、Hooks、Vue 示例、安全、a11y | 规则分级 + 工具链 + Review 格式 |
+| `vue3-engineering` | Vue 3 组件/响应式/composables/Router/Pinia/VueUse/Vitest/Playwright/性能 | 响应式/组件 + 生态/测试 + 调试索引 + 反模式 |
+| `frontend-design-craft` | 做/改/评审落地页、产品页、后台、仪表盘、表单、设计系统 | brief/视觉方向 + 评审 rubric + 浏览器验收 + 反 AI 味 |
+| `software-engineering-process` | 新项目/新模块/大改动、排期拆分、用户问「用什么流程」、现有流程不适配 | 自动选择算法 + 流程库 + 场景模板 + DoR/DoD + 交付纪律 |
 | `fullstack-monolith-dev` | 单体全栈开发：Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token（版本按项目） | 技术栈与版本策略、四套环境、RBAC、双文档、门禁 |
 | `fullstack-monolith-debug` | 单体故障排查：500/401/403/404、数据不一致、慢查询、连不上中间件 | 定位流程 + 分层清单 + 排查记录 |
 | `fullstack-microservice-dev` | 微服务开发：Nacos / Gateway / OpenFeign / Sentinel / Seata + Maven 多模块 | 版本读取、拆分、模块、网关、事务 |
 | `fullstack-microservice-debug` | 微服务链路排查：注册失败、网关 404、Feign 超时、熔断、Seata 不回滚、MQ 堆积 | 逐跳定位 + 故障速查 |
 
-两个标准技能 + 一个流程技能是**横切能力**：四个全栈技能管架构、技术栈、环境与门禁；Java / 前端代码怎么写，交给两个标准技能；项目该用哪种开发流程，交给 `software-engineering-process` 自动判断。
+六个横切技能是**可组合能力**：四个全栈技能管架构、技术栈、环境与门禁；Java / Spring 代码怎么写交给 `alibaba-java-standards` / `spring-boot-engineering`，前端 / Vue 代码怎么写交给 `f2e-spec` / `vue3-engineering`，页面视觉与设计评审交给 `frontend-design-craft`，项目该用哪种开发流程交给 `software-engineering-process` 自动判断。十个技能都可独立 `only` / `disabled`。
 
 ## 版本策略：不锁技术版本
 
@@ -82,9 +87,13 @@
 resources/
 ├── alibaba-java/          # 01a–01h 拆分章节 + 02–08 + 09 现代 Java + 索引/模板
 ├── f2e-spec/              # F2E 原始快照 + ESLint/Prettier/tsconfig 配置
+├── spring-boot/           # 架构/API/事务/JPA + 测试/Testcontainers/ArchUnit/Modulith + 反模式
+├── vue3/                  # 响应式/组件/composables + Router/Pinia/VueUse/测试 + 调试索引
+├── frontend-design/       # brief/视觉方向 + 评审 rubric + 浏览器验收 + 反 AI 味
+├── engineering/           # 证据/审查/交付/简化纪律
 ├── examples/              # 6 组 before/after 示例
 ├── reference/             # 历史原文（版本锁定不生效）
-├── templates/             # PROCESS.md 等项目模板
+├── templates/             # PROCESS / REQUIREMENTS / DESIGN / REVIEW / DELIVERY
 ├── AGENTS.snippet.md      # 项目 AGENTS.md 自动加载片段
 └── scan-redlines.mjs      # Java / 前端 P0 启发式扫描器
 ```
@@ -107,7 +116,7 @@ dsh plugin --profile web add git+https://github.com/lw24-1936/dsh-agent-prompts.
 dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 ```
 
-### 方式三：npm（0.5.1 发布后可用）
+### 方式三：npm（0.6.0 发布后可用）
 
 ```bash
 dsh plugin --profile web add dsh-agent-prompts
@@ -126,7 +135,10 @@ dsh plugin --profile web add dsh-agent-prompts
 ```
 用 software-engineering-process 判断这个项目该用什么流程
 用 alibaba-java-standards 检查这个 Service
+用 spring-boot-engineering 设计这个模块的 API 和测试
 用 f2e-spec 审查这个 Vue 页面
+用 vue3-engineering 重构这个 composable
+用 frontend-design-craft 评审这个落地页
 用 fullstack-microservice-dev 规范帮我搭骨架
 用 fullstack-monolith-debug 流程排查这个 500
 ```
@@ -241,10 +253,13 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 dsh-agent-prompts/
 ├── package.json
 ├── cordis.patch.yml           # profile 补丁：插入一条插件行
-├── lib/index.js               # 注册 7 个技能，声明 resourceBase
+├── lib/index.js               # 注册 10 个技能，声明 resourceBase
 ├── skills/                    # 技能正文（改文案不用改代码）
 │   ├── alibaba-java-standards.md
+│   ├── spring-boot-engineering.md
 │   ├── f2e-spec.md
+│   ├── vue3-engineering.md
+│   ├── frontend-design-craft.md
 │   ├── software-engineering-process.md
 │   ├── fullstack-monolith-dev.md
 │   ├── fullstack-monolith-debug.md
@@ -254,11 +269,19 @@ dsh-agent-prompts/
 │   ├── scan-redlines.mjs
 │   ├── alibaba-java/          # 00-index + 01a–01h + 02–08 + 09 + project-template
 │   ├── f2e-spec/              # original + toolchain
+│   ├── spring-boot/           # 架构/API/JPA + 测试/Modulith + 反模式
+│   ├── vue3/                  # 响应式/组件 + 生态/测试 + 调试 + 反模式
+│   ├── frontend-design/       # brief/方向 + 评审 + 浏览器验收 + 反 AI 味
+│   ├── engineering/           # 证据/审查/交付/简化
 │   ├── examples/              # 6 组 before/after
 │   ├── reference/             # 历史原文（版本锁定不生效，见 reference/README.md）
+│   ├── templates/             # PROCESS / REQUIREMENTS / DESIGN / REVIEW / DELIVERY
 │   └── AGENTS.snippet.md      # 项目 AGENTS.md 片段
 ├── test/                      # node:test：注册契约 + 扫描器 + 内容 + tarball
-├── docs/SCANNER.md            # 扫描器完整文档
+├── docs/
+│   ├── SCANNER.md             # 扫描器完整文档
+│   ├── REFERENCE-SKILL-ANALYSIS.md  # 8 个参考 Skill 的优缺点/吸收映射
+│   └── SKILL-AUTHORING.md     # 技能编写实践
 ├── .github/workflows/         # ci.yml（Node 20/22/24）+ release.yml（tag 自动 GitHub Release）
 ├── CHANGELOG.md
 ├── NOTICE.md                  # 来源与许可
@@ -292,7 +315,7 @@ npm run scan:java -- --root .
 npm run scan:frontend -- --root .
 ```
 
-CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 7 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
+CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`，并检查 tarball 安装后的 10 个技能与资源文件；推 `v*` tag 时 `release.yml` 自动创建 GitHub Release。
 
 ## 兼容性
 
@@ -303,6 +326,7 @@ CI（`.github/workflows/ci.yml`）在 Node 20 / 22 / 24 上跑 `npm run verify`�
 
 ## 版本
 
+- **0.6.0**：学习并吸收 8 个公开 Agent Skill/仓库（SivaLabs Spring Boot、AI Java Workflow、Vuejs AI Skills、Anthony Fu Skills、VueUse Skills、Anthropic Frontend Design、Taste Skill、Impeccable）；新增 `spring-boot-engineering`、`vue3-engineering`、`frontend-design-craft` 三个技能与对应资源包；新增证据/审查/交付/简化纪律与 5 个模板；新增 `docs/REFERENCE-SKILL-ANALYSIS.md` / `docs/SKILL-AUTHORING.md`；技能数 7 → 10。
 - **0.5.1**：补齐流程技能的项目模板 `templates/PROCESS.md`、AGENTS 片段中的 7 个技能名、单体/微服务描述与流程联动；内容测试覆盖模板与引用。
 - **0.5.0**：新增 `software-engineering-process`，按项目约束自动选择 Waterfall / V-Model / 增量 / 迭代 / Spiral / Scrum / Kanban / XP / DevOps / 混合门禁，并给出节奏、产物、门禁与重选条件；四个全栈技能与 AGENTS 片段接入流程选择。
 - **0.4.0**：移除技术版本硬绑定——Spring Boot / Spring Cloud / JDK / Vue / MySQL / ESLint 等版本改为从项目 POM/BOM/package.json 读取；Java 现代写法按项目 JDK 选择；Node 引擎下限放宽到 20；同步文档与 CI。
@@ -360,6 +384,7 @@ P0 修复涉及线程池参数、事务边界、SQL 语义、组件 key 选择�
 - Java 规约条文：《Java 开发手册（黄山版）》v1.7.1，版权归阿里巴巴集团；封装参考 [Sxuan-Coder/alibaba-java-development-guide](https://github.com/Sxuan-Coder/alibaba-java-development-guide)（MIT）。
 - 前端规约：[alibaba/f2e-spec](https://github.com/alibaba/f2e-spec)（MIT）；原始 Skill 快照在 `resources/f2e-spec/original.md`。
 - 全栈原始文档：随包保留在 `resources/reference/`，版权归原作者，仅作对照。
+- 0.6.0 参考的 8 个公开 Skill/仓库、吸收映射与“未照搬”清单：[docs/REFERENCE-SKILL-ANALYSIS.md](./docs/REFERENCE-SKILL-ANALYSIS.md)；技能编写实践：[docs/SKILL-AUTHORING.md](./docs/SKILL-AUTHORING.md)。
 
 完整声明见 [NOTICE.md](./NOTICE.md)。
 

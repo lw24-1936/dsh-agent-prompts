@@ -2,7 +2,7 @@
 
 > 加载本规范后，它就是本项目的硬约束。前端部分与单体版一致，本文件只强调**差异点**与微服务结构约束。
 >
-> **配套标准**：Java 写法遵循 `alibaba-java-standards`，前端写法遵循 `f2e-spec`。本文件管拆分、模块、网关、事务与门禁；**不锁定技术版本**。
+> **配套标准**：Java 写法遵循 `alibaba-java-standards` 与 `spring-boot-engineering`，前端写法遵循 `f2e-spec` 与 `vue3-engineering`，视觉设计遵循 `frontend-design-craft`。本文件管拆分、模块、网关、事务与门禁；**不锁定技术版本**。
 >
 > **版本原则**：先读项目父 POM / `dependencyManagement` / BOM / `package.json`，按项目现有版本执行；没有版本信息时先问用户，不要求升级，也不凭记忆写版本号。
 >
@@ -157,7 +157,7 @@ public interface UserFeignClient {
 
 **启动顺序必须写清**：Nacos → 各业务服务 → 网关 → 前端。
 
-## 十四、提交前门禁（十二条）
+## 十四、提交前门禁（十三条）
 
 1. 父 POM 能 `mvn clean package` 全部模块通过。
 2. 四套 profile 齐全，打包后 `spring.profiles.active` 已替换。
@@ -171,11 +171,15 @@ public interface UserFeignClient {
 10. `DEV.md` / `DESIGN.md` 已同步，`DESIGN.md` 含拆分清单与端口表。
 11. **Java P0 扫描**：`node "<资源目录>/scan-redlines.mjs" --profile java --root .` 退出码 0；重点复核线程池、日期时间、SQL 拼接、无 where 的 update·delete、空 catch、集合 return null、ThreadLocal。
 12. **前端质量门禁**：`eslint` + `vue-tsc --noEmit` 通过；F2E P0 扫描退出码 0，或逐条说明豁免理由。
+13. **设计验收**（UI 改动必做）：`frontend-design-craft` 的四视口截图、四态、键盘/对比度/reduced-motion 检查完成；无 P0 设计阻断。
 
 ## 十五、编码规约（与标准技能联动）
 
 - **Java**：加载 `alibaba-java-standards`。Feign / 网关 / 事务代码同样受 P0 红线约束；Seata、Sentinel 的设计条文按需读 `alibaba-java/07-design-standards.md`。
+- **Spring Boot 工程**：加载 `spring-boot-engineering`。服务内的结构/API/事务/JPA/测试/Modulith 按其正文与 `spring-boot/` 资源执行；微服务拆分/网关/跨服务一致性仍以本文件为准。
 - **前端**：加载 `f2e-spec`，与单体版相同。
+- **Vue 3 工程**：加载 `vue3-engineering`，与单体版相同。
+- **视觉设计**：加载 `frontend-design-craft`，UI 改动按四视口/四态/可访问性验收。
 - **冲突裁决**：版本以项目 POM/BOM 为准；服务拆分、模块依赖、网关规则、事务模式以本文件为准；编码写法按标准技能。冲突时先问用户。
 - **原始文档**：`reference/fullstack-microservice.original.md`（历史快照，其中的版本锁定不再生效；以项目 POM/BOM 与本技能为准）。
 

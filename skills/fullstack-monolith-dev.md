@@ -2,7 +2,7 @@
 
 > 加载本规范后，它就是本项目的硬约束。与用户指令冲突时先提问，不要自行放宽。
 >
-> **配套标准**：Java 写法遵循 `alibaba-java-standards`（P0 红线 + 章节路由），前端写法遵循 `f2e-spec`（ESLint + Vue/React + 安全分级）。本文件管架构、流程、环境与门禁，不重复抄写编码条文。
+> **配套标准**：Java 写法遵循 `alibaba-java-standards`（P0 红线 + 章节路由）与 `spring-boot-engineering`（结构/API/事务/JPA/测试/Modulith），前端写法遵循 `f2e-spec` 与 `vue3-engineering`（组件/响应式/Router/Pinia/测试），视觉设计遵循 `frontend-design-craft`。本文件管架构、流程、环境与门禁，不重复抄写编码条文。
 >
 > **版本原则**：本技能不锁定任何技术版本。先读项目的 `pom.xml` / `build.gradle` / `package.json` / 父 POM 或 BOM，按项目现有版本执行；没有版本信息时先问用户，不要求升级，也不凭记忆写版本号。
 >
@@ -130,7 +130,7 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 
 **输出格式固定**：`【理解确认】`→`【待澄清问题】`→`【UI 组合推荐】`→`【文件清单】`→`【开发文档变更】`→`【设计文档变更】`→`【代码】`→`【验证步骤】`。
 
-## 八、提交前门禁（十条，全过才交付）
+## 八、提交前门禁（十一条，全过才交付）
 
 1. 前端 `pnpm build:test` / `build:pre` / `build:pro` 三条都能过，`dist/*` 产物存在。
 2. 后端 `mvn clean package -P<profile>` 能过，打包产物里 `spring.profiles.active` 已替换成目标环境。
@@ -142,12 +142,16 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 8. `DEV.md` 与 `DESIGN.md` 已同步本次改动。
 9. **Java P0 扫描**：`node "<资源目录>/scan-redlines.mjs" --profile java --root .` 退出码 0；再人工复核线程池 / 日期时间 / `${}` 拼接 / 无 where 的 update·delete / 空 catch / 集合 return null / ThreadLocal 未 remove。
 10. **前端质量门禁**：`pnpm eslint . --max-warnings=0` 与 `vue-tsc --noEmit`（或项目约定的 `tsc`）通过；F2E P0 扫描退出码 0，或逐条说明豁免理由。
+11. **设计验收**（UI 改动必做）：`frontend-design-craft` 的四视口截图、四态、键盘/对比度/reduced-motion 检查完成；无 P0 设计阻断。
 
 ## 九、编码规约（与标准技能联动）
 
 - **Java**：加载 `alibaba-java-standards`。P0 红线（新代码直接合规、被改到的存量代码发现即修复、不可口头豁免）在该技能正文；条文按需读 `alibaba-java/` 下的 01a–01h 与 09 章节。项目团队约定放 `.dsh/java-standards.md`（可从 `alibaba-java/project-template.md` 复制）。
+- **Spring Boot 工程**：加载 `spring-boot-engineering`。结构/API/Service 事务/JPA/测试切片/Testcontainers/ArchUnit/Modulith 按其正文与 `spring-boot/` 资源执行；与 MyBatis-Plus 项目冲突时以项目现有 ORM 为准，不强行套 JPA。
 - **前端**：加载 `f2e-spec`。至少遵守：`const`/`let`、`===`、Hooks 规则、`v-for` 稳定 key、`v-if` 不与 `v-for` 同元素、`v-html` / `dangerouslySetInnerHTML` 必须消毒、`target="_blank"` 带 `noopener`。
-- **冲突裁决**：本文件的架构/分层/权限/门禁是项目硬约束；技术版本以项目 POM / package.json 为准；编码写法按两个标准技能。两者冲突时先问用户，不自行放宽 P0 或技术栈。
+- **Vue 3 工程**：加载 `vue3-engineering`。组件边界/响应式/Composables/Router/Pinia/测试/性能按其正文与 `vue3/` 资源执行；Vue 2 用 Options API 等价写法。
+- **视觉设计**：加载 `frontend-design-craft`。UI 改动必须有 brief/方向、四态、键盘/对比度/reduced-motion，并在 1440/1024/768/390 四视口做浏览器验收。
+- **冲突裁决**：本文件的架构/分层/权限/门禁是项目硬约束；技术版本以项目 POM / package.json 为准；编码写法按标准技能。两者冲突时先问用户，不自行放宽 P0 或技术栈。
 - **原始文档**：`reference/fullstack-single.original.md`（历史快照，其中的版本锁定不再生效；以本技能与项目实际版本为准）。
 
 ## 十、必须停下来提问的情况

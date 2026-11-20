@@ -78,6 +78,7 @@
 | 存储评审、UML、弱依赖与降级、SOLID/DRY、系统设计 | `alibaba-java/07-design-standards.md` |
 | 版本历史、专有名词、错误码全表 | `alibaba-java/08-appendix.md` |
 | 现代 Java（按项目 JDK 版本选择）：records、`var`、pattern matching、虚拟线程（JDK 21+）、Optional、CompletableFuture | `alibaba-java/09-modern-java.md` |
+| Spring Boot 工程：包结构、REST/ProblemDetail、Service/事务、JPA、测试切片/Testcontainers、ArchUnit、Modulith | `spring-boot/README.md`（按需读 `spring-boot/api-and-service.md`、`spring-boot/testing-and-modulith.md`、`spring-boot/anti-patterns.md`） |
 
 `alibaba-java/00-index.md` 是章节索引与执行摘要，可先读它再决定读哪章。原「一、编程规约」已拆成 8 个文件（`01a`…`01h`），不要再整章读入。
 
@@ -164,9 +165,11 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 
 ## 八、与全栈技能的关系
 
+- Spring Boot 工程实践：`spring-boot-engineering` 的「结构/API/事务/JPA/测试/Modulith」优先；Java 写法仍受本技能 P0 约束。
 - 单体开发：`fullstack-monolith-dev` 的「技术栈 / 分层 / 权限 / 门禁」优先，Java 写法遵循本技能。
 - 微服务开发：`fullstack-microservice-dev` 的「版本三元组 / 模块结构 / Feign / 网关」优先，Java 写法遵循本技能。
 - 排查：`fullstack-monolith-debug` / `fullstack-microservice-debug` 负责定位流程；修复代码时同样受 P0 约束。
+- 证据/审查/交付纪律：`engineering/evidence-and-review.md`、`engineering/delivery.md`。
 
 ## 九、来源与许可
 

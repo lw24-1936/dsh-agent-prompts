@@ -126,7 +126,14 @@ node "<资源目录>/scan-redlines.mjs" --profile frontend --baseline .dsh/redli
 
 存量代码只汇总 P0；P1 一句话带过（如「另有 12 处命名/格式问题，属存量未强制」）；P2 默认不提。
 
-## 十一、来源与许可
+## 十一、Vue 工程与视觉设计
+
+- Vue 3 组件/响应式/Composables/Router/Pinia/测试/性能：加载 `vue3-engineering`，按需读 `vue3/core.md`、`vue3/ecosystem.md`、`vue3/debugging.md`、`vue3/anti-patterns.md`。
+- 页面视觉方向、排版/色彩/布局/动效、反 AI 味、浏览器验收：加载 `frontend-design-craft`，按需读 `frontend-design/`。
+- 本技能负责**代码规范与安全红线**；视觉设计规范不替代可访问性/对比度/键盘可达要求。
+- Vue 2 项目按 Options API 等价写法，不强制迁移；工具链版本按项目 `package.json`。
+
+## 十二、来源与许可
 
 - 规范来源：[阿里巴巴前端代码规范 F2E Spec](https://github.com/alibaba/f2e-spec)（MIT）。
 - 原始 Skill 快照见资源文件 `f2e-spec/original.md`；本技能在其基础上做了 Hooks / TS / Vue（按项目版本）/ 安全分级修订，冲突时以本技能与项目 ESLint 配置为准。
