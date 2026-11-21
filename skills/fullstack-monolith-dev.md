@@ -80,7 +80,7 @@ RABBITMQ_HOST / RABBITMQ_PORT / RABBITMQ_USER / RABBITMQ_PASSWORD / RABBITMQ_VHO
 - 统一返回体 `Result<T>`，`code` 用 200 / 400 / 401 / 403 / 404 / 405 / 500。
 - **Long 序列化为 String**；时间统一格式化字符串；枚举向前端传 `code`。
 
-**页面文件内部顺序**：`<script setup>` → 模板 → 样式；导入按「框架 / 第三方 / 本地」分组。
+**页面文件内部顺序（必须）**：`<template>` → `<script setup lang="ts">` → `<style scoped>`；模板第一块、脚本第二、样式最后。导入在 script 内按「框架 / 第三方 / 本地」分组。
 
 ## 四、后端约定
 

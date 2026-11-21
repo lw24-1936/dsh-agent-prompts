@@ -164,6 +164,33 @@ test('frontend scanner passes clean Vue 3 code', () => {
   assert.equal(data.summary.P0, 0);
 });
 
+test('frontend scanner flags script-first Vue SFC order', () => {
+  const root = fixture({
+    'src/WrongOrder.vue': [
+      '<script setup lang="ts">',
+      'const title = "Order";',
+      '</script>',
+      '<template>',
+      '  <h1>{{ title }}</h1>',
+      '</template>',
+      '<style scoped>',
+      'h1 { color: #111; }',
+      '</style>',
+      '<style>',
+      '/* global */',
+      '</style>',
+    ].join('\n'),
+  });
+
+  const result = run('frontend', root, ['--fail-on', 'P1']);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  const data = parse(result);
+  const order = data.findings.filter((finding) => finding.rule === 'F2E_SFC_ORDER');
+  assert.ok(order.some((finding) => finding.severity === 'P1'), JSON.stringify(order));
+  assert.ok(order.some((finding) => /script 在 template 前/.test(finding.message)));
+  assert.ok(order.some((finding) => /只保留一个 style 块/.test(finding.message)));
+});
+
 test('rejects an unknown profile', () => {
   const root = fixture({ 'a.txt': 'x' });
   const result = spawnSync(process.execPath, [SCANNER, '--profile', 'nope', '--root', root], { encoding: 'utf8' });

@@ -22,7 +22,7 @@
 
 ## 三、组件与 SFC
 
-- `<script setup lang="ts">` 默认；scripts → template → style；模板保持声明式。
+- **SFC 块顺序必须**：`<template>` → `<script setup lang="ts">` → `<style scoped>`；模板第一块、脚本第二、样式最后。不要按 script-first 组织（存量组件被触碰时一并调整）。
 - props 只读、类型明确；`defineEmits` 声明事件；项目支持时用 `defineModel`。
 - `v-for` 稳定唯一 key；`v-if`/`v-for` 不同元素；`v-html` 只渲染已消毒内容。
 - 多根节点/透传 attrs 明确归属；子组件方法用 `defineExpose` 最小暴露。
@@ -64,11 +64,12 @@
 按症状查 `vue3/debugging.md`：不更新、重复渲染、watcher 异常、组件找不到、路由参数、Pinia 解构、异步/SSR/hydration。
 先最小复现，再沿“源状态 → computed → 模板/路由/store”定位；一次只改一处。
 
-反模式：`vue3/anti-patterns.md`；完整检查项：`vue3/core.md`、`vue3/ecosystem.md`。
+反模式：`vue3/anti-patterns.md`；完整检查项：`vue3/core.md`、`vue3/ecosystem.md`；SFC 顺序示例：`examples/vue-sfc-order.md`。
 
 ## 九、自检
 
 - [ ] 组件边界/状态所有权清楚，没有上帝组件/composable。
+- [ ] SFC 块顺序是 `template → script setup → style scoped`；没有 script-first。
 - [ ] 源状态最小，派生 computed；无重复同步。
 - [ ] v-for key、v-if/v-for、v-html、props/emits 正确。
 - [ ] composable 有清理/取消/错误处理，不隐藏副作用。

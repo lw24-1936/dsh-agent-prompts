@@ -49,7 +49,7 @@ function read(path) {
 }
 
 test('package metadata advertises the scanner and Node 20+', () => {
-  assert.equal(pkg.version, '0.7.1');
+  assert.equal(pkg.version, '0.8.0');
   assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
   assert.equal(pkg.bin['dsh-agent-prompts-design'], './resources/frontend-design/check-design.mjs');
   assert.equal(pkg.exports['./scan'], './resources/scan-redlines.mjs');
@@ -115,6 +115,7 @@ test('resource references in skill bodies resolve', () => {
     'examples/java-sql.md',
     'examples/java-empty-catch.md',
     'examples/vue-key.md',
+    'examples/vue-sfc-order.md',
     'examples/xss.md',
     'AGENTS.snippet.md',
     'templates/PROCESS.md',
@@ -325,8 +326,24 @@ test('delivery templates exist and carry evidence fields', () => {
   }
 });
 
-test('CHANGELOG records 0.7.0 and earlier releases', () => {
+test('Vue SFC order is mandatory in the active skills', () => {
+  const vue = read('skills/vue3-engineering.md');
+  assert.match(vue, /SFC 块顺序必须/);
+  assert.match(vue, /template.*script.*style/);
+  const f2e = read('skills/f2e-spec.md');
+  assert.match(f2e, /SFC 块顺序必须/);
+  const core = read('resources/vue3/core.md');
+  assert.match(core, /SFC 结构（强制顺序）/);
+  assert.ok(core.indexOf('<template') < core.indexOf('<script'), 'core.md example should put template first');
+  assert.ok(core.indexOf('<script') < core.indexOf('<style'), 'core.md example should put script before style');
+  assert.match(read('resources/examples/vue-sfc-order.md'), /F2E_SFC_ORDER/);
+});
+
+test('CHANGELOG records 0.8.0 and earlier releases', () => {
   const changelog = read('CHANGELOG.md');
+  assert.match(changelog, /## 0\.8\.0/);
+  assert.match(changelog, /F2E_SFC_ORDER/);
+  assert.match(changelog, /vue-sfc-order\.md/);
   assert.match(changelog, /## 0\.7\.0/);
   assert.match(changelog, /AGENTS\.md/);
   assert.match(changelog, /check-design\.mjs/);

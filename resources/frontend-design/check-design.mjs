@@ -9,7 +9,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, resolve } from 'node:path';
 
-const VERSION = '0.7.1';
+const VERSION = '0.8.0';
 const EXTENSIONS = new Set(['.html', '.vue', '.jsx', '.tsx', '.css', '.scss', '.sass', '.less']);
 const IGNORED_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '.next', '.nuxt', 'out', 'vendor', '.output']);
 

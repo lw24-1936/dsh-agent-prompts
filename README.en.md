@@ -6,7 +6,7 @@ No more pasting long prompts into every session: the agent loads the right skill
 
 [中文](./README.md) · English
 
-[![version](https://img.shields.io/badge/version-0.7.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts/releases)
+[![version](https://img.shields.io/badge/version-0.8.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts/releases)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20-339933)](https://nodejs.org/)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
@@ -32,8 +32,8 @@ Desktop app: **Plugin Settings → Install**, enter the GitHub URL or a local pa
 |---|---|---|
 | `alibaba-java-standards` | Writing/changing/reviewing Java or SQL | P0 red lines, three-tier enforcement, chapter routing |
 | `spring-boot-engineering` | Spring Boot structure/API/transactions/JPA/tests/Modulith | Domain modules, REST/ProblemDetail, transactions, Testcontainers/ArchUnit, Security |
-| `f2e-spec` | Writing/changing/reviewing JS/TS/React/Vue | Formatting, Hooks, Vue examples, security, a11y |
-| `vue3-engineering` | Vue 3 components/reactivity/composables/Router/Pinia/tests | Reactivity/components, ecosystem, Vitest/Playwright, debugging |
+| `f2e-spec` | Writing/changing/reviewing JS/TS/React/Vue | Formatting, Hooks, Vue examples/SFC order, security, a11y |
+| `vue3-engineering` | Vue 3 components/reactivity/composables/Router/Pinia/tests | Reactivity/components, SFC order, ecosystem, Vitest/Playwright, debugging |
 | `frontend-design-craft` | Designing/changing/reviewing pages, landing pages, dashboards, design systems | Brief/visual direction, review rubric, four-viewport browser check, anti-slop, design checker |
 | `software-engineering-process` | New project/module/major change, planning, "which process?" | Automatic selection, flow library, DoR/DoD, evidence/review/delivery discipline |
 | `fullstack-monolith-dev` | Monolith full-stack development | Vue + Spring Boot stack, environments, RBAC, docs, gates |
@@ -77,7 +77,7 @@ node "<resource dir>/scan-redlines.mjs" --profile java --root . --format sarif
 
 If installed in devDependencies: `npx dsh-agent-prompts-scan --profile java --changed-only --root .`.
 
-Heuristic, not a full linter; use P3C/PMD/ESLint and human review for formal gates. See [SCANNER.md](./docs/SCANNER.md).
+Heuristic, not a full linter; use P3C/PMD/ESLint and human review for formal gates. It also checks Vue SFC block order (`template → script → style`). See [SCANNER.md](./docs/SCANNER.md).
 
 ### Design anti-pattern checker
 

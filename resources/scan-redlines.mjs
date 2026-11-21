@@ -26,7 +26,7 @@ import {
 } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 
-const SCANNER_VERSION = '0.7.1';
+const SCANNER_VERSION = '0.8.0';
 const SCANNER_NAME = 'dsh-agent-prompts/scan-redlines';
 
 const IGNORED_DIRS = new Set([
@@ -243,6 +243,13 @@ const PROFILES = {
         source: 'raw',
         message: '禁止 v-if 与 v-for 同元素，用 template v-for 或 computed 过滤',
         custom: scanVueFor,
+      },
+      {
+        id: 'F2E_SFC_ORDER',
+        severity: 'P1',
+        source: 'raw',
+        message: 'Vue SFC 顶层块顺序必须 template → script → style，不要 script-first',
+        custom: scanVueSfcOrder,
       },
       {
         id: 'F2E_INNER_HTML',
@@ -623,6 +630,28 @@ function scanVueFor({ raw, add, rel }) {
     if (/\bv-if\s*=/.test(tag)) {
       add('F2E_V_IF_FOR', 'P1', '禁止 v-if 与 v-for 同元素', match.index);
     }
+  }
+}
+
+function scanVueSfcOrder({ raw, add, rel }) {
+  if (!/\.vue$/i.test(rel)) return;
+  const template = raw.search(/<template\b/);
+  const script = raw.search(/<script\b/);
+  const style = raw.search(/<style\b/);
+  // Render-function SFCs legitimately have no <template>; skip rather than guess.
+  if (template === -1) return;
+  if (script !== -1 && script < template) {
+    add('F2E_SFC_ORDER', 'P1', 'Vue SFC 必须 template → script → style；当前 script 在 template 前', script);
+  }
+  if (style !== -1 && style < template) {
+    add('F2E_SFC_ORDER', 'P1', 'Vue SFC 必须 template → script → style；当前 style 在 template 前', style);
+  }
+  if (script !== -1 && style !== -1 && style < script) {
+    add('F2E_SFC_ORDER', 'P1', 'Vue SFC 必须 template → script → style；当前 style 在 script 前', style);
+  }
+  const styleBlocks = (raw.match(/<style\b/g) || []).length;
+  if (styleBlocks > 1) {
+    add('F2E_SFC_ORDER', 'P2', '每个 SFC 只保留一个 style 块；全局样式拆到独立文件', style);
   }
 }
 

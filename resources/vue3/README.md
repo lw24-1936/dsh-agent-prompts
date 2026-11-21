@@ -6,7 +6,7 @@
 
 | 文件 | 内容 | 何时读 |
 |---|---|---|
-| `core.md` | 响应式、SFC、组件边界、props/emits、composables | 写/改组件、抽逻辑 |
+| `core.md` | 响应式、SFC 结构（template → script → style）、组件边界、props/emits、composables | 写/改组件、抽逻辑 |
 | `component-patterns.md` | 异步组件、Suspense、KeepAlive、Teleport、过渡、slots/attrs、JSX、指令、SSR | 复杂组件/交互 |
 | `ecosystem.md` | Router、Pinia、VueUse、Vitest/Playwright、性能、SSR | 路由/状态/测试/工具链 |
 | `debugging.md` | 按症状定位的常见坑 | 状态不更新、重复渲染、路由/Store 异常 |

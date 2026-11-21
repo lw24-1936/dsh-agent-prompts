@@ -50,6 +50,7 @@
 
 > 以下以 Vue 3 `<script setup>` 为例；Vue 2 项目用 `data` / `computed` / `methods` / `props` 的等价写法，不强制升级。
 
+- **SFC 块顺序必须**：`<template>` → `<script setup lang="ts">` → `<style scoped>`；模板第一块、脚本第二、样式最后。不要按 script-first 组织；Vue 2 同样保持 template → script → style。
 - 统一 `<script setup lang="ts">`；不混用 Options API（存量组件除外）。
 - Props：`defineProps<{ id: string }>()`；Emits：`defineEmits<{ change: [value: string] }>()`；不用运行时 `props: []`。
 - `v-for` 必须带 `:key`，用业务唯一 ID；**禁止 `v-if` 与 `v-for` 同元素**（用 `<template v-for>` 或 computed 过滤）。

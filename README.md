@@ -6,7 +6,7 @@
 
 [English](./README.en.md) · 简体中文
 
-[![version](https://img.shields.io/badge/version-0.7.1-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts/releases)
+[![version](https://img.shields.io/badge/version-0.8.0-4D6BFE)](https://github.com/lw24-1936/dsh-agent-prompts/releases)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20-339933)](https://nodejs.org/)
 [![DSH Market](https://img.shields.io/badge/DSH%20Market-listed-2EA043)](https://dsh.market/)
@@ -47,8 +47,8 @@ dsh plugin --profile web add file:/path/to/dsh-agent-prompts
 |---|---|---|
 | `alibaba-java-standards` | 写/改/review Java 或 SQL | P0 红线、三级管控、章节路由、API 速查 |
 | `spring-boot-engineering` | Spring Boot 包结构/API/事务/JPA/测试/Modulith | 业务域分包、REST/ProblemDetail、Service 事务、Testcontainers/ArchUnit、Security |
-| `f2e-spec` | 写/改/review JS/TS/React/Vue | 格式、Hooks、Vue 示例、安全、a11y、ESLint/Prettier |
-| `vue3-engineering` | Vue 3 组件/响应式/composables/Router/Pinia/测试 | 响应式/组件模式、生态、Vitest/Playwright、调试索引、反模式 |
+| `f2e-spec` | 写/改/review JS/TS/React/Vue | 格式、Hooks、Vue 示例、SFC 块顺序、安全、a11y、ESLint/Prettier |
+| `vue3-engineering` | Vue 3 组件/响应式/composables/Router/Pinia/测试 | 响应式/组件模式、SFC 顺序、生态、Vitest/Playwright、调试索引、反模式 |
 | `frontend-design-craft` | 做/改/评审页面、落地页、后台、设计系统 | brief/视觉方向、评审 rubric、四视口浏览器验收、反 AI 味、设计检查器 |
 | `software-engineering-process` | 新项目/新模块/大改动、排期、问“用什么流程” | 自动选择算法、流程库、DoR/DoD、证据/审查/交付纪律 |
 | `fullstack-monolith-dev` | 单体全栈开发 | Vue + TS + Vite + Pinia / Spring Boot + JDK + MyBatis-Plus + Sa-Token、四套环境、RBAC、双文档、门禁 |
@@ -121,7 +121,7 @@ npx dsh-agent-prompts-scan --profile java --changed-only --root .
 
 ![扫描器终端演示](./docs/assets/scan-demo.svg)
 
-覆盖：Java 线程池/日期/SQL 拼接/空 catch/资源/ThreadLocal 等；前端 eval、v-html、外链 noopener、v-for key 等。它是正则级启发式，正式门禁仍用 P3C / PMD / ESLint 与人工 review；完整规则见 [SCANNER.md](./docs/SCANNER.md)。
+覆盖：Java 线程池/日期/SQL 拼接/空 catch/资源/ThreadLocal 等；前端 eval、v-html、外链 noopener、v-for key、Vue SFC 块顺序（`template → script → style`）等。它是正则级启发式，正式门禁仍用 P3C / PMD / ESLint 与人工 review；完整规则见 [SCANNER.md](./docs/SCANNER.md)。
 
 ### 2. 设计反模式检查器
 

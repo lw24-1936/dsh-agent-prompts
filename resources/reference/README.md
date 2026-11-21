@@ -4,5 +4,7 @@
 
 **注意**：原文中出现的 Spring Boot / Spring Cloud / JDK / Vue / MySQL 等版本号是当时的历史写法，**自 0.4.0 起不再作为强制约束**。实际执行以 `skills/fullstack-*.md` 为准：先读项目 `pom.xml` / `build.gradle` / `package.json`，按项目现有版本执行，不要求升级。
 
+原文中的 Vue SFC 示例可能把 `<script>` 放在 `<template>` 前；**当前规范以 `resources/vue3/core.md` 为准：`template → script → style`**，原文仅作历史对照。
+
 - `fullstack-single.original.md`：单体版原文
 - `fullstack-microservice.original.md`：微服务版原文

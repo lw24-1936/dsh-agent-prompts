@@ -6,7 +6,7 @@
 ## 编码规约（dsh-agent-prompts）
 
 - 写、改或 review Java/SQL 前，先加载技能 `alibaba-java-standards`，按其「P0 红线」执行；条文按需读 `alibaba-java/01a…09`。Spring Boot 结构/API/事务/JPA/测试同时加载 `spring-boot-engineering`，按需读 `spring-boot/`。
-- 写、改或 review 前端（JS/TS/React/Vue，框架版本按项目）前，先加载技能 `f2e-spec`；Vue 3 组件/响应式/Router/Pinia/测试同时加载 `vue3-engineering`，按需读 `vue3/`。
+- 写、改或 review 前端（JS/TS/React/Vue，框架版本按项目）前，先加载技能 `f2e-spec`；Vue 3 组件/响应式/Router/Pinia/测试同时加载 `vue3-engineering`，按需读 `vue3/`。Vue SFC 块顺序必须 `template → script setup → style scoped`；违规由 `F2E_SFC_ORDER` 扫描提示。
 - 做/改/评审页面、落地页、后台或设计系统前，加载 `frontend-design-craft`；UI 改动按四视口、四态、键盘/对比度/reduced-motion 验收。
 - 开始新项目/新模块/大改动前，先加载 `software-engineering-process`，由它按项目约束自动选择开发流程；不要先问用户选 Scrum 还是瀑布。
 - 技术版本以项目 `pom.xml` / `build.gradle` / `package.json` / 父 POM / BOM 为准；不要求升级，没有版本信息时先问用户。

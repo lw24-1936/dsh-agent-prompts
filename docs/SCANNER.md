@@ -146,6 +146,7 @@ npx dsh-agent-prompts-scan --profile java --root . --changed-only --base origin/
 | `F2E_INDEX_KEY` | P1 | 数组索引作为 key |
 | `F2E_V_FOR_NO_KEY` | P1 | `v-for` 缺 key |
 | `F2E_V_IF_FOR` | P1 | `v-if` 与 `v-for` 同元素 |
+| `F2E_SFC_ORDER` | P1 | Vue SFC 块顺序不是 `template → script → style`；多个 style 块为 P2 |
 | `F2E_INNER_HTML` | P1 | `.innerHTML =` |
 | `F2E_DEBUGGER` | P1 | `debugger` |
 | `F2E_TS_IGNORE` | P2 | `@ts-ignore` |

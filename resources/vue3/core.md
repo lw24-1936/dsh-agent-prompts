@@ -31,19 +31,23 @@
 
 判断内聚：**一起变化/共享不变量**的放一起；只是“在同一页”或“读同一份数据”不足以合并。不要把所有逻辑塞进一个 `useFeature()` 就算拆完；根组件负责组合，功能组件/composable 各自承担明确职责。
 
-## 3. SFC 结构
+## 3. SFC 结构（强制顺序）
 
-推荐顺序：
+页面/组件 SFC 的顶层块顺序**必须**是：
 
 ```vue
+<!-- 1. 模板 -->
+<template>
+  <!-- 声明式；复杂分支/派生放 script -->
+  <div>...</div>
+</template>
+
+<!-- 2. 脚本 -->
 <script setup lang="ts">
 // imports → props/emits → state → computed → methods → lifecycle
 </script>
 
-<template>
-  <!-- 声明式；复杂分支/派生放 script -->
-</template>
-
+<!-- 3. 样式 -->
 <style scoped>
 /* 只影响当前组件 */
 </style>
@@ -51,12 +55,17 @@
 
 规则：
 
-- `<script setup lang="ts">` 为默认；不要混用 Options API（存量组件除外）。
+- 顶层块顺序固定：`template` → `script` → `style`；不要 script-first。
+- 推荐保留 `<!-- 1. 模板 -->`、`<!-- 2. 脚本 -->`、`<!-- 3. 样式 -->` 注释；注释可选，**块顺序是强制**。
+- `<script setup lang="ts">` 为默认；不要混用 Options API（存量组件除外）。Vue 2 / Options API 同样保持 template → script → style。
+- 每个 SFC 只保留一个 `<style>` 块；`scoped` 优先。全局 reset/token 拆到独立样式文件，不塞进页面组件。
 - 模板保持声明式；不要塞复杂表达式/副作用。
 - `v-for` 必须有稳定唯一 `:key`；不要用数组下标。
 - `v-if` 与 `v-for` 不要同元素；用 `<template v-for>` 或 computed 过滤。
 - `v-html` 只渲染已消毒内容；默认禁止未信任输入。
 - 组件名多单词；`defineOptions({ name })` 按项目规范。
+
+例外：无模板的 render-function 组件可以 `script` 在前；纯逻辑 `.ts`/composable 不属于 SFC，不适用本节。存量 SFC 被触碰时，按此顺序一并调整；不要只改新文件导致风格分叉。
 
 ## 4. Props / Emits / v-model
 

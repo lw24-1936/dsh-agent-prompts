@@ -1,6 +1,6 @@
 {
   "name": "dsh-agent-prompts",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "type": "module",
   "description": "DeepSeek Harness 技能包：10 个按场景自动加载的技能（全栈单体/微服务 × 开发/排查 + 阿里 Java/前端规约 + Spring Boot + Vue 3 + 前端视觉设计 + 软件工程流程自动选择），带章节渐进披露、P0 红线扫描、设计反模式检查与提交前门禁；技术版本跟随项目，不硬绑。",
   "main": "lib/index.js",

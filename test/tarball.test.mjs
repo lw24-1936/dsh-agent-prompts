@@ -51,7 +51,7 @@ test('packed tarball installs and exposes ten skills plus scanner', { timeout: 1
 
     const installed = join(installDir, 'node_modules', 'dsh-agent-prompts');
     const pkg = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
-    assert.equal(pkg.version, '0.7.1');
+    assert.equal(pkg.version, '0.8.0');
     assert.equal(pkg.bin['dsh-agent-prompts-scan'], './resources/scan-redlines.mjs');
     assert.equal(pkg.bin['dsh-agent-prompts-design'], './resources/frontend-design/check-design.mjs');
     for (const file of [

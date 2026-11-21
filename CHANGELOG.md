@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.0 — 2026-11-21
+
+### Added
+
+- **Vue SFC 块顺序规范**：页面/组件必须 `<template>` → `<script setup lang="ts">` → `<style scoped>`；Vue 2 / Options API 同样适用；无模板的 render-function 组件例外。
+- 新增 `F2E_SFC_ORDER` 扫描规则：检测 script-first、style 在 template/script 前、多个 `<style>` 块（P2）。
+- 新增示例 `resources/examples/vue-sfc-order.md`；`resources/vue3/core.md`、`f2e-spec`、`vue3-engineering`、`fullstack-monolith-dev`、`AGENTS.snippet` 同步。
+- 版本 0.8.0；扫描器/设计检查器版本同步。
+
 ## 0.7.1 — 2026-11-20
 
 ### Changed

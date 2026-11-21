@@ -9,6 +9,7 @@
 | `java-sql.md` | `JAVA_SQL_DOLLAR` / `JAVA_SQL_NO_WHERE` / `XML_SQL_*` | SQL 注入、无 where 的 update/delete |
 | `java-empty-catch.md` | `JAVA_EMPTY_CATCH` / `JAVA_PRINT_STACKTRACE` | 异常分类、日志、业务异常 |
 | `vue-key.md` | `F2E_V_FOR_NO_KEY` / `F2E_V_IF_FOR` / `F2E_INDEX_KEY` | Vue 列表 key 与 v-if/v-for（Vue 3 示例） |
+| `vue-sfc-order.md` | `F2E_SFC_ORDER` | Vue SFC 必须 `template → script → style`，禁止 script-first |
 | `xss.md` | `F2E_V_HTML` / `F2E_DANGEROUS_HTML` / `F2E_TARGET_BLANK` | HTML 消毒、外链 noopener |
 
 示例中的代码是演示片段，不是完整实现；按项目实际框架与版本（Spring Boot / Vue / React）调整，不要求升级。
